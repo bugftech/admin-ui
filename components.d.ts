@@ -7,13 +7,6 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    ApiApiTable: typeof import('./src/components/api/ApiTable.vue')['default']
-    ApiDataTable: typeof import('./src/components/api/DataTable.vue')['default']
-    ApiOrderDataTable: typeof import('./src/components/api/OrderDataTable.vue')['default']
-    ApiProductDataTable: typeof import('./src/components/api/ProductDataTable.vue')['default']
-    ApiSection: typeof import('./src/components/api/Section.vue')['default']
-    ApiTable: typeof import('./src/components/api/Table.vue')['default']
-    ApiTestDataTable: typeof import('./src/components/api/TestDataTable.vue')['default']
     AppBackBtn: typeof import('./src/components/app/BackBtn.vue')['default']
     AppBarBar: typeof import('./src/components/app/bar/Bar.vue')['default']
     AppBarLogo: typeof import('./src/components/app/bar/Logo.vue')['default']
@@ -30,12 +23,10 @@ declare module 'vue' {
     AppDrawerList: typeof import('./src/components/app/drawer/List.vue')['default']
     AppSnackBarQueue: typeof import('./src/components/app/SnackBarQueue.vue')['default']
     AuthLoginForm: typeof import('./src/components/auth/LoginForm.vue')['default']
-    FormLoginForm: typeof import('./src/components/form/LoginForm.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     OrderBasicInfoSection: typeof import('./src/components/order/BasicInfoSection.vue')['default']
     OrderBillSection: typeof import('./src/components/order/BillSection.vue')['default']
     OrderDataTable: typeof import('./src/components/order/DataTable.vue')['default']
-    OrderItemSection: typeof import('./src/components/order/ItemSection.vue')['default']
     OrderItemsSection: typeof import('./src/components/order/ItemsSection.vue')['default']
     OrderMoreMenu: typeof import('./src/components/order/MoreMenu.vue')['default']
     OrderNoteSection: typeof import('./src/components/order/NoteSection.vue')['default']

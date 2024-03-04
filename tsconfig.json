@@ -18,9 +18,13 @@
       "@/*": [
        "src/*"
       ]
-     }
+     },
+    "types": [
+      "vite/client",
+      "vite-plugin-vue-layouts/client",
+      "vue-router"
+    ]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }

@@ -2,8 +2,7 @@
   <v-menu :open-on-hover="false">
     <template v-slot:activator="{ props }">
       <v-avatar v-bind="props">
-        <v-img v-if="image" :src="image" alt="John"></v-img>
-        <v-skeleton-loader type="avatar" v-else />
+        <v-icon>mdi-account</v-icon>
       </v-avatar>
     </template>
     <v-card min-width="300" class="mt-2" theme="light">
@@ -35,7 +34,9 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue";
 import { useUserStore } from "@/store/user";
+import { storeToRefs } from "pinia";
 
 const defaultAvatar = "";
 
@@ -57,7 +58,6 @@ const items: Item[] = [
     to: "/login",
   },
 ];
-
 
 const user = useUserStore();
 const { profile } = storeToRefs(user);

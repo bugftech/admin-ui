@@ -51,7 +51,7 @@ export const useOrderStore = defineStore({
       this.currentIndex--;
       console.log("prev:", this.currentIndex);
     },
-    async fetch(): Promise<APIResponse<null>> {
+    async fetch<T>(): Promise<APIResponse<T>> {
       try {
         this.loading = true;
         const { data, status } = await API.bugfreed.list<OrderInfo>("orders");
@@ -60,7 +60,7 @@ export const useOrderStore = defineStore({
           this.loading = true;
           return {
             success: true,
-            data: null,
+            data: null as unknown as T,
           };
         }
       } catch (error) {
@@ -68,11 +68,16 @@ export const useOrderStore = defineStore({
         return {
           success: false,
           status: _error.response?.status,
-          data: null,
+          data: null as unknown as T,
         };
       } finally {
         this.loading = false;
       }
+      // Add a return statement at the end of the function
+      return {
+        success: false,
+        data: null as unknown as T,
+      };
     },
   },
 });

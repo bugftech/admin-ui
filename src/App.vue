@@ -8,6 +8,7 @@
 
 <script lang="ts" setup>
 import { useHead } from "@unhead/vue";
+import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
 const route = useRoute();

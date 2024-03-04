@@ -1,6 +1,12 @@
 import { copyToClipboardFormatted } from "./copy";
+
+// Translation 翻译类型
+interface Translation {
+  [key: string]: string;
+}
+
 // BasicTranslation 基础信息翻译
-export const BasicTranslation = {
+export const BasicTranslation: Translation = {
   bfAppId: "应用ID",
   memberUsername: "会员用户名",
   id: "ID",
@@ -18,7 +24,7 @@ export const BasicTranslation = {
 };
 
 // NoteTranslation 备注翻译
-export const NoteTranslation = {
+export const NoteTranslation: Translation = {
   hospital: "就诊医院",
   department: "科室",
   expectedTreatmentTime: "期望就诊时间",
@@ -41,7 +47,7 @@ export const NoteTranslation = {
 };
 
 // ProductTranslation 商品翻译
-export const ProductTranslation = {
+export const ProductTranslation: Translation = {
   productName: "商品",
   productSubTitle: "商品副标题",
   productQuantity: "数量",
@@ -49,8 +55,8 @@ export const ProductTranslation = {
   realAmount: "折后价格",
 };
 
-const copyBasicKeys = ["memberUsername", "orderSn"];
-const copyProductKeys = [
+const copyBasicKeys: (keyof Translation)[] = ["memberUsername", "orderSn"];
+const copyProductKeys: (keyof Translation)[] = [
   "productName",
   "productSubTitle",
   "productQuantity",
@@ -59,9 +65,8 @@ const copyProductKeys = [
 ];
 
 // copyOrderInfo 复制订单信息
-export function copyOrderInfo(obj) {
-  console.log("obj:", obj);
-  const arr = [];
+export function copyOrderInfo(obj: any) {
+  const arr: string[] = [];
   // 复制基础信息
   for (const key of copyBasicKeys) {
     if (obj[key] != undefined) {
@@ -72,7 +77,7 @@ export function copyOrderInfo(obj) {
 
   // 复制备注
   if (obj["note"] != undefined) {
-    let parsedObject = "";
+    let parsedObject: Translation | string = "";
     try {
       parsedObject = JSON.parse(obj["note"]);
     } catch (error) {
@@ -82,7 +87,7 @@ export function copyOrderInfo(obj) {
     if (typeof parsedObject === "object") {
       Object.keys(parsedObject).forEach((key) => {
         // 获取键对应的值
-        const value = parsedObject[key];
+        const value = (parsedObject as Translation)[key];
         const translatedKey = NoteTranslation[key];
         const str = translatedKey + ": " + value;
         arr.push(str);
