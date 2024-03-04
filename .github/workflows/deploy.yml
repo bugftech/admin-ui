@@ -29,6 +29,8 @@ jobs:
       with:
         name: dist
         path: dist
+    - name: List file
+      run: ls -l
     - name: Copy files via SCP
       uses: appleboy/scp-action@v0.1.7
       with:
