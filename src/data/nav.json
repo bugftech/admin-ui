@@ -1,0 +1,60 @@
+[
+  {
+    "title": "主页",
+    "to": "/home",
+    "inactiveIcon": "mdi-home-circle",
+    "activeIcon": "mdi-home-circle-outline"
+  },
+  {
+    "title": "订单(OMS)",
+    "inactiveIcon": "mdi-archive",
+    "activeIcon": "mdi-archive-outline",
+    "items": [
+      {
+        "title": "订单",
+        "to": "/orders"
+      }
+    ]
+  },
+  {
+    "title": "产品(PMS)",
+    "inactiveIcon": "mdi-tag-multiple",
+    "activeIcon": "mdi-tag-multiple-outline",
+    "items": [
+      {
+        "title": "商品",
+        "to": "/products"
+      },
+      {
+        "title": "产品类型",
+        "to": "/categories"
+      },
+      {
+        "title": "库存",
+        "to": "/stocks"
+      },
+      {
+        "title": "礼品卡",
+        "to": "/cards"
+      }
+    ]
+  },
+  {
+    "title": "客户",
+    "to": "/customers",
+    "inactiveIcon": "mdi-account-box",
+    "activeIcon": "mdi-account-box-outline"
+  },
+  {
+    "title": "分析",
+    "to": "/analytics",
+    "inactiveIcon": "mdi-chart-box",
+    "activeIcon": "mdi-chart-box-outline"
+  },
+  {
+    "title": "折扣",
+    "to": "/discounts",
+    "inactiveIcon": "mdi-sale",
+    "activeIcon": "mdi-sale-outline"
+  }
+]
