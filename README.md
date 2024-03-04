@@ -2,14 +2,6 @@
 
 后台管理系统
 
-## ❗️ Important Links
-
-- 📄 [Docs](https://vuetifyjs.com/)
-- 🚨 [Issues](https://issues.vuetifyjs.com/)
-- 🏬 [Store](https://store.vuetifyjs.com/)
-- 🎮 [Playground](https://play.vuetifyjs.com/)
-- 💬 [Discord](https://community.vuetifyjs.com)
-
 ## 💿 Install
 
 使用您首选的包管理器设置您的项目。使用相应的命令安装依赖：
