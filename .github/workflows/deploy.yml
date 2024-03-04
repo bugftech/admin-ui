@@ -23,12 +23,15 @@ jobs:
 
     - name: Build project
       run: yarn build
+      
+    - name: Tar dist directory
+      run: tar -cvf dist.tar ./dist
 
-    - name: Archive dist directory
+    - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
-        name: dist.tar
-        path: dist
+        name: dist
+        path: dist.tar
 
     - name: List file
       run: ls -l
