@@ -29,7 +29,7 @@ instance.interceptors.response.use(
   },
   function (error) {
     // 响应状态码不是 2xx 时触发失败的回调，形参中的 error 是“失败的结果”
-    if (error.response.status === 401 ) {
+    if (error.response.status === 403 ) {
       router.push("/login");
     }
     return Promise.reject(error);
