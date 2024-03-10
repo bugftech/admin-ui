@@ -23,13 +23,26 @@ jobs:
 
     - name: Build project
       run: yarn build
+      
+    - name: Tar dist directory
+      run: tar -cvf dist.tar ./dist
 
-    - name: Archive dist directory
+    - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: dist
-        path: dist
+        path: dist.tar
 
+    - name: List file
+      run: ls -l
+    - name: Copy files via SCP
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: 'root'
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        source: "dist.tar"
+        target: "/home/app/admin-ui"
     - name: Deploy to server
       uses: appleboy/ssh-action@master
       with:
@@ -39,5 +52,5 @@ jobs:
         port: 22
         script: |
           cd /home/app/admin-ui
-          rm -rf *
-          tar xvf $GITHUB_WORKSPACE/dist.tar
+          rm -rf dist
+          tar xvf dist.tar
