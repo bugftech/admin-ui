@@ -43,6 +43,11 @@ declare module 'vue-router/auto/routes' {
     'orders': RouteRecordInfo<'orders', '/orders', Record<never, never>, Record<never, never>>,
     '/orders/[id]/': RouteRecordInfo<'/orders/[id]/', '/orders/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/orders/[id]/update': RouteRecordInfo<'/orders/[id]/update', '/orders/:id/update', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/settings': RouteRecordInfo<'/settings', '/settings', Record<never, never>, Record<never, never>>,
+    '/settings/basic': RouteRecordInfo<'/settings/basic', '/settings/basic', Record<never, never>, Record<never, never>>,
+    '/settings/notification': RouteRecordInfo<'/settings/notification', '/settings/notification', Record<never, never>, Record<never, never>>,
+    '/settings/pay': RouteRecordInfo<'/settings/pay', '/settings/pay', Record<never, never>, Record<never, never>>,
+    '/settings/serviceaccount': RouteRecordInfo<'/settings/serviceaccount', '/settings/serviceaccount', Record<never, never>, Record<never, never>>,
     '/stocks/': RouteRecordInfo<'/stocks/', '/stocks', Record<never, never>, Record<never, never>>,
   }
 }

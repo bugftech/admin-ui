@@ -8,8 +8,19 @@
     floating
   >
     <template v-slot:prepend>
-      <AppDrawerList :items="app.navItems" />
+      <AppDrawerPrepend />
     </template>
+    <v-divider />
+    <AppDrawerList :items="app.navItems" />
+    <v-divider />
+    <v-list nav density="compact" slim>
+      <v-list-item link>
+        <template v-slot:prepend>
+          <v-icon size="small">mdi-dots-grid</v-icon>
+        </template>
+        <v-list-item-title class="text-caption"> 所有的服务 </v-list-item-title>
+      </v-list-item>
+    </v-list>
     <template v-slot:append>
       <AppDrawerAppend />
     </template>

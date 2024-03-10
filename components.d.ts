@@ -21,6 +21,7 @@ declare module 'vue' {
     AppDrawerAppend: typeof import('./src/components/app/drawer/Append.vue')['default']
     AppDrawerDrawer: typeof import('./src/components/app/drawer/Drawer.vue')['default']
     AppDrawerList: typeof import('./src/components/app/drawer/List.vue')['default']
+    AppDrawerPrepend: typeof import('./src/components/app/drawer/Prepend.vue')['default']
     AppSnackBarQueue: typeof import('./src/components/app/SnackBarQueue.vue')['default']
     AuthLoginForm: typeof import('./src/components/auth/LoginForm.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
@@ -34,8 +35,15 @@ declare module 'vue' {
     OrderStatusChip: typeof import('./src/components/order/StatusChip.vue')['default']
     OrderStatusFilterMenu: typeof import('./src/components/order/StatusFilterMenu.vue')['default']
     OrderStatusStepper: typeof import('./src/components/order/StatusStepper.vue')['default']
+    PayWechat: typeof import('./src/components/pay/wechat.vue')['default']
+    PayWechatConfig: typeof import('./src/components/pay/wechatConfig.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SettingBasicMiniDialog: typeof import('./src/components/setting/basic/MiniDialog.vue')['default']
+    SettingBasicProfile: typeof import('./src/components/setting/basic/Profile.vue')['default']
+    SettingBasicTenantInfo: typeof import('./src/components/setting/basic/TenantInfo.vue')['default']
+    SettingsTabs: typeof import('./src/components/settings/tabs.vue')['default']
+    SettingTabs: typeof import('./src/components/setting/Tabs.vue')['default']
     StockDataTableHeader: typeof import('./src/components/stock/DataTableHeader.vue')['default']
   }
 }

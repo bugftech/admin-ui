@@ -1,17 +1,20 @@
 <template>
   <v-list nav :lines="false" color="black" density="compact" slim>
     <template v-for="(item, i) in items" :key="i">
-      <v-list-item v-if="!item.items" :title="item.title" :to="item.to">
+      <v-list-item v-if="!item.items" :to="item.to">
         <template v-slot:prepend="{ isActive }">
           <v-icon
             :icon="isActive ? item.activeIcon : item.inactiveIcon"
             size="small"
           ></v-icon>
         </template>
+        <v-list-item-title class="text-caption">
+          {{ item.title }}
+        </v-list-item-title>
       </v-list-item>
       <v-list-group v-else :value="item.items">
         <template v-slot:activator="{ props }">
-          <v-list-item v-bind="props" :title="item.title">
+          <v-list-item v-bind="props">
             <template v-slot:prepend="{ isActive }">
               <v-icon
                 :icon="isActive ? item.activeIcon : item.inactiveIcon"
@@ -19,12 +22,14 @@
                 v-if="item.activeIcon"
               ></v-icon>
             </template>
+            <v-list-item-title class="text-caption">
+              {{ item.title }}
+            </v-list-item-title>
           </v-list-item>
         </template>
 
         <v-list-item
           v-for="(child, idx) in item.items"
-          :title="child.title ? child.title : child"
           :key="idx"
           :to="child.to"
         >
@@ -35,6 +40,9 @@
               v-if="child.activeIcon"
             ></v-icon>
           </template>
+          <v-list-item-title class="text-caption">
+            {{ child.title ? child.title : child }}
+          </v-list-item-title>
         </v-list-item>
       </v-list-group>
     </template>

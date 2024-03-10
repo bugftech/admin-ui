@@ -11,9 +11,6 @@ export default {
   VListItem: {
     density: "compact",
   },
-  VBtn: {
-    rounded: "lg",
-  },
   VTextField: {
     rounded: "lg",
     variant: "outlined",

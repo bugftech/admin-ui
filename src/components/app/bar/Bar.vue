@@ -14,7 +14,6 @@
     <template v-slot:append>
       <template v-if="mdAndUp">
         <AppBarNotificationsMenu />
-        <v-btn icon="mdi-dots-grid" v-if="smAndUp" />
         <AppBarUserMenu />
       </template>
     </template>

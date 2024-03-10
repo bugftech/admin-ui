@@ -2,7 +2,16 @@
   <v-card>
     <v-toolbar color="transparent">
       <AppDatePicker />
-      <v-checkbox label="2S刷新一次" hide-details />
+      <v-checkbox
+        hide-details
+        v-model="autoRefresh"
+        true-icon="fa:fas fa-check-square"
+        false-icon="fa:far fa-square"
+      >
+        <template v-slot:label>
+          <div class="text-caption font-weight-bold">5S刷新一次</div>
+        </template>
+      </v-checkbox>
       <v-tooltip text="刷新" class="text-caption" location="bottom">
         <template v-slot:activator="{ props }">
           <v-btn
@@ -60,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onBeforeUnmount, watch } from "vue";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useOrderStore } from "@/store/orders";
@@ -71,6 +80,9 @@ import { formatDateTime } from "@/composables/time";
 const order = useOrderStore();
 const search = ref();
 const router = useRouter();
+const autoRefresh = ref(false);
+let refreshInterval: NodeJS.Timeout;
+
 const onClickRow = (e: any, selected: any) => {
   order.setCurrentIndex(selected.index);
   router.push({ name: "/orders/[id]/", params: { id: selected.index } });
@@ -80,5 +92,35 @@ const { headers, items, loading } = storeToRefs(order);
 
 const filtered = computed(() => {
   return items.value.map((item) => item.order);
+});
+
+const startRefreshInterval = () => {
+  refreshInterval = setInterval(refreshData, 5000); // 每5秒刷新一次，可以根据需求调整时间间隔
+};
+
+const stopRefreshInterval = () => {
+  clearInterval(refreshInterval);
+};
+
+const refreshData = () => {
+  // 这里是请求刷新数据的逻辑，可以是接口请求或者其他数据更新方法
+  // 这里假设通过axios请求数据
+  order.fetch()
+  console.log("refresh");
+};
+
+watch(autoRefresh, (newVal) => {
+  if (newVal) {
+    // 当checkbox为true时启动定时器
+    startRefreshInterval();
+  } else {
+    // 当checkbox为false时关闭定时器
+    stopRefreshInterval();
+  }
+});
+
+onBeforeUnmount(() => {
+  // 在组件销毁时清除定时器，防止内存泄漏
+  stopRefreshInterval();
 });
 </script>

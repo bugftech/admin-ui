@@ -60,7 +60,7 @@
                     height="64"
                   >
                     <div class="text-caption v-label">总订单数</div>
-                    <div class="text-h6">20</div>
+                    <div class="text-h6">{{ total }}</div>
                   </v-sheet>
                 </template>
               </v-hover>
@@ -77,7 +77,7 @@
                     height="64"
                   >
                     <div class="text-caption v-label">已发货</div>
-                    <div class="text-h6">20</div>
+                    <div class="text-h6">{{ shipped }}</div>
                   </v-sheet>
                 </template>
               </v-hover>
@@ -94,7 +94,7 @@
                     height="64"
                   >
                     <div class="text-caption v-label">已完成</div>
-                    <div class="text-h6">20</div>
+                    <div class="text-h6">{{ completed }}</div>
                   </v-sheet>
                 </template>
               </v-hover>
@@ -124,9 +124,13 @@
 
 <script setup>
 import { useOrderStore } from "@/store/orders";
+import { storeToRefs } from "pinia";
+
 const labels = ["12am", "3am", "6am", "9am", "12pm", "3pm", "6pm", "9pm"];
 const value = [200, 675, 410, 390, 310, 460, 250, 240];
 const order = useOrderStore();
+
+const { total, shipped, completed } = storeToRefs(order);
 
 onMounted(async () => {
   const { success, data } = await order.fetch();

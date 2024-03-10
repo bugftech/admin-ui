@@ -109,7 +109,6 @@ const prev = () => {
 };
 
 const copy = () => {
-  console.log(orderItems.value);
   if (order) {
     copyOrderInfo({ ...order.value, items: orderItems.value });
   }

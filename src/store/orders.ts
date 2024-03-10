@@ -12,6 +12,9 @@ type State = {
   limit: number;
   loading: boolean;
   currentIndex: number;
+  total: number;
+  shipped: number;
+  completed: number;
 };
 
 export const useOrderStore = defineStore({
@@ -24,6 +27,9 @@ export const useOrderStore = defineStore({
       limit: 20,
       loading: false,
       currentIndex: 0,
+      total: 0,
+      shipped: 0,
+      completed: 0,
     } as State),
   getters: {
     currentOrder: (state) => {
@@ -38,6 +44,9 @@ export const useOrderStore = defineStore({
   actions: {
     setItems(data: OrderInfo[]) {
       this.items = data;
+      this.total = data.length;
+      this.shipped = data.filter((obj) => obj.order.status === 2).length;
+      this.completed = data.filter((obj) => obj.order.status === 3).length;
     },
     // 记录当前位置
     setCurrentIndex(idx: number) {
@@ -45,18 +54,16 @@ export const useOrderStore = defineStore({
     },
     next() {
       this.currentIndex++;
-      console.log("next:", this.currentIndex);
     },
     prev() {
       this.currentIndex--;
-      console.log("prev:", this.currentIndex);
     },
     async fetch<T>(): Promise<APIResponse<T>> {
       try {
         this.loading = true;
         const { data, status } = await API.bugfreed.list<OrderInfo>("orders");
         if (status === 200) {
-          this.setItems(data.data);
+          this.setItems(data.data.reverse());
           this.loading = true;
           return {
             success: true,

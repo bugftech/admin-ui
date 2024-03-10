@@ -12,6 +12,8 @@ export function copyToClipboardFormatted(obj: any) {
         formattedText += key + ": " + obj[key] + "\n";
       }
     }
+  } else {
+    formattedText = obj
   }
 
   // 创建一个临时的textarea元素
