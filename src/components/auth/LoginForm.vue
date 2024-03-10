@@ -10,7 +10,12 @@
     >
     <v-text-field v-model="password" type="password" hide-details="auto">
     </v-text-field>
-    <v-checkbox hide-details v-model="rememberMe">
+    <v-checkbox
+      hide-details
+      v-model="rememberMe"
+      true-icon="fa:fas fa-check-square"
+      false-icon="fa:far fa-square"
+    >
       <template v-slot:label>
         <div class="text-caption font-weight-medium">记住我</div>
       </template>
