@@ -57,13 +57,13 @@ async function add<T>(serviceName: string, data: T) {
 }
 
 // update 更新一个对象
-async function update<T>(serviceName: string, data: T) {
+async function update<T>(serviceName: string, id: number, data: T) {
   if (!supportedServices.includes(serviceName)) {
     throw new Error(`Unsupported service: ${serviceName}`);
   }
 
-  const url: string = `/${serviceName}`;
-  return await http.patch<APIResponse<T>>(url, data, { withCredentials: true });
+  const url: string = `/${serviceName}/${id}`;
+  return await http.put<APIResponse<T>>(url, data, { withCredentials: true });
 }
 
 export default {

@@ -86,5 +86,35 @@ export const useOrderStore = defineStore({
         data: null as unknown as T,
       };
     },
+    async updateStatus<T>(
+      orderId: number,
+      orderStatus: string
+    ): Promise<APIResponse<T>> {
+      try {
+        const { data, status } = await API.bugfreed.update("orders",orderId, {
+          status: orderStatus,
+        });
+        if (status === 200) {
+          this.fetch();
+          this.loading = true;
+          return {
+            success: true,
+            data: null as unknown as T,
+          };
+        }
+      } catch (error) {
+        const _error = error as AxiosError<string>;
+        return {
+          success: false,
+          status: _error.response?.status,
+          data: null as unknown as T,
+        };
+      }
+
+      return {
+        success: false,
+        data: null as unknown as T,
+      };
+    },
   },
 });

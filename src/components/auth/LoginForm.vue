@@ -44,7 +44,7 @@
 <script setup>
 import { ref } from "vue";
 import { useAuthStore } from "@/store/auth";
-import { useRouter } from "vue-router";
+import { useRouter,useRoute } from "vue-router";
 import { setCookie, getCookie } from "@/composables/cookie";
 import { encrypt, decrypt } from "@/composables/crypto";
 
@@ -54,6 +54,7 @@ const rememberMe = ref(false);
 
 const auth = useAuthStore();
 const router = useRouter();
+const route = useRoute();
 
 const login = async () => {
   const { success } = await auth.login(username.value, password.value);
@@ -69,7 +70,9 @@ const login = async () => {
       setCookie("rememberedPassword", "", -1);
       setCookie("rememberMe", "", -1);
     }
-    router.push("/orders");
+
+    const redirect = route.query.redirect || '/home'
+    router.push(redirect);
   }
 };
 

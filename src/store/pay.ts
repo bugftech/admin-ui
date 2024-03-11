@@ -1,4 +1,4 @@
-import { OrderInfo, APIResponse } from "@/services/types";
+import { APIResponse } from "@/services/types";
 import { API } from "@/services";
 import { AxiosError } from "axios";
 
@@ -10,7 +10,7 @@ export type wechatPay = {
   // 微信支付商户号
   mchId: string;
   // 微信支付子商户号
-  subMchId: string;
+  subMchId?: string;
   // 微信支付 API 证书
   apiCert?: string;
   // 微信支付 API v2 密钥
@@ -23,15 +23,20 @@ export type wechatPay = {
   notifyUrl: string;
 };
 
-type Pays = {
-  wechatPays: wechatPay[];
-};
+// AppType 应用类型枚举
+export enum PayType {
+  Wechat = "wechat",
+  Alipay = "alipay",
+}
+
+type alipay = {};
 
 type RootState = {
   loading: boolean;
-  editWechatPay: wechatPay;
-  defaultWechatPay: wechatPay;
   wechatpays: wechatPay[];
+  alipays: alipay[];
+  currentPayIndex: number;
+  currentPayType: PayType;
 };
 
 export const usePayStore = defineStore({
@@ -39,33 +44,26 @@ export const usePayStore = defineStore({
   state: () =>
     ({
       loading: false,
-      wechatpays: [],
-      editWechatPay: {
-        appId: "",
-        mchId: "",
-        subMchId: "",
-        apiV2Key: "",
-        apiV3Key: "",
-        isProvider: false,
-        notifyUrl: "",
-      },
-      defaultWechatPay: {
-        appId: "",
-        mchId: "",
-        subMchId: "",
-        apiV2Key: "",
-        apiV3Key: "",
-        isProvider: false,
-        notifyUrl: "",
-      },
+      wechatpays: [
+        {
+          appId: "112231231231",
+          mchId: "asdfasdfas",
+          apiV2Key: "xxx",
+          isProvider: false,
+          notifyUrl: "https://localhost:8080/notify",
+        },
+      ],
+      alipays: [],
+      currentPayIndex: 0,
+      currentPayType: PayType.Wechat,
     } as RootState),
   actions: {
     async fetch<T>(): Promise<APIResponse<T>> {
       try {
         this.loading = true;
-        const { data, status } = await API.bugfreed.list<Pays>("pays");
+        const { data, status } = await API.bugfreed.list<wechatPay[]>("pays");
         if (status === 200) {
-          console.log(data)
+          console.log(data);
           this.loading = true;
           return {
             success: true,
@@ -87,6 +85,15 @@ export const usePayStore = defineStore({
         success: false,
         data: null as unknown as T,
       };
+    },
+    addWxPay(pay: wechatPay) {
+      this.wechatpays.push(pay);
+    },
+    updateWxPay(pay: wechatPay) {
+      const idx = this.wechatpays.findIndex((item) => item.appId === pay.appId);
+      if (idx > -1) {
+        this.wechatpays[idx] = pay;
+      }
     },
   },
 });

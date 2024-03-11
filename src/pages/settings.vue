@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row align="center" justify="center">
       <v-col cols="12">
         <!--面包屑-->

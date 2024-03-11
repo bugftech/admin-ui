@@ -52,6 +52,8 @@
 </template>
 
 <script setup>
+import { useOrderStore } from "@/store/orders";
+
 const props = defineProps({
   orderId: {
     type: Number,
@@ -95,12 +97,15 @@ const items = [
   },
 ];
 
+const { orderId, value } = props;
+
 const filtered = items.filter((item) => item.value > props.value);
 // confirm dialog ref
 const confirm = ref();
+const orderStore = useOrderStore();
 
 const updateStatus = (status) => {
-  const statusItem = items.find(item=> item.value === status);
+  const statusItem = items.find((item) => item.value === status);
   confirm.value
     .open(
       "更新订单状态",
@@ -108,7 +113,8 @@ const updateStatus = (status) => {
     )
     .then((ok) => {
       if (ok) {
-        console.log(status);
+        const { success } = orderStore.updateStatus(orderId, value);
+        console.log(success);
       }
     });
 };

@@ -8,7 +8,6 @@
 import { createRouter, createWebHistory } from "vue-router/auto";
 import { setupLayouts } from "virtual:generated-layouts";
 
-
 const router = createRouter({
   history: createWebHistory(),
   extendRoutes: setupLayouts,
@@ -16,10 +15,9 @@ const router = createRouter({
 
 router.addRoute({
   path: "/:pathMatch(.*)*",
-  name: 'NotFound',
+  name: "NotFound",
   component: () => import("@/layouts/404.vue"),
 });
 
-
-console.log(router.getRoutes())
+console.log("routes:", router.getRoutes());
 export default router;

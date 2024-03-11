@@ -1,85 +1,55 @@
 <template>
   <v-card>
-    <v-toolbar color="transparent">
-      <v-spacer />
-      <v-dialog width="600">
-        <template v-slot:activator="{ props }">
-          <v-btn
-            v-bind="props"
-            size="small"
-            prepend-icon="mdi-plus"
-            variant="flat"
-            color="grey-darken-4"
-          >
-            添加新的支付
-          </v-btn>
-        </template>
-        <template v-slot:default="{ isActive }">
-          <v-card>
-            <v-toolbar color="transparent" density="default">
-              <v-toolbar-title class="text-body-2 font-weight-medium">
-                添加支付能力到您的应用
-              </v-toolbar-title>
-              <v-spacer></v-spacer>
-              <v-btn
-                icon="mdi-close"
-                variant="text"
-                @click="isActive.value = false"
-              ></v-btn>
-            </v-toolbar>
-            <v-card-subtitle class="text-caption text-wrap v-label">
-              若需要使用支付能力，请选择一个对应的平台支付。
-            </v-card-subtitle>
-            <v-card-text class="pa-12">
-              <div class="d-flex justify-center ga-4">
-                <template v-for="(platform, i) in platforms" :key="i">
-                  <v-divider v-if="i != 0" vertical class="my-4" />
-                  <v-btn
-                    :icon="platform.icon"
-                    variant="outlined"
-                    rounded="circle"
-                    size="large"
-                    :color="platform.color"
-                    :disabled="platform.disabled"
-                  ></v-btn>
-                </template>
-              </div>
-            </v-card-text>
-          </v-card>
-        </template>
-      </v-dialog>
-    </v-toolbar>
+    <v-card-text class="py-2">
+      <v-row>
+        <v-col cols="12" md="6">
+          <div class="text-subtitle-1 font-weight-bold">为您的项目添加应用</div>
+          <div class="text-caption v-label mt-2">
+            要开始使用，请先从右侧选择一个第三方支付。
+          </div>
+        </v-col>
+        <v-col cols="12" md="6">
+          <div class="d-flex justify-center ga-4">
+            <v-spacer />
+            <SettingPayAddDialog method="wechat" />
+            <v-divider class="my-4" vertical />
+            <v-btn
+              icon="fa:fab fa-alipay"
+              variant="outlined"
+              disabled
+            />
+          </div>
+        </v-col>
+      </v-row>
+    </v-card-text>
     <v-divider />
     <v-card-text class="pa-0">
       <v-row no-gutters>
-        <v-col cols="12" md="3">
-          <v-sheet>
-            <v-list bg-color="transparent" density="compact" :lines="false">
-              <v-list-subheader class="text-caption">
-                <v-icon start color="green">mdi-wechat</v-icon> 微信
-              </v-list-subheader>
-              <v-list-item
-                v-for="(wx, i) in wechatPays"
-                :key="i"
-                @click="viewWxPay(wx.id)"
-              >
-                <v-list-item-title class="text-caption font-weight-bold">
-                  微信支付 {{ i + 1 }}
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-            <v-divider />
-            <v-list bg-color="transparent" density="compact" :lines="false">
-              <v-list-subheader class="text-caption">
-                <v-icon start color="blue" icon="fa:fab fa-alipay"></v-icon>
-                支付宝
-              </v-list-subheader>
-            </v-list>
-            <v-divider />
-          </v-sheet>
+        <v-col cols="12" md="4">
+          <v-list v-if="wechatpays.length">
+            <v-list-subheader class="text-caption font-weight-regular"
+              >微信支付</v-list-subheader
+            >
+            <v-list-item
+              v-for="(wx, i) in wechatpays"
+              :key="i"
+              color="indigo"
+              prepend-icon="mdi-wechat"
+              :active="i === currentPayIndex && currentPayType === 'wechat'"
+              @click="onView('wechat', i)"
+            >
+              <v-list-item-title class="text-subtitle-2">{{
+                wx.mchId
+              }}</v-list-item-title>
+              <v-list-item-subtitle class="text-caption">
+                {{ wx.appId }}
+              </v-list-item-subtitle>
+            </v-list-item>
+          </v-list>
         </v-col>
         <v-divider vertical />
-        <v-col cols="12" md="9">
+        <v-col cols="12" md="8" class="px-4">
+          <SettingPayWechatConfig :pay="currentPayForm" />
         </v-col>
       </v-row>
     </v-card-text>
@@ -88,25 +58,16 @@
 
 <script setup>
 import { usePayStore } from "@/store/pay";
-const viewWxPay = () => {};
-const platforms = [
-  {
-    id: 1,
-    title: "微信支付",
-    icon: "mdi-wechat",
-    color: "green",
-  },
-  {
-    id: 1,
-    title: "支付宝",
-    icon: "fa:fab fa-alipay",
-    disabled: true,
-    color: "blue",
-  },
-];
 
-const pay = usePayStore();
-const { wechatPays } = storeToRefs(pay);
+const store = usePayStore();
+const { wechatpays, currentPayIndex, currentPayType, alipays } =
+  storeToRefs(store);
+
+const currentPayForm = computed(() => {
+  const pays =
+    currentPayType.value === "wechat" ? wechatpays.value : alipays.value;
+  return pays[currentPayIndex.value];
+});
 </script>
 
 <route lang="yaml">

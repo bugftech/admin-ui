@@ -53,7 +53,7 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <OrderStatusStepper :value="2" />
+        <OrderStatusStepper :value="order.status" :orderId="order.id" />
       </v-col>
       <v-col cols="12" md="8">
         <OrderBasicInfoSection :item="order" />

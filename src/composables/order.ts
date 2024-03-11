@@ -9,11 +9,12 @@ interface Translation {
 export const BasicTranslation: Translation = {
   bfAppId: "应用ID",
   memberUsername: "会员用户名",
-  id: "ID",
   autoConfirmDay: "自动确认天数",
   confirmStatus: "确认状态",
   deleteStatus: "删除状态",
-  orderSn: "订单编号",
+  //orderSn: "订单编号",
+  // id: "ID",
+  id: "订单编号",
   orderType: "订单类型",
   payType: "支付类型",
   sourceType: "来源类型",
@@ -55,7 +56,7 @@ export const ProductTranslation: Translation = {
   realAmount: "折后价格",
 };
 
-const copyBasicKeys: (keyof Translation)[] = ["memberUsername", "orderSn"];
+const copyBasicKeys: (keyof Translation)[] = ["memberUsername", "id"];
 const copyProductKeys: (keyof Translation)[] = [
   "productName",
   "productSubTitle",
@@ -67,6 +68,17 @@ const copyProductKeys: (keyof Translation)[] = [
 // copyOrderInfo 复制订单信息
 export function copyOrderInfo(obj: any) {
   const arr: string[] = [];
+  // 处理订单id
+  if (obj.id) {
+    const currentDate = new Date(obj.createTime);
+    console.log("currentDate", currentDate);
+    const year = currentDate.getFullYear();
+    const month = (currentDate.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-based
+    const day = currentDate.getDate().toString().padStart(2, "0");
+
+    const formattedDate = `${year}${month}${day}10`;
+    obj.id = formattedDate + obj.id;
+  }
   // 复制基础信息
   for (const key of copyBasicKeys) {
     if (obj[key] != undefined) {

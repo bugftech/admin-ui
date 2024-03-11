@@ -1,5 +1,7 @@
 import axios from "axios";
-import { useRouter } from "vue-router";
+
+// 不能直接用vue-router.他只能在setup函数内使用
+import router from "@/router";
 const url = import.meta.env.VITE_API_SERVER_URL;
 
 const instance = axios.create({
@@ -21,7 +23,6 @@ instance.interceptors.request.use(
   }
 );
 
-const router = useRouter()
 instance.interceptors.response.use(
   function (response) {
     // status 2xx
@@ -29,8 +30,17 @@ instance.interceptors.response.use(
   },
   function (error) {
     // 响应状态码不是 2xx 时触发失败的回调，形参中的 error 是“失败的结果”
-    if (error.response.status === 403 ) {
-      router.push("/login");
+    if (error.response.status === 403) {
+      const currentRouteName = router.currentRoute.value.name;
+      console.log("currentRouteName:",currentRouteName)
+      if (currentRouteName !== "/login") {
+        router.push({
+          name: "/login",
+          query: {
+            redirect: router.currentRoute.value.fullPath,
+          },
+        });
+      }
     }
     return Promise.reject(error);
   }

@@ -1,7 +1,7 @@
 <template>
   <v-dialog max-width="800" v-model="dialog" persistent>
     <template v-slot:activator="{ props }">
-      <v-btn icon="mdi-wechat" size="large" v-bind="props" variant="outlined" />
+      <v-btn icon="mdi-wechat" v-bind="props" variant="outlined" />
     </template>
     <v-card>
       <v-toolbar>
@@ -57,12 +57,11 @@
 
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import { useApplicationStore } from "@/store/applications";
+import { useApplicationStore, AppType } from "@/store/applications";
 
 const store = useApplicationStore();
-
 const dialog = ref(false);
-// 创建一个符合 MiniConfig 类型要求的对象
+
 const state = reactive({
   name: "",
   appId: "",
@@ -70,18 +69,12 @@ const state = reactive({
 });
 
 const onClose = () => {
-  state.name = "";
-  state.appId = "";
-  state.appSecret = "";
+  Object.assign(state, { name: "", appId: "", appSecret: "" });
   dialog.value = false;
 };
 
 const onSubmit = () => {
-  store.addMiniApp({
-    name: state.name,
-    appId: state.appId,
-    appSecret: state.appSecret,
-  });
+  store.addApp({ ...state }, AppType.Wechat);
   onClose();
 };
 </script>

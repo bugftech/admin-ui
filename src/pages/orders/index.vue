@@ -143,5 +143,5 @@ onMounted(async () => {
 <route lang="yaml">
 name: "orders"
 meta:
-  breadcrumb: "orders"
+  breadcrumb: "订单"
 </route>
