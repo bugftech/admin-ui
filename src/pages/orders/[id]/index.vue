@@ -54,9 +54,9 @@
     <v-row>
       <v-col cols="12">
         <OrderStatusStepper
-          :status="order?.status"
-          :orderId="order?.id"
-          :bfAppId="order?.bfAppId"
+          :status="order.status"
+          :orderId="order.id"
+          :bfAppId="order.bfAppId"
         />
       </v-col>
       <v-col cols="12" md="8">
@@ -76,9 +76,9 @@
       </v-col>
       <v-col cols="12" md="4">
         <OrderPriceSection
-          :totalAmount="order?.totalAmoun"
-          :payAmount="order?.payAmount"
-          :promotionAmount="order?.promotionAmount"
+          :totalAmount="order.totalAmount"
+          :payAmount="order.payAmount"
+          :promotionAmount="order.promotionAmount"
         />
 
         <OrderBillSection class="mt-4" />
@@ -90,15 +90,16 @@
 <script setup lang="ts">
 import { useOrderStore } from "@/store/orders";
 import { copyOrderInfo } from "@/composables/order";
-
+import { useRoute } from "vue-router";
+import { Order, OrderItem } from "@/interfaces/order";
 const route = useRoute();
-const id = route.params.id;
 const orderStore = useOrderStore();
-const order = ref();
-const orderItems = ref([]);
+const order = ref<Order>({} as Order);
+  const orderItems = ref<OrderItem[]>([]);
 
-order.value = orderStore.currentOrder.order;
-orderItems.value = orderStore.currentOrder.orderItems;
+const id = (route.params as { id: string }).id;
+order.value = orderStore.currentOrder?.order || {} as Order;
+orderItems.value = orderStore.currentOrder?.orderItems || [];
 
 const next = () => {
   orderStore.next();
@@ -109,7 +110,7 @@ const prev = () => {
 };
 
 const copy = () => {
-  if (order) {
+  if (order.value) {
     copyOrderInfo({ ...order.value, items: orderItems.value });
   }
 };
