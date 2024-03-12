@@ -38,6 +38,7 @@ declare module 'vue' {
     OrderStatusStepper: typeof import('./src/components/order/StatusStepper.vue')['default']
     PayWechat: typeof import('./src/components/pay/wechat.vue')['default']
     PayWechatConfig: typeof import('./src/components/pay/wechatConfig.vue')['default']
+    ProductDataTable: typeof import('./src/components/product/DataTable.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SettingBasicAlipayMiniDialog: typeof import('./src/components/setting/basic/AlipayMiniDialog.vue')['default']

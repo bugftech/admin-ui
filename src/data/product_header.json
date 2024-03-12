@@ -1,0 +1,26 @@
+[
+  {
+    "title": "产品名称",
+    "key": "name"
+  },
+  {
+    "title": "价格",
+    "key": "price"
+  },
+  {
+    "title": "销量",
+    "key": "sale"
+  },
+  {
+    "title": "库存",
+    "key": "stock"
+  },
+  {
+    "title": "是否上架",
+    "key": "isPublished"
+  },
+  {
+    "title": "是否限时促销",
+    "key": "promotionType"
+  }
+]

@@ -1,8 +1,9 @@
 import { defineStore } from "pinia";
-import { OrderInfo, APIResponse } from "@/services/types";
+import { APIResponse } from "@/services/types";
 import { API } from "@/services";
 import { AxiosError } from "axios";
-
+// interface
+import { UpdateOrderStatus, OrderInfo } from "@/interfaces/order";
 import data from "@/data/order_header.json";
 
 type State = {
@@ -88,14 +89,11 @@ export const useOrderStore = defineStore({
     },
     async updateStatus<T>(
       orderId: number,
-      orderStatus: string
+      params: UpdateOrderStatus
     ): Promise<APIResponse<T>> {
       try {
-        const { data, status } = await API.bugfreed.update("orders",orderId, {
-          status: orderStatus,
-        });
+        const { status } = await API.bugfreed.update("orders", orderId, params);
         if (status === 200) {
-          this.fetch();
           this.loading = true;
           return {
             success: true,
@@ -115,6 +113,24 @@ export const useOrderStore = defineStore({
         success: false,
         data: null as unknown as T,
       };
+    },
+    async getOrder<T>(id: number): Promise<APIResponse<T>> {
+      try {
+        this.loading = true;
+        const {data,status} = await API.bugfreed.get<OrderInfo>("orders",id)
+        return {
+          success: true,
+          data: null as unknown as T,
+        };
+
+      } catch (error) {
+        const _error = error as AxiosError<string>;
+        return {
+          success: false,
+          status: _error.response?.status,
+          data: null as unknown as T,
+        };
+      }
     },
   },
 });

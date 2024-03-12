@@ -133,7 +133,7 @@ const order = useOrderStore();
 const { total, shipped, completed } = storeToRefs(order);
 
 onMounted(async () => {
-  const { success, data } = await order.fetch();
+  const { success } = await order.fetch();
   if (!success) {
     console.log("failed to get orders");
   }

@@ -23,19 +23,23 @@
     "items": [
       {
         "title": "商品",
-        "to": "/products"
+        "to": "/pms/products"
+      },
+      {
+        "title": "系列",
+        "to": "/pms/stocks"
       },
       {
         "title": "产品类型",
-        "to": "/categories"
+        "to": "/pms/categories"
       },
       {
         "title": "库存",
-        "to": "/stocks"
+        "to": "/pms/stocks"
       },
       {
         "title": "礼品卡",
-        "to": "/cards"
+        "to": "/pms/cards"
       }
     ]
   },

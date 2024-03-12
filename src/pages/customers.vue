@@ -4,7 +4,6 @@
       <v-col cols="12">
         <!--面包屑-->
         <AppBreadcrumb></AppBreadcrumb>
-        <SettingTabs />
         <v-divider />
       </v-col>
       <v-col cols="12" md="10">
@@ -17,7 +16,6 @@
 <script setup></script>
 
 <route lang="yaml">
-redirect: "/settings/basic"
 meta:
-  breadcrumb: 项目
+  breadcrumb: 客户
 </route>

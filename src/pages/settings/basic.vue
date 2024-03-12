@@ -99,6 +99,10 @@ const currentAppForm = computed(() => {
   return apps[currentAppIndex.value];
 });
 
+
+onMounted(()=>{
+  
+})
 </script>
 
 <route lang="yaml">

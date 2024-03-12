@@ -53,7 +53,11 @@
     </v-row>
     <v-row>
       <v-col cols="12">
-        <OrderStatusStepper :value="order.status" :orderId="order.id" />
+        <OrderStatusStepper
+          :status="order?.status"
+          :orderId="order?.id"
+          :bfAppId="order?.bfAppId"
+        />
       </v-col>
       <v-col cols="12" md="8">
         <OrderBasicInfoSection :item="order" />
@@ -83,22 +87,18 @@
   </v-container>
 </template>
 
-<script setup>
-import { storeToRefs } from "pinia";
+<script setup lang="ts">
 import { useOrderStore } from "@/store/orders";
-const orderStore = useOrderStore();
 import { copyOrderInfo } from "@/composables/order";
 
 const route = useRoute();
 const id = route.params.id;
-
+const orderStore = useOrderStore();
 const order = ref();
 const orderItems = ref([]);
 
-if (orderStore.currentOrder) {
-  order.value = orderStore.currentOrder.order;
-  orderItems.value = orderStore.currentOrder.orderItems;
-}
+order.value = orderStore.currentOrder.order;
+orderItems.value = orderStore.currentOrder.orderItems;
 
 const next = () => {
   orderStore.next();
@@ -117,5 +117,5 @@ const copy = () => {
 
 <route lang="yaml">
 meta:
-  breadcrumb: "view"
+  breadcrumb: "查看"
 </route>

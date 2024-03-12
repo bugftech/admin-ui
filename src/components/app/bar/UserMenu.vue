@@ -8,13 +8,14 @@
     <v-card min-width="300" class="mt-2" theme="light">
       <div class="text-center">
         <v-avatar color="indigo" size="large" class="my-3" variant="elevated">
-          <v-img :src="profile.avatar" />
+          <v-img v-if="userProfile.avatar" :src="userProfile.avatar" />
+          <div v-else>S</div>
         </v-avatar>
         <v-list-item-title class="font-weight-bold">{{
-          profile.name
+          userProfile.nickName?userProfile.nickName: '尚未设置昵称'
         }}</v-list-item-title>
         <v-list-item-subtitle class="text-caption font-weight-bold">{{
-          profile.email
+          userProfile.email
         }}</v-list-item-subtitle>
         <v-btn rounded prepend-icon="mdi-cog" variant="tonal" class="my-4"
           >设置账号</v-btn
@@ -59,10 +60,10 @@ const items: Item[] = [
   },
 ];
 
-const user = useUserStore();
-const { profile } = storeToRefs(user);
+const userStore = useUserStore();
+const { userProfile } = storeToRefs(userStore);
 
 onMounted(() => {
-  user.fetchProfile();
+  userStore.fetchUserProfile();
 });
 </script>

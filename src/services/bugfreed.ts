@@ -66,10 +66,17 @@ async function update<T>(serviceName: string, id: number, data: T) {
   return await http.put<APIResponse<T>>(url, data, { withCredentials: true });
 }
 
+
+
+async function getByURL<T>(url: string) {
+  return await http.get<APIResponse<T>>(url, { withCredentials: true });
+}
+
 export default {
   list,
   get,
   remove,
   add,
   update,
+  getByURL
 };

@@ -69,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onBeforeUnmount, watch } from "vue";
+import { ref, computed, onBeforeUnmount, watch, toRaw } from "vue";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useOrderStore } from "@/store/orders";
@@ -82,13 +82,13 @@ const search = ref();
 const router = useRouter();
 const autoRefresh = ref(false);
 let refreshInterval: NodeJS.Timeout;
+const { headers, items, loading } = storeToRefs(order);
 
 const onClickRow = (e: any, selected: any) => {
+  const copyItem = toRaw(selected.item);
   order.setCurrentIndex(selected.index);
-  router.push({ name: "/orders/[id]/", params: { id: selected.index } });
+  router.push({ name: "/orders/[id]/", params: { id: copyItem.id } });
 };
-
-const { headers, items, loading } = storeToRefs(order);
 
 const filtered = computed(() => {
   return items.value.map((item) => item.order);
@@ -105,7 +105,7 @@ const stopRefreshInterval = () => {
 const refreshData = () => {
   // 这里是请求刷新数据的逻辑，可以是接口请求或者其他数据更新方法
   // 这里假设通过axios请求数据
-  order.fetch()
+  order.fetch();
   console.log("refresh");
 };
 
