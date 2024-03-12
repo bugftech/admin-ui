@@ -133,4 +133,7 @@ export const useOrderStore = defineStore({
       }
     },
   },
+  persist: {
+    enabled: true // true 表示开启持久化保存
+  }
 });
