@@ -1,6 +1,11 @@
 <template>
   <v-tabs density="compact" v-model="activeTab">
-    <v-tab class="text-caption" v-for="(tab, i) in tabs" :to="tab.to" :key="i" exact
+    <v-tab
+      class="text-caption"
+      v-for="(tab, i) in tabs"
+      :to="tab.to"
+      :key="i"
+      exact
       >{{ tab.title }}
     </v-tab>
   </v-tabs>
@@ -22,9 +27,15 @@ const tabs = [
     title: "通知",
     to: "/settings/notification",
   },
+  /*
   {
     title: "服务账号",
     to: "/settings/serviceaccount",
   },
+  */
+  {
+    title: "成员与权限",
+    to: "/settings/iam",
+  }
 ];
 </script>

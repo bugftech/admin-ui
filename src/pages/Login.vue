@@ -37,7 +37,7 @@ meta:
 <style>
 .bg {
   overflow: hidden;
-  background: linear-gradient(135deg, #333333, #999999); 
+  /* background: linear-gradient(135deg, #333333, #999999); */
 }
 
 .drop-filter {

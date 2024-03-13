@@ -1,11 +1,6 @@
 <template>
-  <div to="/" class="d-flex ms-4 me-2 text-decoration-none align-center">
-    <v-avatar>
-      <v-img src="@/assets/bugfreed-transparent.png"></v-img>
-    </v-avatar>
-    <div class="text-body-2 font-weight-bold" style="font-family: futura">
-      BUGFRRED
-    </div>
+  <div class="ms-4">
+    <v-img src="@/assets/bugfreed-text.svg" style="width: 100px"></v-img>
   </div>
 </template>
 
