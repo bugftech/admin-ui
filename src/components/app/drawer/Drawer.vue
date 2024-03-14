@@ -4,7 +4,6 @@
     v-model="app.drawer"
     width="240"
     :order="mobile ? -1 : undefined"
-    style="background: #ebebeb"
     floating
   >
     <template v-slot:prepend>

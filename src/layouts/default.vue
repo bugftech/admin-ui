@@ -3,7 +3,7 @@
     <AppBarBar />
     <AppSnackBarQueue />
     <AppDrawerDrawer />
-    <v-main style="background: #f1f1f1">
+    <v-main :class="mode">
       <slot>
         <router-view v-slot="{ Component }">
           <v-fade-transition hide-on-leave>
@@ -18,5 +18,24 @@
 </template>
 
 <script setup>
+import { useTheme } from "vuetify";
+import { useRoute } from "vue-router";
+
 const route = useRoute();
+const theme = useTheme();
+
+const mode = computed(()=>{
+  return theme.global.name.value 
+})
 </script>
+
+
+<style>
+.dark {
+  background: black;
+}
+
+.light {
+  background: #f1f1f1;
+}
+</style>

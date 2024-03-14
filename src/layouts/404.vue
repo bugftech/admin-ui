@@ -9,7 +9,15 @@
             请检查 URL 并重试，或者使用搜索栏查找所需的内容。
           </p>
 
-          <v-btn prepend-icon="mdi-step-backward" to="/"> 返回首页 </v-btn>
+          <v-btn
+            prepend-icon="mdi-step-backward"
+            to="/"
+            variant="flat"
+            color="orange-accent-2"
+            rounded="xl"
+          >
+            返回首页
+          </v-btn>
           <p></p>
         </v-col>
       </v-row>

@@ -26,7 +26,7 @@ export const useAuthStore = defineStore({
     ): Promise<APIResponse<null>> {
       try {
         this.loading = true;
-        const { status } = await http.post("/signin", {
+        const { data,status } = await http.post("/signin", {
           username: username,
           password: password,
         });
@@ -34,11 +34,10 @@ export const useAuthStore = defineStore({
           app.snackbar("登录成功", {
             color: "indigo",
             timeout: 2000,
-            location: "top center",
           });
           return {
             success: true,
-            data: null,
+            data: data,
             status: status,
           };
         } else {
@@ -55,6 +54,7 @@ export const useAuthStore = defineStore({
         const _error = error as AxiosError<string>;
         app.snackbar("服务器错误", {
           timeout: 2000,
+          location: 'top center'
         });
         return {
           success: false,

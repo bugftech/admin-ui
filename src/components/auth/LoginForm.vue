@@ -3,12 +3,26 @@
     <v-label class="text-caption font-weight-medium pb-2 text-light"
       >用户名/邮件</v-label
     >
-    <v-text-field v-model="username" hide-details="auto"> </v-text-field>
+    <v-text-field
+      v-model="username"
+      hide-details="auto"
+      density="compact"
+      variant="solo-filled"
+      flat
+    >
+    </v-text-field>
 
     <v-label class="text-caption font-weight-medium pb-2 text-lightText mt-4"
       >密码</v-label
     >
-    <v-text-field v-model="password" type="password" hide-details="auto">
+    <v-text-field
+      flat
+      v-model="password"
+      type="password"
+      hide-details="auto"
+      density="compact"
+      variant="solo-filled"
+    >
     </v-text-field>
     <v-checkbox
       hide-details
@@ -22,19 +36,22 @@
     </v-checkbox>
     <v-btn
       block
-      theme="dark"
       prepend-icon="mdi-login"
       variant="flat"
-      rounded="pill"
+      rounded="lg"
       class="mt-4"
+      color="orange-accent-2"
+      :loading="loading"
       @click="login"
-      >登录</v-btn
+      >登录账号</v-btn
     >
+
+    <v-divider class="my-8" />
     <v-btn
       block
       prepend-icon="mdi-lock-reset"
       variant="tonal"
-      rounded="pill"
+      rounded="lg"
       class="mt-4"
       >忘记密码？</v-btn
     >
@@ -44,7 +61,7 @@
 <script setup>
 import { ref } from "vue";
 import { useAuthStore } from "@/store/auth";
-import { useRouter,useRoute } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { setCookie, getCookie } from "@/composables/cookie";
 import { encrypt, decrypt } from "@/composables/crypto";
 
@@ -55,6 +72,7 @@ const rememberMe = ref(false);
 const auth = useAuthStore();
 const router = useRouter();
 const route = useRoute();
+const { loading } = storeToRefs(auth);
 
 const login = async () => {
   const { success } = await auth.login(username.value, password.value);
@@ -71,7 +89,7 @@ const login = async () => {
       setCookie("rememberMe", "", -1);
     }
 
-    const redirect = route.query.redirect || '/home'
+    const redirect = route.query.redirect || "/home";
     router.push(redirect);
   }
 };

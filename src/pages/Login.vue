@@ -1,18 +1,18 @@
 <template>
+  <v-app-bar app flat>
+    <AppBarLogo class="ms-4"/>
+  </v-app-bar>
   <v-container class="fill-height bg" fluid>
     <v-row align="center" justify="center">
       <v-col cols="12" xl="4" lg="4">
-        <v-card
-          class="elevation-1 py-12 px-12 rounded-lg drop-filter"
-          :loading="loading"
-        >
+        <v-card class="py-12 px-12 rounded-lg drop-filter" flat>
           <h2 class="text-h3 font-weight-semibold mb-2">登录</h2>
-          <div class="text-subtitle-2 mb-6">BUGFREED 管理端</div>
+          <div class="text-subtitle-1 mb-6">BUGFREED 管理端</div>
           <AuthLoginForm />
           <h6 class="text-caption mt-8 d-flex align-center">
             <div class="text-medium-emphasis">还未拥有账号？</div>
-            <v-btn href="/signup" variant="outlined" size="small"
-              >创建账号</v-btn
+            <div href="/signup" variant="outlined" class="text-decoration-underline"
+              >创建账号</div
             >
           </h6>
         </v-card>
@@ -26,12 +26,12 @@ import { useAuthStore } from "@/store/auth";
 import { storeToRefs } from "pinia";
 
 const auth = useAuthStore();
-const { loading } = storeToRefs(auth);
 </script>
 
 <route lang="yaml">
 meta:
   layout: bare
+  title: "登录"
 </route>
 
 <style>
@@ -42,6 +42,6 @@ meta:
 
 .drop-filter {
   backdrop-filter: blur(15px) !important;
-  background: rgba(255, 255, 255, .9) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
 }
 </style>

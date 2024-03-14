@@ -1,6 +1,6 @@
 <template>
   <v-toolbar class="rounded-lg" color="transparent" density="compact">
-    <v-breadcrumbs :items="breadcrumbs" class="text-subtitle-2"> </v-breadcrumbs>
+    <v-breadcrumbs :items="breadcrumbs" class="text-h6"> </v-breadcrumbs>
     <v-spacer />
     <template v-slot:append>
       <slot />
@@ -15,5 +15,4 @@ const items = computed(() => {
 });
 
 const { breadcrumbs } = useBreadcrumbs(items);
-console.log("items:", breadcrumbs.value);
 </script>

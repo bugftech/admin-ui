@@ -4,10 +4,16 @@ import { APIResponse, Pagination } from "./types";
 const supportedServices = ["orders", "products"];
 
 // list 根据分页获取数据
-async function list<T>(serviceName: string, pagination?: Pagination) {
+async function list<T>(
+  serviceName: string,
+  query?: Record<string, any>,
+  pagination?: Pagination
+) {
+  /*
   if (!supportedServices.includes(serviceName)) {
     throw new Error(`Unsupported service: ${serviceName}`);
   }
+  */
 
   let url: string = `/${serviceName}`;
   if (pagination) {
@@ -15,6 +21,12 @@ async function list<T>(serviceName: string, pagination?: Pagination) {
     url += `?page=${page}&pageSize=${limit}`;
   } else {
     url += "/all";
+  }
+
+  // Append query parameters if provided
+  if (query) {
+    const queryParams = new URLSearchParams(query).toString();
+    url += `&${queryParams}`;
   }
 
   return await http.get<APIResponse<T[]>>(url, { withCredentials: true });
@@ -66,8 +78,6 @@ async function update<T>(serviceName: string, id: number, data: T) {
   return await http.put<APIResponse<T>>(url, data, { withCredentials: true });
 }
 
-
-
 async function getByURL<T>(url: string) {
   return await http.get<APIResponse<T>>(url, { withCredentials: true });
 }
@@ -78,5 +88,5 @@ export default {
   remove,
   add,
   update,
-  getByURL
+  getByURL,
 };

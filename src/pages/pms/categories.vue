@@ -6,73 +6,22 @@
         <AppBreadcrumb>
           <v-btn variant="tonal" size="small"> 导入 </v-btn>
           <v-btn variant="tonal" size="small" class="mx-2"> 导出 </v-btn>
-          <CategoryAddDialog />
+          <CategoryUpsertDialog />
         </AppBreadcrumb>
-
-        <v-card class="mt-4">
-          <v-toolbar color="transparent">
-            <v-spacer />
-            <v-responsive max-width="344">
-              <v-text-field
-                flat
-                density="compact"
-                variant="solo-filled"
-                placeholder="检索"
-                class="me-2"
-                prepend-inner-icon="mdi-magnify"
-                v-model="search"
-              >
-              </v-text-field>
-            </v-responsive>
-          </v-toolbar>
-          <v-divider />
-          <v-data-table
-            :headers="headers"
-            class="text-caption"
-            hover
-            :items="items"
-          >
-            <template v-slot:item.product="{ item }">
-              <v-list-item class="pa-0">
-                <template v-slot:prepend>
-                  <v-avatar class="rounded-lg border">
-                    <v-img :src="item.image" v-if="item.image" />
-                    <v-icon icon="mdi-image" v-else />
-                  </v-avatar>
-
-                  <v-list-item-title class="text-caption font-weight-bold ms-2">
-                    {{ item.productName }}
-                  </v-list-item-title>
-                </template>
-              </v-list-item>
-            </template>
-            <template v-slot:item.actions="{ item }">
-              <v-icon icon="mdi-dots-vertical-circle" size="x-large"> </v-icon>
-            </template>
-          </v-data-table>
-        </v-card>
+        <CategoryDataTable />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script setup>
-const headers = [
-  { title: "名称", value: "name" },
-  { title: "等级", key: "level" },
-  { title: "商品数量", key: "count" },
-  { title: "单位", key: "unit" },
-  { title: "操作", key: "actions", align: "end" },
-];
+import { useCategoryStore } from "@/store/category";
+const store = useCategoryStore();
 
-const items = [
-  {
-    productName: "库装",
-    skuCode: "ABC-12345-S-BL",
-    lock: 20,
-    stock: 30,
-  },
-];
+onMounted(async () => {
+  const { success } = await store.fetch();
+  console.log("fetch categories ok");
+});
 </script>
 
 <route lang="yaml">

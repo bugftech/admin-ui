@@ -4,7 +4,8 @@
       <v-btn
         icon="fa:fab fa-alipay"
         v-bind="props"
-        variant="outlined"
+        variant="text"
+        class="border"
       />
     </template>
     <v-card>

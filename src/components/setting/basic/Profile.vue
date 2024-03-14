@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-toolbar color="transparent">
-      <v-toolbar-title class="text-caption font-weight-bold"
+      <v-toolbar-title class="text-subtitle-2 font-weight-bold"
         >基础信息</v-toolbar-title
       >
       <v-spacer />
@@ -9,6 +9,7 @@
         variant="tonal"
         size="small"
         v-if="canEditInfo"
+        @click="canEditInfo = !canEditInfo"
         prepend-icon="mdi-close"
       >
         取消
@@ -18,7 +19,8 @@
         variant="flat"
         size="small"
         v-if="canEditInfo"
-        color="red"
+        color="orange-accent-2"
+        @click="canEditInfo = !canEditInfo"
         prepend-icon="mdi-check-all"
       >
         保存
@@ -33,7 +35,7 @@
     <v-card-text>
       <v-row dense>
         <v-col cols="12" md="4">
-          <v-label class="text-caption font-weight-medium"> 项目名称 </v-label>
+          <v-label class="text-caption font-weight-medium"> 公司名称 </v-label>
         </v-col>
         <v-col cols="12" md="8">
           <v-text-field
@@ -74,7 +76,7 @@
           >
             <template v-slot:append>
               <v-btn
-                color="indigo"
+                color="orange-accent-2"
                 variant="flat"
                 size="small"
                 @click="copy(item.uuid)"

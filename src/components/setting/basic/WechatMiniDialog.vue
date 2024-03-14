@@ -1,7 +1,7 @@
 <template>
   <v-dialog max-width="800" v-model="dialog" persistent>
     <template v-slot:activator="{ props }">
-      <v-btn icon="mdi-wechat" v-bind="props" variant="outlined" />
+      <v-btn icon="mdi-wechat" v-bind="props"  variant="text" class="border" />
     </template>
     <v-card>
       <v-toolbar>

@@ -5,10 +5,15 @@
     content-class="overflow-visible align-self-start mt-0"
     max-height="900"
     scrollable
-    theme="light"
   >
     <template v-slot:activator="{ props }">
-      <v-text-field v-bind="props">
+      <v-text-field
+        v-bind="props"
+        variant="solo-filled"
+        flat
+        density="compact"
+        hide-details
+      >
         <template v-slot:prepend-inner>
           <v-icon size="small"> mdi-magnify </v-icon>
         </template>
@@ -17,8 +22,8 @@
             size="x-small"
             prepend-icon="mdi-apple-keyboard-command"
             class="border"
+            append-icon="mdi-temperature-kelvin"
           >
-            K
           </v-btn>
         </template>
       </v-text-field>

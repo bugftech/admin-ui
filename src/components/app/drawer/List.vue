@@ -1,5 +1,11 @@
 <template>
-  <v-list nav :lines="false" color="black" density="compact" slim>
+  <v-list
+    nav
+    :lines="false"
+    density="compact"
+    slim
+    variant="text"
+  >
     <template v-for="(item, i) in items" :key="i">
       <v-list-item v-if="!item.items" :to="item.to">
         <template v-slot:prepend="{ isActive }">
@@ -56,3 +62,9 @@ const props = defineProps({
   },
 });
 </script>
+
+<style>
+.opcity {
+  opacity: 1 !important;
+}
+</style>

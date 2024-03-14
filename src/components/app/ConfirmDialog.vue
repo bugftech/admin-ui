@@ -13,8 +13,8 @@
         <v-btn
           icon="mdi-window-close"
           @click="cancel"
-          size="x-small"
-          variant="flat"
+          size="small"
+          variant="text"
           rounded="circle"
         ></v-btn>
       </v-toolbar>
@@ -22,13 +22,17 @@
         v-show="!!message"
         class="py-6 text-caption font-weight-medium text-wrap text-grey"
       >
-       <div v-html="message" />
+        <div v-html="message" />
       </v-card-text>
       <v-divider />
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn text @click="cancel" size="small" variant="tonal">取消</v-btn>
-        <v-btn @click="agree" variant="flat" size="small" color="black"
+        <v-btn
+          @click="agree"
+          variant="flat"
+          size="small"
+          :color="options.color ? options.color : 'black'"
           >确定</v-btn
         >
       </v-card-actions>

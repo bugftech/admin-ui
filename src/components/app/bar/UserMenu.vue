@@ -5,9 +5,9 @@
         <v-icon>mdi-account</v-icon>
       </v-avatar>
     </template>
-    <v-card min-width="300" class="mt-2" theme="light">
+    <v-card min-width="300" class="mt-2">
       <div class="text-center">
-        <v-avatar color="indigo" size="large" class="my-3" variant="elevated">
+        <v-avatar color="orange-accent-3" size="large" class="my-3" variant="elevated">
           <v-img v-if="userProfile.avatar" :src="userProfile.avatar" />
           <div v-else>S</div>
         </v-avatar>

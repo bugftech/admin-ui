@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar density="comfortable" flat theme="dark">
+  <v-app-bar density="comfortable">
     <template v-slot:prepend>
       <AppBarLogo />
       <v-btn
@@ -12,6 +12,7 @@
     <AppBarSearchDialog />
     <v-spacer> </v-spacer>
     <template v-slot:append>
+      <AppBarThemeToggleBtn />
       <template v-if="mdAndUp">
         <AppBarNotificationsMenu />
         <AppBarUserMenu />
@@ -22,7 +23,7 @@
 
 <script setup>
 import { useAppStore } from "@/store/app";
-const { smAndUp, mdAndUp, mdAndDown } = useDisplay();
+const { mdAndUp, mdAndDown } = useDisplay();
 
 const route = useRoute();
 const app = useAppStore();

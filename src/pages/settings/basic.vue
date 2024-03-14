@@ -5,7 +5,7 @@
       <v-row>
         <v-col cols="12" md="6">
           <div class="text-subtitle-1 font-weight-bold">为您的项目添加应用</div>
-          <div class="text-caption v-label mt-2">
+          <div class="text-caption v-label">
             要开始使用，请先从右侧选择一个平台。
           </div>
         </v-col>
@@ -23,7 +23,7 @@
     <v-card-text class="pa-0">
       <v-row no-gutters>
         <v-col cols="12" md="4">
-          <v-list v-if="miniprograms.length">
+          <v-list v-if="miniprograms.length" density="compact">
             <v-list-subheader class="text-caption font-weight-regular"
               >微信小程序</v-list-subheader
             >
@@ -35,7 +35,7 @@
               @click="onView('wechat', i)"
             >
               <template v-slot:prepend>
-                <v-btn icon="mdi-wechat" variant="outlined" class="me-2">
+                <v-btn icon="mdi-wechat" variant="text" class="me-2 border">
                 </v-btn>
               </template>
               <v-list-item-title class="text-subtitle-2">{{
@@ -59,7 +59,7 @@
               @click="onView('alipay', i)"
             >
               <template v-slot:prepend>
-                <v-btn icon="fa:fab fa-alipay" variant="outlined" class="me-2">
+                <v-btn icon="fa:fab fa-alipay" variant="text" class="me-2 border">
                 </v-btn>
               </template>
               <v-list-item-title class="text-subtitle-2">{{
@@ -94,15 +94,13 @@ const onView = (appType, idx) => {
 };
 
 const currentAppForm = computed(() => {
-  const apps = currentAppType.value === "wechat" ? miniprograms.value : alipays.value;
+  const apps =
+    currentAppType.value === "wechat" ? miniprograms.value : alipays.value;
   console.log("apps:", apps);
   return apps[currentAppIndex.value];
 });
 
-
-onMounted(()=>{
-  
-})
+onMounted(() => {});
 </script>
 
 <route lang="yaml">
