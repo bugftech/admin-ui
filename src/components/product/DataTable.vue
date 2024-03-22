@@ -37,7 +37,7 @@
       <template v-slot:loading>
         <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
       </template>
-      <template v-slot:item.name="{ item }">
+      <template v-slot:[`item.name`]="{ item }">
         <v-list-item class="pa-0" slim>
           <template v-slot:prepend>
             <v-avatar class="rounded-lg border">
@@ -50,13 +50,13 @@
           </v-list-item-title>
         </v-list-item>
       </template>
-      <template v-slot:item.price="{ item }">
+      <template v-slot:[`item.price`]="{ item }">
         <div>{{ usePriceYuan(item.price) }}</div>
       </template>
-      <template v-slot:item.originalPrice="{ item }">
+      <template v-slot:[`item.originalPrice`]="{ item }">
         <div>{{ usePriceYuan(item.originalPrice) }}</div>
       </template>
-      <template v-slot:item.status="{ item }">
+      <template v-slot:[`item.status`]="{ item }">
         <div class="d-flex">
           <v-chip
             size="x-small"

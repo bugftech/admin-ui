@@ -34,27 +34,6 @@
                   <v-sheet
                     v-bind="props"
                     :color="isHovering ? '#ebebeb' : undefined"
-                    class="d-flex align-center justify-center ma-2"
-                    rounded="lg"
-                    height="52"
-                  >
-                    <div
-                      class="d-flex align-center justify-center text-subtitle-2"
-                    >
-                      <v-icon>mdi-calendar-range</v-icon
-                      ><span class="ml-2">今天</span>
-                    </div>
-                  </v-sheet>
-                </template>
-              </v-hover>
-            </v-col>
-            <v-divider vertical></v-divider>
-            <v-col cols="12" md="2" xs="3">
-              <v-hover>
-                <template v-slot:default="{ isHovering, props }">
-                  <v-sheet
-                    v-bind="props"
-                    :color="isHovering ? '#ebebeb' : undefined"
                     class="ma-2 d-flex justify-space-between flex-column py-2 px-4"
                     rounded="lg"
                     height="64"
@@ -99,20 +78,6 @@
                 </template>
               </v-hover>
             </v-col>
-            <v-divider vertical></v-divider>
-            <v-col cols="12" md="4">
-              <v-sparkline
-                fill
-                height="52"
-                smooth
-                :gradient="['#f72047', '#ffd200', '#1feaea']"
-                auto-draw
-                :labels="labels"
-                :model-value="value"
-                line-width="2"
-                padding="16"
-              ></v-sparkline>
-            </v-col>
           </v-row>
         </v-card>
         <!--工具栏-->
@@ -126,8 +91,6 @@
 import { useOrderStore } from "@/store/orders";
 import { storeToRefs } from "pinia";
 
-const labels = ["12am", "3am", "6am", "9am", "12pm", "3pm", "6pm", "9pm"];
-const value = [200, 675, 410, 390, 310, 460, 250, 240];
 const order = useOrderStore();
 
 const { total, shipped, completed } = storeToRefs(order);

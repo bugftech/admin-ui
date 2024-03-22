@@ -197,6 +197,11 @@ class SDK extends BaseClient {
     return await this.get<ProductAndSku>(url);
   }
 
+  async getUsers(): Promise<APIResponse<any>> {
+    const url = "/users";
+    return await this.get<any[]>(url);
+  }
+
   // listWrapperUrl 获取列表的方式
   private listWrapperUrl(url: string, pagination?: Pagination): string {
     if (!pagination) return url + "/all";

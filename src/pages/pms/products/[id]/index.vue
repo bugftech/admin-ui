@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-col cols="12" md="10">
+      <v-col cols="12" md="12">
         <v-toolbar color="transparent" fixed>
           <AppBackBtn />
           <v-toolbar-title class="text-body-1 font-weight-bold">
@@ -27,10 +27,10 @@
           >
         </v-toolbar>
       </v-col>
-      <v-col cols="12" md="7">
+      <v-col cols="12" md="8">
         <v-card>
           <v-card-text>
-            <AppLabel>输入商品名称</AppLabel>
+            <AppLabel>商品名称</AppLabel>
             <v-text-field
               variant="solo-filled"
               flat
@@ -180,7 +180,7 @@
         <ProductAlbumPics v-model="item.albumPics" class="mt-4" />
         <ProductUpsertSku v-model:skus="item.skuStockList" />
       </v-col>
-      <v-col cols="12" md="3">
+      <v-col cols="12" md="4">
         <v-card>
           <v-card-text>
             <AppLabel>状态</AppLabel>

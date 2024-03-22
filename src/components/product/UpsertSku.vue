@@ -99,7 +99,7 @@
       :headers="headers"
       class="text-caption"
     >
-      <template v-slot:item.skuAttributes="{ item }">
+      <template v-slot:[`item.skuAttributes`]="{ item }">
         <v-list-item class="pa-0">
           <template v-slot:prepend>
             <v-avatar class="rounded-lg border">
@@ -112,17 +112,17 @@
           </v-list-item-title>
         </v-list-item>
       </template>
-      <template v-slot:item.skuCode="{ item }">
+      <template v-slot:[`item.skuCode`]="{ item }">
         {{ item.skuCode }}
       </template>
-      <template v-slot:item.price="{ item }">
+      <template v-slot:[`item.price`]="{ item }">
         {{ item.price }}
       </template>
-      <template v-slot:item.stock="{ item }">
+      <template v-slot:[`item.stock`]="{ item }">
         {{ item.stock }}
       </template>
       <template v-slot:bottom> </template>
-      <template v-slot:item.actions="{ item }">
+      <template v-slot:[`item.actions`]="{ item }">
         <v-btn
           icon="mdi-pencil"
           size="x-small"

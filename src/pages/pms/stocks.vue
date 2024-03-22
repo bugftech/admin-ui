@@ -49,8 +49,7 @@
               </v-list-item>
             </template>
             <template v-slot:[`item.actions`]="{ item }">
-              <v-icon icon="mdi-dots-vertical-circle" size="x-large">
-              </v-icon>
+              <v-icon icon="mdi-dots-vertical" size="x-large"> </v-icon>
             </template>
           </v-data-table>
         </v-card>
@@ -80,7 +79,7 @@ const headers = [
   {
     title: "操作",
     value: "actions",
-    align: "end"
+    align: "end",
   },
 ];
 
