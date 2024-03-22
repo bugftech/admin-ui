@@ -13,7 +13,6 @@
 
         <v-card class="mt-4">
           <v-toolbar color="transparent">
-            <v-spacer />
             <v-responsive max-width="344">
               <v-text-field
                 flat
@@ -26,24 +25,26 @@
               >
               </v-text-field>
             </v-responsive>
+            <v-spacer />
           </v-toolbar>
           <v-divider />
           <v-data-table
             :headers="headers"
             class="text-caption"
             hover
-            :items="items"
+            :search="search"
+            :items="skus"
           >
-            <template v-slot:[`item.product`]="{ item }">
+            <template v-slot:[`item.variant`]="{ item }">
               <v-list-item class="pa-0">
                 <template v-slot:prepend>
                   <v-avatar class="rounded-lg border">
-                    <v-img :src="item.image" v-if="item.image" />
+                    <v-img :src="item.pic" v-if="item.pic" />
                     <v-icon icon="mdi-image" v-else />
                   </v-avatar>
 
                   <v-list-item-title class="text-caption font-weight-bold ms-2">
-                    {{ item.productName }}
+                    {{ item.skuAttributes[0]?.value }}
                   </v-list-item-title>
                 </template>
               </v-list-item>
@@ -59,10 +60,14 @@
 </template>
 
 <script setup>
+import BFSDK from "@/api/sdk";
+const skus = ref([]);
+const search = ref("");
+
 const headers = [
   {
-    title: "产品",
-    value: "product",
+    title: "变体",
+    value: "variant",
   },
   {
     title: "SKU编号",
@@ -83,14 +88,18 @@ const headers = [
   },
 ];
 
-const items = [
-  {
-    productName: "库装",
-    skuCode: "ABC-12345-S-BL",
-    lock: 20,
-    stock: 30,
-  },
-];
+onMounted(async () => {
+  const { data, success } = await BFSDK.getSkus();
+  if (success) {
+    data.forEach(element => {
+      if (!element.skuAttributes) return;
+      element.skuAttributes = JSON.parse(element.skuAttributes)
+    });
+
+    skus.value = data;
+  }
+});
+
 </script>
 
 <route lang="yaml">

@@ -27,7 +27,7 @@
           </v-menu>
         </AppBreadcrumb>
         <v-card class="my-4">
-          <v-row noGutters class="align-center justify-center">
+          <v-row noGutters class="align-center">
             <v-col cols="12" md="2" xs="3">
               <v-hover>
                 <template v-slot:default="{ isHovering, props }">

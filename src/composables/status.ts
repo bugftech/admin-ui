@@ -40,7 +40,7 @@ const statusItems: StatusItem[] = [
   },
   {
     value: 5,
-    title: "无效的订单",
+    title: "无效的",
     icon: "mdi-cancel", // Icon for "无效的订单"
     color: "black",
   },

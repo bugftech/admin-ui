@@ -61,7 +61,7 @@
           <v-chip
             size="x-small"
             label
-            color="orange-darken-4"
+            color="orange-accent-3"
             class="mr-2"
             v-if="item.isNew"
             prepend-icon="mdi-new-box"
@@ -71,7 +71,7 @@
             size="x-small"
             label
             class="mr-2"
-            color="indigo-darken-4"
+            color="green-darken-1"
             v-if="item.isRecommand"
             prepend-icon="mdi-star"
             >推荐</v-chip

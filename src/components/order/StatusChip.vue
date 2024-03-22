@@ -1,5 +1,5 @@
 <template>
-  <v-chip :color="color" :prepend-icon="icon" size="small"> {{ title }}</v-chip>
+  <v-chip :color="color" :prepend-icon="icon" size="x-small"> {{ title }}</v-chip>
 </template>
 
 <script setup>

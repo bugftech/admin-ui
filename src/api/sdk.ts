@@ -202,6 +202,11 @@ class SDK extends BaseClient {
     return await this.get<any[]>(url);
   }
 
+  async getSkus(): Promise<APIResponse<any>> {
+    const url = "/tenant/skus";
+    return await this.get<any[]>(url);
+  }
+
   // listWrapperUrl 获取列表的方式
   private listWrapperUrl(url: string, pagination?: Pagination): string {
     if (!pagination) return url + "/all";

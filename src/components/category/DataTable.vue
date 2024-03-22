@@ -44,7 +44,7 @@
         <v-menu close-on-content-click>
           <template v-slot:activator="{ props }">
             <v-icon
-              icon="mdi-dots-vertical-circle"
+              icon="mdi-dots-vertical"
               size="x-large"
               v-bind="props"
             >
