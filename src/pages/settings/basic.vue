@@ -59,7 +59,11 @@
               @click="onView('alipay', i)"
             >
               <template v-slot:prepend>
-                <v-btn icon="fa:fab fa-alipay" variant="text" class="me-2 border">
+                <v-btn
+                  icon="fa:fab fa-alipay"
+                  variant="text"
+                  class="me-2 border"
+                >
                 </v-btn>
               </template>
               <v-list-item-title class="text-subtitle-2">{{
@@ -73,7 +77,8 @@
         </v-col>
         <v-divider vertical />
         <v-col cols="12" md="8" class="px-4">
-          <SettingBasicAppConfig :config="currentAppForm" />
+          <SettingBasicAppConfig :config="currentAppForm" v-if="!noData" />
+          <v-card-text v-else />
         </v-col>
       </v-row>
     </v-card-text>
@@ -93,14 +98,19 @@ const onView = (appType, idx) => {
   store.viewApp(appType, idx);
 };
 
+const noData = computed(() => {
+  return miniprograms.value.length === 0 && alipays.value.length === 0;
+});
+
 const currentAppForm = computed(() => {
   const apps =
     currentAppType.value === "wechat" ? miniprograms.value : alipays.value;
-  console.log("apps:", apps);
   return apps[currentAppIndex.value];
 });
 
-onMounted(() => {});
+onMounted(() => {
+  store.fetch();
+});
 </script>
 
 <route lang="yaml">

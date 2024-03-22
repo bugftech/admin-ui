@@ -1,7 +1,5 @@
-import { APIResponse } from "@/services/types";
-import { API } from "@/services";
 import { Product } from "@/interfaces/product";
-
+import BFSDK from "@/api/sdk";
 import data from "@/data/product_header.json";
 
 type State = {
@@ -12,7 +10,6 @@ type State = {
   loading: boolean;
 };
 
-
 export const useProductStore = defineStore({
   id: "product",
   state: (): State => ({
@@ -21,5 +18,14 @@ export const useProductStore = defineStore({
     page: 1,
     limit: 20,
     loading: false,
-  })
-})
+  }),
+  actions: {
+    async fetch() {
+      this.loading = true;
+      const { success, data } = await BFSDK.getProducts();
+      if (!success) return;
+      this.items = data;
+      this.loading = false;
+    },
+  },
+});

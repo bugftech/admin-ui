@@ -110,9 +110,6 @@ const childMode = ref(false);
 const computedItems = items.value.flatMap((obj) => [obj, ...obj.items])
 
 const viewChild = (item) =>  {
-  if (item.items.length) {
-
-  }
 }
 
 const remove = (item) => {

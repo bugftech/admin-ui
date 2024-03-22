@@ -34,7 +34,7 @@
             hover
             :items="items"
           >
-            <template v-slot:item.product="{ item }">
+            <template v-slot:[`item.product`]="{ item }">
               <v-list-item class="pa-0">
                 <template v-slot:prepend>
                   <v-avatar class="rounded-lg border">
@@ -48,7 +48,7 @@
                 </template>
               </v-list-item>
             </template>
-            <template v-slot:item.actions="{ item }">
+            <template v-slot:[`item.actions`]="{ item }">
               <v-icon icon="mdi-dots-vertical-circle" size="x-large">
               </v-icon>
             </template>

@@ -39,14 +39,17 @@ import type {
 
 declare module 'vue-router/auto/routes' {
   export interface RouteNamedMap {
-    '/landing': RouteRecordInfo<'/landing', '/', Record<never, never>, Record<never, never>>,
+    '/apps': RouteRecordInfo<'/apps', '/apps', Record<never, never>, Record<never, never>>,
     '/customers': RouteRecordInfo<'/customers', '/customers', Record<never, never>, Record<never, never>>,
+    '/editor': RouteRecordInfo<'/editor', '/editor', Record<never, never>, Record<never, never>>,
+    '/landing/': RouteRecordInfo<'/landing/', '/', Record<never, never>, Record<never, never>>,
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
     'orders': RouteRecordInfo<'orders', '/orders', Record<never, never>, Record<never, never>>,
     '/orders/[id]/': RouteRecordInfo<'/orders/[id]/', '/orders/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/orders/[id]/update': RouteRecordInfo<'/orders/[id]/update', '/orders/:id/update', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/pms/categories': RouteRecordInfo<'/pms/categories', '/pms/categories', Record<never, never>, Record<never, never>>,
-    '/pms/products': RouteRecordInfo<'/pms/products', '/pms/products', Record<never, never>, Record<never, never>>,
+    '/pms/products/': RouteRecordInfo<'/pms/products/', '/pms/products', Record<never, never>, Record<never, never>>,
+    '/pms/products/[id]/': RouteRecordInfo<'/pms/products/[id]/', '/pms/products/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/pms/stocks': RouteRecordInfo<'/pms/stocks', '/pms/stocks', Record<never, never>, Record<never, never>>,
     '/settings': RouteRecordInfo<'/settings', '/settings', Record<never, never>, Record<never, never>>,
     '/settings/basic': RouteRecordInfo<'/settings/basic', '/settings/basic', Record<never, never>, Record<never, never>>,

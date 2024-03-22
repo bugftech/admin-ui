@@ -5,6 +5,7 @@
         icon="fa:fab fa-alipay"
         v-bind="props"
         variant="text"
+        disabled
         class="border"
       />
     </template>
@@ -62,13 +63,14 @@
 
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import { useApplicationStore, AppType } from "@/store/applications";
+import { useApplicationStore } from "@/store/applications";
+import { AppType, AlipayApp } from "@/interfaces/apps";
 
 const store = useApplicationStore();
 
 const dialog = ref(false);
 // 创建一个符合 MiniConfig 类型要求的对象
-const state = reactive({
+const state = reactive<AlipayApp>({
   name: "",
   appId: "",
   appSecret: "",
@@ -82,14 +84,11 @@ const onClose = () => {
 };
 
 const onSubmit = () => {
-  store.addApp(
-    {
-      name: state.name,
-      appId: state.appId,
-      appSecret: state.appSecret,
-    },
-    AppType.Alipay
-  );
+  store.addApp(AppType.Alipay, {
+    name: state.name,
+    appId: state.appId,
+    appSecret: state.appSecret,
+  });
   onClose();
 };
 </script>

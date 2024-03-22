@@ -8,3 +8,9 @@
 // @use 'vuetify/settings' with (
 //   $color-pack: false
 // );
+
+
+
+@use 'vuetify/settings' with (
+  $field-font-size: 14px,
+)

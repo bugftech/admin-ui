@@ -60,5 +60,11 @@
     "to": "/discounts",
     "inactiveIcon": "mdi-sale",
     "activeIcon": "mdi-sale-outline"
+  },
+  {
+    "title": "富文本",
+    "to": "/editor",
+    "inactiveIcon": "mdi-view-dashboard-edit",
+    "activeIcon": "mdi-view-dashboard-edit-outline"
   }
 ]

@@ -28,5 +28,4 @@ library.add(far); // Include needed regular icons
 library.add(fab); // Include needed brand icons
 
 registerPlugins(app);
-
 app.mount("#app");

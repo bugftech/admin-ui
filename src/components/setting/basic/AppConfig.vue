@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar color="transparent" :loading="true">
+  <v-toolbar color="transparent">
     <div class="text-subtitle-2 font-weight-bold">配置信息</div>
     <v-spacer />
     <v-btn
@@ -59,7 +59,13 @@
       prepend-icon="mdi-close"
       >取消</v-btn
     >
-    <v-btn size="small" variant="flat" @click="save" color="indigo" prepend-icon="mdi-check">
+    <v-btn
+      size="small"
+      variant="flat"
+      @click="save"
+      color="indigo"
+      prepend-icon="mdi-check"
+    >
       保存
     </v-btn>
   </div>
@@ -81,7 +87,6 @@
 
 <script setup>
 import { ref, toRefs } from "vue";
-import { storeToRefs } from "pinia";
 import { copyToClipboardFormatted } from "@/composables/copy";
 import { useApplicationStore } from "@/store/applications";
 
@@ -103,10 +108,7 @@ watchEffect(() => {
 
 // 确认删除
 const confirm = ref();
-// 表单
 const form = ref();
-
-const { currentAppType } = storeToRefs(appStore);
 
 const copy = () => {
   let str = localConfig.value.uuid ? localConfig.value.uuid : "";
@@ -119,20 +121,20 @@ const deleteApp = async () => {
     "删除应用则无法在APP端继续使用绑定的数据，请确认好再操作！"
   );
 
-  if (!res || !localConfig.value.uuid) return;
-  appStore.deleteApp(currentAppType.value, localConfig.value.uuid);
+  if (!res) return;
+  appStore.deleteApp(localConfig.value.id);
 };
 
 const cancel = () => {
   localConfig.value = { ...config.value };
-  canEdit.value = false
+  canEdit.value = false;
 };
 
 const save = async () => {
   const valid = await form.value.validate();
   if (!valid) return;
   // 修改App
-  appStore.updateApp(localConfig.value)
-  canEdit.value = false
+  appStore.updateApp(localConfig.value.id, localConfig.value);
+  canEdit.value = false;
 };
 </script>

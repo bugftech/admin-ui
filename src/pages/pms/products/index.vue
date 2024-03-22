@@ -26,18 +26,16 @@
             <v-list> </v-list>
           </v-menu>
         </AppBreadcrumb>
-        <v-card class="my-4">
-          <div>简单的数据分析</div>
-        </v-card>
-        <ProductDataTable />
+        <ProductDataTable class="mt-4"/>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
-<script setup></script>
+<script setup>
+</script>
 
 <route lang="yaml">
 meta:
-  breadcrumb: 产品
+  breadcrumb: 查看
 </route>

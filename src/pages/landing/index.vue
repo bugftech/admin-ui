@@ -4,7 +4,7 @@
     <div class="logo">BUGFREED.CO</div>
     <v-spacer />
   </v-app-bar>
-  <v-container class="fill-height" fluid>
+  <v-container class="section fill-height" fluid>
     <v-row align="center" justify="center">
       <v-col cols="12" xl="10" lg="6">
         <v-card class="pa-12 text-center" flat>
@@ -31,7 +31,7 @@
     </v-row>
   </v-container>
 
-  <v-footer app class="d-flex justify-center" theme="dark" style="height: 56px;">
+  <v-footer app class="d-flex justify-center" theme="dark" style="height: 56px">
     <div class="text-caption font-weight-medium text-grey">
       ©️ 沪ICP备2023008148号-1
     </div>

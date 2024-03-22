@@ -134,9 +134,6 @@ const { total, shipped, completed } = storeToRefs(order);
 
 onMounted(async () => {
   const { success } = await order.fetch();
-  if (!success) {
-    console.log("failed to get orders");
-  }
 });
 </script>
 

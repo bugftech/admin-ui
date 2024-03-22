@@ -13,11 +13,7 @@
             <v-spacer />
             <SettingPayAddDialog method="wechat" />
             <v-divider class="my-4" vertical />
-            <v-btn
-              icon="fa:fab fa-alipay"
-              variant="outlined"
-              disabled
-            />
+            <v-btn icon="fa:fab fa-alipay" variant="outlined" disabled />
           </div>
         </v-col>
       </v-row>
@@ -49,7 +45,11 @@
         </v-col>
         <v-divider vertical />
         <v-col cols="12" md="8" class="px-4">
-          <SettingPayWechatConfig :pay="currentPayForm" />
+          <SettingPayWechatConfig
+            :pay="currentPayForm"
+            v-if="wechatpays.length"
+          />
+          <v-card-text v-else> </v-card-text>
         </v-col>
       </v-row>
     </v-card-text>
@@ -57,16 +57,26 @@
 </template>
 
 <script setup>
-import { usePayStore } from "@/store/pay";
+import { PayType } from "@/interfaces/pay";
 
-const store = usePayStore();
-const { wechatpays, currentPayIndex, currentPayType, alipays } =
-  storeToRefs(store);
+import BFSDK from "@/api/sdk";
+
+const currentPayIndex = ref(0);
+const currentPayType = ref(PayType.Wechat);
+const wechatpays = ref([]);
+const alipays = ref([]);
 
 const currentPayForm = computed(() => {
   const pays =
     currentPayType.value === "wechat" ? wechatpays.value : alipays.value;
   return pays[currentPayIndex.value];
+});
+
+onMounted(async () => {
+  const { data, success } = await BFSDK.getAppPays(5);
+  if (success) {
+    wechatpays.value = data;
+  }
 });
 </script>
 

@@ -1,3 +1,5 @@
+import { SkuStock } from "./skuStock";
+
 // Product product model
 export interface Product {
   tenantId: number;
@@ -35,7 +37,7 @@ export interface Product {
   serviceIds: string;
   keywords: string;
   note: string;
-  albumPics: string;
+  albumPics: any;
   detailTitle: string;
   detailDesc: string;
   detailHtml: string;
@@ -45,3 +47,8 @@ export interface Product {
   promotionType: number;
   convertPriceFromCentToYuan(priceInCent: number): number;
 }
+
+export interface ProductAndSku extends Product {
+  skuStockList: SkuStock[]
+}
+

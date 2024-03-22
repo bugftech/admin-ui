@@ -4,8 +4,12 @@
     "key": "name"
   },
   {
-    "title": "价格",
+    "title": "售卖价格",
     "key": "price"
+  },
+  {
+    "title": "原价",
+    "key": "originalPrice"
   },
   {
     "title": "销量",
@@ -20,7 +24,11 @@
     "key": "isPublished"
   },
   {
-    "title": "是否限时促销",
-    "key": "promotionType"
+    "title": "促销价格",
+    "key": "promotionPrice"
+  },
+  {
+    "title": "状态",
+    "key": "status"
   }
 ]

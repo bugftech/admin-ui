@@ -1,5 +1,5 @@
 <template>
-  <v-label class="text-caption font-weight-medium pb-2 text-light">
+  <v-label class="text-caption font-weight-regular mb-1 text-light">
     <slot />
   </v-label>
 </template>

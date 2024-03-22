@@ -27,12 +27,6 @@ const tabs = [
     title: "通知",
     to: "/settings/notification",
   },
-  /*
-  {
-    title: "服务账号",
-    to: "/settings/serviceaccount",
-  },
-  */
   {
     title: "成员与权限",
     to: "/settings/iam",
