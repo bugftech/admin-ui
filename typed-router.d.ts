@@ -57,7 +57,6 @@ declare module 'vue-router/auto/routes' {
     '/settings/notification': RouteRecordInfo<'/settings/notification', '/settings/notification', Record<never, never>, Record<never, never>>,
     '/settings/pay': RouteRecordInfo<'/settings/pay', '/settings/pay', Record<never, never>, Record<never, never>>,
     '/settings/serviceaccount': RouteRecordInfo<'/settings/serviceaccount', '/settings/serviceaccount', Record<never, never>, Record<never, never>>,
-    '/stocks/': RouteRecordInfo<'/stocks/', '/stocks', Record<never, never>, Record<never, never>>,
   }
 }
 

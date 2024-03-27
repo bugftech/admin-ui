@@ -11,3 +11,7 @@ export interface Category {
   keywords: string;
   description: string;
 }
+
+export interface AllCategory extends Category {
+  items?: Category[];
+}

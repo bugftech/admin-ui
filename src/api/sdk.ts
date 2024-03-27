@@ -2,6 +2,8 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { WechatApp } from "@/interfaces/apps";
 import { WechatPay } from "@/interfaces/pay";
 import { Product, ProductAndSku } from "@/interfaces/product";
+import { AllCategory } from "@/interfaces/category";
+
 
 const url = import.meta.env.VITE_API_SERVER_URL;
 
@@ -205,6 +207,17 @@ class SDK extends BaseClient {
   async getSkus(): Promise<APIResponse<any>> {
     const url = "/tenant/skus";
     return await this.get<any[]>(url);
+  }
+
+  async getCategories(level?: number): Promise<APIResponse<AllCategory[]>> {
+    let url = "";
+    if (level === 1) {
+      url = "/pms/categories";
+    } else {
+      url = "/pms/categories/all";
+    }
+
+    return await this.get<AllCategory[]>(url);
   }
 
   // listWrapperUrl 获取列表的方式

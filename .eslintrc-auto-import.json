@@ -76,6 +76,24 @@
     "useDisplay": true,
     "useGoTo": true,
     "useRtl": true,
-    "useTheme": true
+    "useTheme": true,
+    "AppType": true,
+    "PayType": true,
+    "BasicTranslation": true,
+    "NoteTranslation": true,
+    "ProductTranslation": true,
+    "copyOrderInfo": true,
+    "copyToClipboardFormatted": true,
+    "decrypt": true,
+    "emailRules": true,
+    "encrypt": true,
+    "formatDateTime": true,
+    "getCookie": true,
+    "nameRules": true,
+    "nonEmptyRules": true,
+    "setCookie": true,
+    "useBreadcrumbs": true,
+    "useOrderStatus": true,
+    "usePriceYuan": true
   }
 }
