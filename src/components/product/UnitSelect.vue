@@ -15,14 +15,10 @@
 import { ref } from "vue";
 
 const props = defineProps({
-  modelValue: {
-    type: String,
-    required: true,
-  },
+  modelValue: String,
 });
 
 const unit = ref(props.modelValue);
-
 // 监听 props 的变化，同步更新内部的 items
 watchEffect(() => {
   unit.value = props.modelValue;

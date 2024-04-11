@@ -94,6 +94,14 @@
     "setCookie": true,
     "useBreadcrumbs": true,
     "useOrderStatus": true,
-    "usePriceYuan": true
+    "usePriceYuan": true,
+    "sdk": true,
+    "downloadCSV": true,
+    "snackbar": true,
+    "useSnackbar": true,
+    "usePriceRef": true,
+    "backToPrev": true,
+    "useRouterBack": true,
+    "isDiscountType": true
   }
 }

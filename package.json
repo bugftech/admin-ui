@@ -21,10 +21,11 @@
     "core-js": "^3.34.0",
     "crypto-js": "^4.2.0",
     "date-fns": "^3.3.1",
+    "echarts": "^5.5.0",
     "pinia-plugin-persist": "^1.0.0",
     "roboto-fontface": "*",
     "vue": "^3.3.0",
-    "vuetify": "^3.0.0"
+    "vuetify": "^3.5.12"
   },
   "devDependencies": {
     "@babel/types": "^7.23.0",

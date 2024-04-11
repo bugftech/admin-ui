@@ -11,20 +11,18 @@
       <v-btn variant="tonal" size="small" class="mx-2" @click="viewFirstLevel"
         >一级</v-btn
       >
-      <v-spacer />
-      <v-responsive max-width="344">
-        <v-text-field
-          flat
-          density="compact"
-          variant="solo-filled"
-          placeholder="检索"
-          class="me-2 text-caption"
-          prepend-inner-icon="mdi-magnify"
-          v-model="search"
-        >
-        </v-text-field>
-      </v-responsive>
     </v-toolbar>
+    <v-divider />
+    <v-text-field
+      flat
+      density="compact"
+      variant="solo"
+      placeholder="检索"
+      class="me-2 text-caption"
+      prepend-inner-icon="mdi-magnify"
+      v-model="search"
+    >
+    </v-text-field>
     <v-divider />
     <v-data-table
       :loading="loading"
@@ -96,8 +94,10 @@
 
 <script setup lang="ts">
 import { toRaw } from "vue";
+import { AllCategory } from "@/interfaces/category";
+import BFSDK from "@/api/sdk";
 
-const headers: TableHeader[] = [
+const headers: any[] = [
   { title: "名称", key: "name" },
   { title: "等级", key: "level" },
   { title: "商品数量", key: "count" },
@@ -146,7 +146,7 @@ const viewAll = async () => {
   loading.value = true;
   const { success, data } = await fetch();
   if (success) {
-    items.value = data.flatMap((obj) => {
+    items.value = data.flatMap((obj: any) => {
       if (obj.items && obj.items.length > 0) {
         // If obj has items property, flatten obj and its items
         return [obj, ...obj.items];

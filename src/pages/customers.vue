@@ -3,40 +3,50 @@
     <v-row align="center" justify="center">
       <v-col cols="12">
         <!--面包屑-->
-        <AppBreadcrumb></AppBreadcrumb>
+        <AppBreadcrumb>
+          <v-btn icon="mdi-download"></v-btn>
+        </AppBreadcrumb>
         <v-card class="mt-2">
-          <v-toolbar density="compact" color="transparent">
-            <v-responsive max-width="344">
-              <v-text-field
-                flat
-                density="compact"
-                variant="solo-filled"
-                placeholder="检索"
-                class="ms-2"
-                prepend-inner-icon="mdi-magnify"
-                v-model="search"
-              >
-              </v-text-field>
-            </v-responsive>
-            <v-spacer />
-            <v-toolbar-items>
-              <v-btn icon="mdi-download"></v-btn>
-            </v-toolbar-items>
-          </v-toolbar>
+          <v-toolbar density="compact" color="transparent"> </v-toolbar>
+          <v-divider />
+          <v-text-field
+            flat
+            density="compact"
+            variant="solo"
+            placeholder="检索"
+            prepend-inner-icon="mdi-magnify"
+            v-model="search"
+          >
+          </v-text-field>
           <v-divider />
           <v-data-table
-            :seach="search"
+            :search="search"
             class="text-caption"
-            :items="users"
+            :items="items"
             :headers="headers"
+            :loading="loading"
           >
+            <template v-slot:[`item.nickName`]="{ item }">
+              <v-list-item slim class="pa-0">
+                <template v-slot:prepend>
+                  <v-avatar class="rounded-lg border">
+                    <v-img :src="item.avatar" v-if="item.avatar" />
+                    <v-icon icon="mdi-image" v-else />
+                  </v-avatar>
+                </template>
+                <v-list-item-title class="text-caption font-weight-bold">
+                  {{ item.nickName }}
+                </v-list-item-title>
+              </v-list-item>
+            </template>
             <template v-slot:[`item.createdAt`]="{ item }">
               {{ formatDateTime(item.createdAt) }}
             </template>
 
             <template v-slot:[`item.isDisabled`]="{ item }">
-              <v-icon v-if="item.isDisabled" color="grey">mdi-wifi-off</v-icon>
-              <v-icon v-else>mdi-wifi</v-icon>
+              <v-icon :color="item.isDisabled ? 'grey' : 'indigo'"
+                >mdi-account-badge-outline</v-icon
+              >
             </template>
 
             <template v-slot:[`item.actions`]="{ item }">
@@ -44,7 +54,8 @@
                 size="x-small"
                 prepend-icon="mdi-send"
                 variant="flat"
-                color="orange-accent-2"
+                color="orange-accent-1"
+                @click="sendEmail(item)"
                 >消息</v-btn
               >
             </template>
@@ -59,8 +70,9 @@
 import BFSDK from "@/api/sdk";
 import { formatDateTime } from "@/composables/time";
 
-const users = ref([]);
+const items = ref([]);
 const search = ref("");
+const loading = ref(false);
 
 const headers = [
   {
@@ -68,7 +80,7 @@ const headers = [
     key: "nickName",
   },
   {
-    title: "手机号",
+    title: "UID",
     key: "login",
   },
   {
@@ -93,15 +105,27 @@ const headers = [
   },
 ];
 
+const sendEmail = (item) => {
+  console.log(item);
+};
+
 onMounted(async () => {
+  loading.value = true
   const { data, success } = await BFSDK.getUsers();
   if (success) {
-    users.value = data;
+    items.value = data;
   }
+
+  loading.value =false
+});
+
+defineExpose({
+  items,
 });
 </script>
 
 <route lang="yaml">
 meta:
+  title: "客户中心"
   breadcrumb: 客户
 </route>

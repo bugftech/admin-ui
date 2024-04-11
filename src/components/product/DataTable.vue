@@ -2,25 +2,23 @@
   <v-card>
     <v-toolbar color="transparent">
       <AppDatePicker />
+      <v-spacer />
       <v-tooltip text="刷新" class="text-caption" location="bottom">
         <template v-slot:activator="{ props }">
           <v-btn icon="mdi-sync" size="small" v-bind="props" />
         </template>
       </v-tooltip>
-      <v-spacer />
-      <v-responsive max-width="344">
-        <v-text-field
-          flat
-          density="compact"
-          variant="solo-filled"
-          placeholder="检索"
-          class="me-2"
-          prepend-inner-icon="mdi-magnify"
-          v-model="search"
-        >
-        </v-text-field>
-      </v-responsive>
     </v-toolbar>
+    <v-divider />
+    <v-text-field
+      flat
+      density="compact"
+      variant="solo"
+      placeholder="检索"
+      prepend-inner-icon="mdi-magnify"
+      v-model="search"
+    >
+    </v-text-field>
     <v-divider />
     <v-data-table
       density="comfortable"
@@ -36,6 +34,13 @@
     >
       <template v-slot:loading>
         <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
+      </template>
+      <template v-slot:[`item.isPublished`]="{ item }">
+        <v-checkbox-btn
+          readonly
+          :model-value="item.isPublished"
+          hide-details
+        ></v-checkbox-btn>
       </template>
       <template v-slot:[`item.name`]="{ item }">
         <v-list-item class="pa-0" slim>
@@ -55,6 +60,9 @@
       </template>
       <template v-slot:[`item.originalPrice`]="{ item }">
         <div>{{ usePriceYuan(item.originalPrice) }}</div>
+      </template>
+      <template v-slot:[`item.promotionPrice`]="{ item }">
+        <div>{{ usePriceYuan(item.promotionPrice) }}</div>
       </template>
       <template v-slot:[`item.status`]="{ item }">
         <div class="d-flex">
@@ -90,31 +98,72 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { storeToRefs } from "pinia";
-import { useProductStore } from "@/store/product";
 import BFSDK from "@/api/sdk";
-import { Product } from "@/interfaces/product";
-
 // Utilities
 import { usePriceYuan } from "@/composables/price";
-import { formatDateTime } from "@/composables/time";
+import { Product } from "@/interfaces/product";
 
-const productStore = useProductStore();
+const headers = [
+  {
+    title: "产品名称",
+    key: "name",
+  },
+  {
+    title: "售卖价格",
+    key: "price",
+  },
+  {
+    title: "原价",
+    key: "originalPrice",
+  },
+  {
+    title: "促销价格",
+    key: "promotionPrice",
+  },
+  {
+    title: "销量",
+    key: "sale",
+  },
+  {
+    title: "库存",
+    key: "stock",
+  },
+  {
+    title: "是否上架",
+    key: "isPublished",
+  },
+  {
+    title: "状态",
+    key: "status",
+  },
+];
+
 const search = ref();
 const router = useRouter();
+const items = ref<Product[]>([]);
+const loading = ref(false);
 
 const onClickRow = (e: any, selected: any) => {
-  const id = items.value[selected.index].id
+  const id = items.value[selected.index].id;
   router.push(`/pms/products/${id}`);
 };
 
-const { headers, items, loading } = storeToRefs(productStore);
+const fetch = async () => {
+  loading.value = true;
+  const { success, data } = await BFSDK.getProducts();
+  if (!success) return (loading.value = false);
+  items.value = data;
+  loading.value = false;
+};
 
 onMounted(async () => {
-  const { success, data } = await BFSDK.getProducts();
-  if (!success) return;
-  items.value = data;
+  await fetch()
+});
+
+defineExpose({
+  items,
+  fetch
 });
 </script>

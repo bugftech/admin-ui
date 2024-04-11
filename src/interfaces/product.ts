@@ -8,6 +8,7 @@ export interface Product {
   productCategoryId: number;
   productCategoryName: string;
   productAttributeCategoryId: number;
+  productAttributeCategoryValues: any[];
   id: number;
   feightTemplateId?: number;
   name: string;
@@ -45,10 +46,8 @@ export interface Product {
   promotionEndTime?: Date;
   promotionPerLimit: number;
   promotionType: number;
-  convertPriceFromCentToYuan(priceInCent: number): number;
 }
 
 export interface ProductAndSku extends Product {
-  skuStockList: SkuStock[]
+  skuStockList: SkuStock[];
 }
-

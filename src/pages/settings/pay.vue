@@ -58,13 +58,12 @@
 
 <script setup>
 import { PayType } from "@/interfaces/pay";
+import { usePayStore } from "@/store/pay";
 
-import BFSDK from "@/api/sdk";
-
+const payStore = usePayStore();
 const currentPayIndex = ref(0);
 const currentPayType = ref(PayType.Wechat);
-const wechatpays = ref([]);
-const alipays = ref([]);
+const { wechatpays, alipays } = storeToRefs(payStore);
 
 const currentPayForm = computed(() => {
   const pays =
@@ -73,9 +72,11 @@ const currentPayForm = computed(() => {
 });
 
 onMounted(async () => {
-  const { data, success } = await BFSDK.getAppPays(5);
-  if (success) {
-    wechatpays.value = data;
+  try {
+    const res = await payStore.fetch(5);
+    console.log(res);
+  } catch (error) {
+    console.error("Failed to fetch pays from payStore:", error);
   }
 });
 </script>

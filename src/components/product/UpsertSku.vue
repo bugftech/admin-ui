@@ -188,7 +188,13 @@
               <v-text-field
                 variant="solo-filled"
                 flat
-                v-model="editedSku.price"
+                prefix="¥"
+                suffix="元"
+                persistent-placeholder
+                type="number"
+                step="0.01"
+                min="0"
+                v-model.number="editedSku.price"
               />
             </v-col>
             <v-col cols="12" md="4">
@@ -196,7 +202,13 @@
               <v-text-field
                 variant="solo-filled"
                 flat
-                v-model="editedSku.promotionPrice"
+                prefix="¥"
+                suffix="元"
+                persistent-placeholder
+                type="number"
+                step="0.01"
+                min="0"
+                v-model.number="editedSku.promotionPrice"
               />
             </v-col>
           </v-row>
@@ -206,7 +218,10 @@
               <v-text-field
                 variant="solo-filled"
                 flat
-                v-model="editedSku.stock"
+                type="number"
+                step="1"
+                min="0"
+                v-model.number="editedSku.stock"
               />
             </v-col>
             <v-col cols="12" md="4">
@@ -214,7 +229,10 @@
               <v-text-field
                 variant="solo-filled"
                 flat
-                v-model="editedSku.lowStock"
+                type="number"
+                step="1"
+                min="0"
+                v-model.number="editedSku.lowStock"
               />
             </v-col>
             <v-col cols="12" md="4">
@@ -222,7 +240,10 @@
               <v-text-field
                 variant="solo-filled"
                 flat
-                v-model="editedSku.lockStock"
+                type="number"
+                step="1"
+                min="0"
+                v-model.number="editedSku.lockStock"
               />
             </v-col>
           </v-row>
@@ -239,12 +260,11 @@
 
 <script setup>
 import { nonEmptyRules } from "@/composables/formRules";
-import { ref, computed } from "vue";
+import { ref, computed, toRefs } from "vue";
 const props = defineProps({
   skus: Array,
 });
 
-const emit = defineEmits(["update:skus"]);
 const variants = ref([]);
 const formRefs = ref([]);
 
@@ -275,8 +295,8 @@ const headers = [
 const skuDialog = ref(false);
 const editedSku = ref({});
 const editedIndex = ref(-1);
-const pics = ref([]);
-
+const { skus } = toRefs(props);
+const items = ref([]);
 const addVariant = () => {
   // 创建一个新的 ref，并将其推入 formRefs 数组
   const formRef = ref(null);
@@ -301,6 +321,7 @@ const onChange = (i, idx) => {
 };
 
 const onLockVariant = async (i) => {
+  console.log("idx", variants.value[i]);
   if (!variants.value[i]) return;
 
   // 获取表单引用并验证
@@ -329,50 +350,20 @@ const onDeleteVariantItem = (i, idx) => {
   variants.value[i].values.splice(idx, 1);
 };
 
-const items = computed(() => {
-  const combinations = ref([]);
-  const generateCombinations = (arr) => {
-    const generate = (index, currentCombination) => {
-      // 避免空数组比较时出现满足条件
-      if (arr.length === 0) return;
-      if (currentCombination.length === arr.length) {
-        combinations.value.push(currentCombination);
-        return;
-      }
-
-      const currentItem = arr[index];
-
-      if (currentItem) {
-        if (currentItem.title == "") return;
-        currentItem.values.forEach((value) => {
-          if (value !== "") {
-            const newCombination = [...currentCombination];
-            newCombination.push({ key: currentItem.title, value });
-            generate(index + 1, newCombination);
-          }
-        });
-      } else {
-        generate(index + 1, currentCombination);
-      }
-    };
-
-    generate(0, []);
-
-    return combinations.value.map((combination, idx) => {
-      return {
-        id: idx,
-        skuAttribute: combination,
-        skuCode: "",
-        price: 0,
-        stock: 0,
-      };
-    });
-  };
-  return generateCombinations(variants.value);
-});
-
 const convertToString = (list) => {
-  return list.map((item) => item.value).join("/");
+  if (!Array.isArray(list)) {
+    return "";
+  }
+
+  return list
+    .map((item) => {
+      if (item && typeof item.value !== "undefined") {
+        return item.value;
+      } else {
+        return "";
+      }
+    })
+    .join("/");
 };
 
 const defaultSku = ref({
@@ -402,6 +393,82 @@ const close = () => {
   });
 };
 
+watchEffect(() => {
+  if (skus.value.length > 0) {
+    skus.value.forEach((item) => {
+      if (!item.skuAttributes || item.skuAttributes.length === 0) return;
+      item.skuAttributes.forEach((sku) => {
+        const idx = variants.value.findIndex((vari) => vari.title === sku.key);
+        if (idx === -1) {
+          const formRef = ref(null);
+          formRefs.value.push(formRef);
+
+          variants.value.push({
+            title: sku.key,
+            lock: true,
+            values: [sku.value],
+          });
+        } else {
+          if (!variants.value[idx].values.includes(sku.value)) {
+            variants.value[idx].values.push(sku.value);
+          }
+        }
+      });
+    });
+  }
+  const combinations = [];
+  const generateCombinations = (arr) => {
+    const generate = (index, currentCombination) => {
+      if (arr.length === 0) return;
+      if (currentCombination.length === arr.length) {
+        combinations.push(currentCombination);
+        return;
+      }
+      const currentItem = arr[index];
+      if (currentItem) {
+        if (currentItem.title == "") return;
+        currentItem.values.forEach((value) => {
+          if (value !== "") {
+            const newCombination = [...currentCombination];
+            newCombination.push({ key: currentItem.title, value });
+            generate(index + 1, newCombination);
+          }
+        });
+      } else {
+        generate(index + 1, currentCombination);
+      }
+    };
+
+    generate(0, []);
+
+    return combinations.map((combination, idx) => {
+      return {
+        id: idx,
+        skuAttributes: combination,
+        skuCode: "",
+        price: 0,
+        stock: 0,
+      };
+    });
+  };
+
+  const arr = generateCombinations(variants.value);
+  if (arr.length === 0) {
+    items.value = arr;
+    return;
+  }
+
+  items.value = arr.map((item) => {
+    const idx = skus.value.findIndex(
+      (sku) =>
+        JSON.stringify(sku.skuAttributes) === JSON.stringify(item.skuAttributes)
+    );
+
+    if (idx === -1) return item;
+    return { ...item, ...skus.value[idx] };
+  });
+});
+
 const save = () => {
   if (editedIndex.value > -1) {
     const index = editedIndex.value;
@@ -429,15 +496,7 @@ const onChangePic = (e) => {
   editedSku.value.pic = e;
 };
 
-onMounted(() => {
-  if (props.skus.length > 0) {
-    props.skus.forEach((item) => {
-      variants.value.push({
-        title: item.key,
-        lock: true,
-        values: [item.value],
-      });
-    });
-  }
+defineExpose({
+  items,
 });
 </script>

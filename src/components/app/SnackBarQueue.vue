@@ -1,9 +1,9 @@
 <template>
   <v-snackbar
-    style="margin-top: 64px"
+    style="margin-top: 56px"
     v-if="isVisible && current"
     v-model="isActive"
-    :timeout="current.event ? 2000 : current.timeout"
+    :timeout="current.event ? 1000 : current.timeout"
     location="right top"
     color="grey-darken-4"
     @after-leave="onAfterLeave"

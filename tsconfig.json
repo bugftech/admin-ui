@@ -26,6 +26,5 @@
     ]
   },
   "references": [{ "path": "./tsconfig.node.json" }],
-  "exclude": ["node_modules","dist"],
-  "include": ["src/api/*","src/composables/*","src/interfaces/*"]
+  "exclude": ["node_modules","dist"]
 }

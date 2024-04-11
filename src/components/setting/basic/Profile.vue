@@ -26,8 +26,9 @@
         保存
       </v-btn>
       <v-btn
+        size="small"
         v-if="!canEditInfo"
-        icon="mdi-lock"
+        icon="mdi-pencil"
         @click="canEditInfo = !canEditInfo"
       ></v-btn>
     </v-toolbar>
@@ -72,19 +73,9 @@
             variant="solo-filled"
             flat
             v-model="item.uuid"
-            class="text-caption"
+            append-icon="mdi-content-copy"
+            @click:append="copy(item.uuid)"
           >
-            <template v-slot:append>
-              <v-btn
-                color="orange-accent-2"
-                variant="flat"
-                size="small"
-                @click="copy(item.uuid)"
-                prepend-icon="mdi-content-copy"
-              >
-                复制
-              </v-btn>
-            </template>
           </v-text-field>
         </v-col>
       </v-row>

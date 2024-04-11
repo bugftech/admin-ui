@@ -19,5 +19,4 @@ router.addRoute({
   component: () => import("@/layouts/404.vue"),
 });
 
-console.log("routes:", router.getRoutes());
 export default router;

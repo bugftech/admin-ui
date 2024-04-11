@@ -1,6 +1,6 @@
 <template>
   <v-btn
-    icon="mdi-keyboard-backspace"
+    icon="mdi-arrow-left-bold"
     @click="back"
     size="small"
   >

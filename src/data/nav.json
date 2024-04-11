@@ -1,11 +1,5 @@
 [
   {
-    "title": "主页",
-    "to": "/home",
-    "inactiveIcon": "mdi-home-circle",
-    "activeIcon": "mdi-home-circle-outline"
-  },
-  {
     "title": "订单(OMS)",
     "inactiveIcon": "mdi-archive",
     "activeIcon": "mdi-archive-outline",
@@ -27,7 +21,7 @@
       },
       {
         "title": "系列",
-        "to": "/pms/stocks"
+        "to": "/pms/collections"
       },
       {
         "title": "归纳",

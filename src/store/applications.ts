@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import BFSDK from "@/api/sdk";
 import { WechatApp, AlipayApp, AppType } from "@/interfaces/apps";
-import { constructFrom } from "date-fns";
 
 // MiniConfig 小程序配置
 export type MiniConfig = {

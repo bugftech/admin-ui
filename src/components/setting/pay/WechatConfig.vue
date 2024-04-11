@@ -50,7 +50,6 @@
 
 <script setup lang="ts">
 import { wechatPay } from "@/store/pay";
-import { toRaw } from "vue";
 import { usePayStore } from "@/store/pay";
 
 const props = defineProps<{

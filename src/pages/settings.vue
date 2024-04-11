@@ -19,5 +19,6 @@
 <route lang="yaml">
 redirect: "/settings/basic"
 meta:
+  title: "设置项目"
   breadcrumb: 项目
 </route>

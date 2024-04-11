@@ -1,7 +1,8 @@
-const downloadCSV = (
+// downloadCSV 下载csv文件
+export const downloadCSV = (
   items: any[],
   filename: string,
-  headers: { title: string; value: string }[]
+  headers: { title: string; key: string }[]
 ) => {
   // 根据 headers 定义的顺序构建标题行
   const headerRow = headers.map((header) => header.title).join(",") + "\n";
@@ -11,8 +12,7 @@ const downloadCSV = (
     .map((item) => {
       return headers
         .map((header) => {
-          const value =
-            item[header.value] !== undefined ? item[header.value] : ""; // 如果属性不存在，则使用空字符串
+          const value = item[header.key] !== undefined ? item[header.key] : ""; // 如果属性不存在，则使用空字符串
           return value;
         })
         .join(",");

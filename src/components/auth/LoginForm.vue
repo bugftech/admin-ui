@@ -59,24 +59,22 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useAuthStore } from "@/store/auth";
-import { useRouter, useRoute } from "vue-router";
 import { setCookie, getCookie } from "@/composables/cookie";
 import { encrypt, decrypt } from "@/composables/crypto";
+import BFSDK from "@/api/sdk";
 
 const username = ref("");
 const password = ref("");
 const rememberMe = ref(false);
-
-const auth = useAuthStore();
 const router = useRouter();
 const route = useRoute();
-const { loading } = storeToRefs(auth);
+const loading = ref(false);
 
 const login = async () => {
-  const { success } = await auth.login(username.value, password.value);
+  loading.value = true;
+  const { success } = await BFSDK.login(username.value, password.value);
   if (success) {
+    useSnackbar("登录成功")
     if (rememberMe.value) {
       // 有效期设置为7天
       setCookie("rememberedUsername", username.value, 7);
@@ -90,7 +88,13 @@ const login = async () => {
     }
 
     const redirect = route.query.redirect || "/home";
-    router.push(redirect);
+    router.push(redirect).catch((err)=>{
+      console.error(err)
+    }).finally(() => {
+      loading.value = false;
+    });
+  } else {
+    useSnackbar("登录失败")
   }
 };
 

@@ -1,9 +1,12 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { WechatApp } from "@/interfaces/apps";
+import { WechatApp, App } from "@/interfaces/apps";
 import { WechatPay } from "@/interfaces/pay";
 import { Product, ProductAndSku } from "@/interfaces/product";
-import { AllCategory } from "@/interfaces/category";
-
+import { AllCategory, Category } from "@/interfaces/category";
+import { Order } from "@/interfaces/order";
+import { OrderInfo } from "@/services/types";
+import { wechatPay } from "@/store/pay";
+import { Collection } from "@/interfaces/collection";
 
 const url = import.meta.env.VITE_API_SERVER_URL;
 
@@ -151,7 +154,7 @@ class SDK extends BaseClient {
   }
 
   async login(username: string, password: string): Promise<APIResponse<any>> {
-    const url = "/login";
+    const url = "/signin";
     return await this.post(url, { username, password });
   }
 
@@ -160,9 +163,9 @@ class SDK extends BaseClient {
     return await this.post(url, { email: email, password: password });
   }
 
-  async getApps(pagination?: Pagination): Promise<APIResponse<WechatApp[]>> {
+  async getApps(pagination?: Pagination): Promise<APIResponse<App[]>> {
     const url = this.listWrapperUrl("/apps", pagination);
-    return await this.get<WechatApp[]>(url);
+    return await this.get<App[]>(url);
   }
 
   // TODO: 通用的config。不区分type
@@ -199,6 +202,19 @@ class SDK extends BaseClient {
     return await this.get<ProductAndSku>(url);
   }
 
+  async addProduct(config: ProductAndSku): Promise<APIResponse<ProductAndSku>> {
+    const url = "/pms/products";
+    return await this.post<ProductAndSku>(url, config);
+  }
+
+  async updateProduct(
+    id: number | string,
+    product: ProductAndSku
+  ): Promise<APIResponse<ProductAndSku>> {
+    const url = `/pms/products/${id}`;
+    return await this.put<ProductAndSku>(url, product);
+  }
+
   async getUsers(): Promise<APIResponse<any>> {
     const url = "/users";
     return await this.get<any[]>(url);
@@ -218,6 +234,54 @@ class SDK extends BaseClient {
     }
 
     return await this.get<AllCategory[]>(url);
+  }
+
+  async updateCategory(
+    id: number,
+    config: AllCategory
+  ): Promise<APIResponse<AllCategory>> {
+    const url = `/pms/categories/${id}`;
+    return await this.put<AllCategory>(url, config);
+  }
+
+  async addCategory(config: AllCategory): Promise<APIResponse<AllCategory>> {
+    const url = `/pms/categories`;
+    return await this.post<AllCategory>(url, config);
+  }
+
+  async getOrders(pagination?: Pagination): Promise<APIResponse<OrderInfo[]>> {
+    const url = this.listWrapperUrl("/orders", pagination);
+    return await this.get<OrderInfo[]>(url);
+  }
+
+  // Applications Pay
+  async addPay(id: number, config: WechatPay): Promise<APIResponse<WechatPay>> {
+    const url = `/${id}/pays`;
+    return await this.post<wechatPay>(url, config);
+  }
+
+  // Collection
+  async addCollection(config: Collection): Promise<APIResponse<Collection>> {
+    const url = "/pms/collections";
+    return await this.post<Collection>(url, config);
+  }
+
+  async getAllCollections(): Promise<APIResponse<Collection[]>> {
+    const url = "/pms/collections/all";
+    return await this.get<Collection[]>(url);
+  }
+
+  async getCollection(id: number): Promise<APIResponse<Collection[]>> {
+    const url = `/pms/collections/${id}`;
+    return await this.get<Collection[]>(url);
+  }
+
+  async updateCollectionItems(
+    id: number,
+    config: Product[]
+  ): Promise<APIResponse<Collection>> {
+    const url = `/pms/collections/${id}/items`;
+    return await this.put<Collection>(url, { Products: config });
   }
 
   // listWrapperUrl 获取列表的方式

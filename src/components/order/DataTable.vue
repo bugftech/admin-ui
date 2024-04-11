@@ -2,6 +2,7 @@
   <v-card>
     <v-toolbar color="transparent">
       <AppDatePicker />
+      <v-spacer />
       <v-checkbox
         hide-details
         v-model="autoRefresh"
@@ -18,24 +19,22 @@
             icon="mdi-sync"
             size="small"
             v-bind="props"
-            @click="order.fetch"
+            @click="refreshData"
           />
         </template>
       </v-tooltip>
-      <v-spacer />
-      <v-responsive max-width="344">
-        <v-text-field
-          flat
-          density="compact"
-          variant="solo-filled"
-          placeholder="检索"
-          class="me-2"
-          prepend-inner-icon="mdi-magnify"
-          v-model="search"
-        >
-        </v-text-field>
-      </v-responsive>
     </v-toolbar>
+    <v-divider />
+    <v-text-field
+      flat
+      density="compact"
+      variant="solo"
+      placeholder="检索"
+      rounded="0"
+      prepend-inner-icon="mdi-magnify"
+      v-model="search"
+    >
+    </v-text-field>
     <v-divider />
     <v-data-table
       density="comfortable"
@@ -69,24 +68,51 @@
 </template>
 
 <script setup lang="ts">
+// Utilities
 import { ref, computed, onBeforeUnmount, watch, toRaw } from "vue";
 import { useRouter } from "vue-router";
-import { storeToRefs } from "pinia";
-import { useOrderStore } from "@/store/orders";
 import { usePriceYuan } from "@/composables/price";
-// Utilities
 import { formatDateTime } from "@/composables/time";
+import BFSDK from "@/api/sdk";
+import { OrderInfo } from "@/services/types";
 
-const order = useOrderStore();
+const headers: any[] = [
+  {
+    title: "订单编号",
+    key: "id",
+  },
+  {
+    title: "订单总金额",
+    key: "totalAmount",
+  },
+  {
+    title: "实付金额",
+    key: "payAmount",
+  },
+  {
+    title: "客户",
+    key: "memberUsername",
+  },
+  {
+    title: "订单状态",
+    key: "status",
+  },
+  {
+    title: "创建时间",
+    key: "createTime",
+  },
+];
+
 const search = ref();
 const router = useRouter();
 const autoRefresh = ref(false);
+const loading = ref(false);
+const items = ref<OrderInfo[]>([]);
+
 let refreshInterval: NodeJS.Timeout;
-const { headers, items, loading } = storeToRefs(order);
 
 const onClickRow = (e: any, selected: any) => {
   const copyItem = toRaw(selected.item);
-  order.setCurrentIndex(selected.index);
   router.push({ name: "/orders/[id]/", params: { id: copyItem.id } });
 };
 
@@ -102,11 +128,11 @@ const stopRefreshInterval = () => {
   clearInterval(refreshInterval);
 };
 
-const refreshData = () => {
-  // 这里是请求刷新数据的逻辑，可以是接口请求或者其他数据更新方法
-  // 这里假设通过axios请求数据
-  order.fetch();
-  console.log("refresh");
+const refreshData = async () => {
+  const { success, data } = await BFSDK.getOrders();
+  if (success) {
+    items.value = data;
+  }
 };
 
 watch(autoRefresh, (newVal) => {
@@ -116,6 +142,13 @@ watch(autoRefresh, (newVal) => {
   } else {
     // 当checkbox为false时关闭定时器
     stopRefreshInterval();
+  }
+});
+
+onMounted(async () => {
+  const { success, data } = await BFSDK.getOrders();
+  if (success) {
+    items.value = data;
   }
 });
 

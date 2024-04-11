@@ -118,5 +118,6 @@ const copy = () => {
 
 <route lang="yaml">
 meta:
+  title: "查看订单"
   breadcrumb: "查看"
 </route>

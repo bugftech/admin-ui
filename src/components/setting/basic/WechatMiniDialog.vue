@@ -42,7 +42,7 @@
         <v-spacer />
         <v-btn
           size="small"
-          color="indigo"
+          color="orange-accent-2"
           variant="flat"
           prepend-icon="mdi-check"
           :loading="loading"
@@ -57,10 +57,10 @@
 
 <script setup lang="ts">
 import { ref, reactive } from "vue";
-import { useApplicationStore } from "@/store/applications";
 import { AppType, WechatApp } from "@/interfaces/apps";
 import { nonEmptyRules } from "@/composables/formRules";
 
+import { useApplicationStore } from "@/store/applications";
 const store = useApplicationStore();
 const dialog = ref(false);
 const loading = ref(false);

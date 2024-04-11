@@ -38,7 +38,7 @@
                 <v-btn icon="mdi-wechat" variant="text" class="me-2 border">
                 </v-btn>
               </template>
-              <v-list-item-title class="text-subtitle-2">{{
+              <v-list-item-title class="text-caption font-weight-medium">{{
                 mini.name
               }}</v-list-item-title>
               <v-list-item-subtitle class="text-caption">

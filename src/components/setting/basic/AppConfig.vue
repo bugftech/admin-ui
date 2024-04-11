@@ -16,6 +16,7 @@
       :focused="canEdit"
       density="compact"
       v-model="localConfig.name"
+      :rules="nonEmptyRules"
     ></v-text-field>
 
     <AppLabel class="mt-4">UUID</AppLabel>
@@ -31,12 +32,13 @@
       @click:append="copy"
     ></v-text-field>
 
-    <AppLabel class="mt-4">AppId</AppLabel>
+    <AppLabel class="mt-4">App ID</AppLabel>
     <v-text-field
       variant="solo-filled"
       flat
       :focused="canEdit"
       density="compact"
+      :rules="nonEmptyRules"
       v-model="localConfig.appId"
     ></v-text-field>
 
@@ -47,6 +49,7 @@
       :focused="canEdit"
       density="compact"
       type="password"
+      :rules="nonEmptyRules"
       v-model="localConfig.appSecret"
     ></v-text-field>
   </v-form>

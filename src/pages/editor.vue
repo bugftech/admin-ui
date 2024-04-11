@@ -131,3 +131,10 @@ onMounted(async () => {
   }
 });
 </script>
+
+
+<route lang="yaml">
+meta:
+  title: "客户中心"
+  breadcrumb: "客户"
+</route>

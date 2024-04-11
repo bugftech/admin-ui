@@ -1413,6 +1413,14 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
+echarts@^5.5.0:
+  version "5.5.0"
+  resolved "https://registry.npmmirror.com/echarts/-/echarts-5.5.0.tgz#c13945a7f3acdd67c134d8a9ac67e917830113ac"
+  integrity sha512-rNYnNCzqDAPCr4m/fqyUFv7fD9qIsd50S6GDFgO1DxZhncCsNsG7IfUlAlvZe5oSEQxtsjnHiUuppzccry93Xw==
+  dependencies:
+    tslib "2.3.0"
+    zrender "5.5.0"
+
 entities@^4.5.0:
   version "4.5.0"
   resolved "https://registry.npmmirror.com/entities/-/entities-4.5.0.tgz#5d268ea5e7113ec74c4d033b79ea5a35a488fb48"
@@ -2905,6 +2913,11 @@ tsconfig-paths@^3.15.0:
     minimist "^1.2.6"
     strip-bom "^3.0.0"
 
+tslib@2.3.0:
+  version "2.3.0"
+  resolved "https://registry.npmmirror.com/tslib/-/tslib-2.3.0.tgz#803b8cdab3e12ba581a4ca41c8839bbb0dacb09e"
+  integrity sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==
+
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"
   resolved "https://registry.npmmirror.com/type-check/-/type-check-0.4.0.tgz#07b8203bfa7056c0657050e3ccd2c37730bab8f1"
@@ -3190,10 +3203,10 @@ vue@^3.3.0:
     "@vue/server-renderer" "3.4.19"
     "@vue/shared" "3.4.19"
 
-vuetify@^3.0.0:
-  version "3.5.6"
-  resolved "https://registry.npmmirror.com/vuetify/-/vuetify-3.5.6.tgz#cdf8859ab3cc746c78f703db9ec4ea26f3d54757"
-  integrity sha512-PfKSnHaSEGoz1QNHZ2sutOYwmYxtBbxAaeRy0L0qtMWLkKtxheg0he/NX+lsP11I2LevQBj2AgeBYDMZ/oPkPQ==
+vuetify@^3.5.12:
+  version "3.5.15"
+  resolved "https://registry.npmmirror.com/vuetify/-/vuetify-3.5.15.tgz#d93a3db865166b5ddd703a387c5ec3da4c11de3d"
+  integrity sha512-4v+t3yjgZ5M4+YKRK2eOxymWU34/Sg8YP6Dqi4ZMYFjchiwijOns1WW4ywYlYXih0TSPVeAeQpCzztDu89nTyg==
 
 webpack-sources@^3.2.3:
   version "3.2.3"
@@ -3263,3 +3276,10 @@ zhead@^2.2.4:
   version "2.2.4"
   resolved "https://registry.npmmirror.com/zhead/-/zhead-2.2.4.tgz#87cd1e2c3d2f465fa9f43b8db23f9716dfe6bed7"
   integrity sha512-8F0OI5dpWIA5IGG5NHUg9staDwz/ZPxZtvGVf01j7vHqSyZ0raHY+78atOVxRqb73AotX22uV1pXt3gYSstGag==
+
+zrender@5.5.0:
+  version "5.5.0"
+  resolved "https://registry.npmmirror.com/zrender/-/zrender-5.5.0.tgz#54d0d6c4eda81a96d9f60a9cd74dc48ea026bc1e"
+  integrity sha512-O3MilSi/9mwoovx77m6ROZM7sXShR/O/JIanvzTwjN3FORfLSr81PsUGd7jlaYOeds9d8tw82oP44+3YucVo+w==
+  dependencies:
+    tslib "2.3.0"

@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-row>
       <v-col cols="12">
         <!--面包屑-->
@@ -25,11 +25,12 @@
 const data = ref();
 
 const download = () => {
-  console.log("data:", data.value.items);
+  console.log(data.value.items);
 };
 </script>
 
 <route lang="yaml">
 meta:
+  title: "商品分类"
   breadcrumb: 分类
 </route>

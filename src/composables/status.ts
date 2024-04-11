@@ -12,7 +12,7 @@ const statusItems: StatusItem[] = [
     value: 0,
     title: "未支付",
     icon: "mdi-cash-remove", // Icon for "未支付"
-    color: "red",
+    color: "indigo",
   },
   {
     value: 1,
@@ -36,13 +36,13 @@ const statusItems: StatusItem[] = [
     value: 4,
     title: "已关闭",
     icon: "mdi-close-circle", // Icon for "已关闭"
-    color: "gray",
+    color: "grey",
   },
   {
     value: 5,
     title: "无效的",
     icon: "mdi-cancel", // Icon for "无效的订单"
-    color: "black",
+    color: "red",
   },
 ];
 

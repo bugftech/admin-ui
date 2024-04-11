@@ -1,8 +1,9 @@
 import { APIResponse } from "@/services/types";
 import { API } from "@/services";
 import { AxiosError } from "axios";
+import BFSDK from "@/api/sdk";
 
-// wechatPayConfig 微信支付的配置
+// wechatPay 微信支付的配置
 export type wechatPay = {
   id?: number;
   // 微信支付 AppID
@@ -58,33 +59,10 @@ export const usePayStore = defineStore({
       currentPayType: PayType.Wechat,
     } as RootState),
   actions: {
-    async fetch<T>(): Promise<APIResponse<T>> {
-      try {
-        this.loading = true;
-        const { data, status } = await API.bugfreed.list<wechatPay[]>("pays");
-        if (status === 200) {
-          console.log(data);
-          this.loading = true;
-          return {
-            success: true,
-            data: null as unknown as T,
-          };
-        }
-      } catch (error) {
-        const _error = error as AxiosError<string>;
-        return {
-          success: false,
-          status: _error.response?.status,
-          data: null as unknown as T,
-        };
-      } finally {
-        this.loading = false;
-      }
-      // Add a return statement at the end of the function
-      return {
-        success: false,
-        data: null as unknown as T,
-      };
+    async fetch(appId: number) {
+      const { success, data } = await BFSDK.getAppPays(appId);
+      if (!success) return;
+      this.wechatpays = data;
     },
     addWxPay(pay: wechatPay) {
       this.wechatpays.push(pay);

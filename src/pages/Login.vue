@@ -22,16 +22,13 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from "@/store/auth";
-import { storeToRefs } from "pinia";
-
-const auth = useAuthStore();
 </script>
 
 <route lang="yaml">
 meta:
   layout: bare
-  title: "登录"
+  title: "登录Bugfreed"
+  breadcrumb: "认证"
 </route>
 
 <style>

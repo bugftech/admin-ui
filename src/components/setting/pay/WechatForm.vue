@@ -1,12 +1,13 @@
 <template>
   <v-form :readonly="readonly" ref="form">
-    <AppLabel>AppId</AppLabel>
+    <AppLabel>AppId(只读)</AppLabel>
     <v-text-field
       placeholder="请输入微信子商户ID"
       hide-details="auto"
       density="compact"
       variant="solo-filled"
       flat
+      :readonly="pay.appId !== ''"
       :rules="nonEmptyRules"
       v-model="pay.appId"
     >

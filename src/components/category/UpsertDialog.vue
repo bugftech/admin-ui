@@ -4,9 +4,8 @@
     <template v-slot:activator="{ props }">
       <v-btn
         v-bind="props"
-        :variant="meta.variant"
+        :variant="edit ? 'text' : 'elevated'"
         rounded="lg"
-        :color="meta.color"
         :prepend-icon="meta.prependIcon"
         size="small"
       >
@@ -14,13 +13,14 @@
       </v-btn>
     </template>
     <v-card>
-      <v-toolbar color="grey-darken-4">
+      <v-toolbar color="transparent" density="compact">
         <v-toolbar-title class="text-body-1 font-weight-bold">
           {{ meta.title }}
         </v-toolbar-title>
         <v-spacer />
-        <v-btn icon="mdi-close" @click="onClose" />
+        <v-btn icon="mdi-close" @click="close" />
       </v-toolbar>
+      <v-divider />
       <v-card-text>
         <v-row>
           <v-col cols="12" md="6">
@@ -35,28 +35,11 @@
           </v-col>
           <v-col cols="12" md="6">
             <AppLabel>父级分类</AppLabel>
-            <v-select
-              hide-details
-              chips
+            <CategorySelect
+              ref="cateRef"
               :disabled="editItem.level === 1"
-              placeholder="搜索/选择分类"
-              item-title="name"
-              item-value="id"
-              density="compact"
-              clearable
-              variant="solo-filled"
-              flat
-              v-model="editItem.parentId"
-              :items="items"
-            >
-              <template v-slot:no-data>
-                <div class="text-center">
-                  <div class="text-body-2 font-weight-bold my-2">
-                    尚未添加分类
-                  </div>
-                </div>
-              </template>
-            </v-select>
+              v-model:parentId="editItem.parentId"
+            />
           </v-col>
           <v-col cols="12" md="6">
             <AppLabel>排序</AppLabel>
@@ -65,7 +48,10 @@
               type="number"
               variant="solo-filled"
               flat
-              v-model="editItem.sort"
+              density="compact"
+              min="0"
+              step="1"
+              v-model.number="editItem.sort"
             ></v-text-field
           ></v-col>
           <v-col cols="12" md="6">
@@ -79,11 +65,17 @@
           </v-col>
           <v-col cols="12" md="6">
             <AppLabel>图标（icon）</AppLabel>
-            <v-sheet height="100" class="rounded-lg dot"> </v-sheet>
+            <v-sheet class="border" v-if="editItem.icon">
+              <v-img :src="editItem.icon" contain />
+            </v-sheet>
+            <UploadImage v-else @change="onUploadIcon" />
           </v-col>
           <v-col cols="12" md="6">
             <AppLabel>横幅（banner）</AppLabel>
-            <v-sheet height="100" class="rounded-lg dot"> </v-sheet>
+            <v-sheet class="border" v-if="editItem.image">
+              <v-img :src="editItem.image" contain />
+            </v-sheet>
+            <UploadImage v-else @change="onUploadImage" />
           </v-col>
           <v-col cols="12" md="12">
             <AppLabel>描述</AppLabel>
@@ -104,15 +96,9 @@
         <v-btn
           variant="tonal"
           size="small"
-          prepend-icon="mdi-cancel"
-          class="me-2"
-          >取消</v-btn
-        >
-        <v-btn
-          variant="flat"
-          size="small"
-          color="grey-darken-4"
           prepend-icon="mdi-check-all"
+          @click="save"
+          width="70"
           >确认</v-btn
         >
       </v-card-actions>
@@ -120,9 +106,10 @@
   </v-dialog>
 </template>
 
-<script setup>
-import { useCategoryStore } from "@/store/category";
-import { ref, reactive } from "vue";
+<script setup lang="ts">
+import BFSDK from "@/api/sdk";
+import { AllCategory } from "@/interfaces/category";
+import { useSnackbar } from "@/composables/snackbar";
 
 const props = defineProps({
   edit: Boolean,
@@ -130,7 +117,6 @@ const props = defineProps({
 });
 
 const dialog = ref(false);
-
 const meta = computed(() => {
   return props.edit
     ? { title: "编辑", prependIcon: "mdi-pencil", variant: "text" }
@@ -142,15 +128,18 @@ const meta = computed(() => {
       };
 });
 
-const defaultItem = reactive({
+const defaultItem = reactive<AllCategory>({
+  id: 0,
   name: "",
   unit: "",
-  parentId: null,
+  parentId: 0,
   sort: 0,
   icon: "",
   image: "",
+  level: 0,
   keywords: "",
   description: "",
+  count: 0,
 });
 
 let editItem = reactive({ ...defaultItem });
@@ -159,11 +148,36 @@ if (props.edit) {
   editItem = reactive({ ...defaultItem, ...props.item });
 }
 
-const store = useCategoryStore();
-const { items } = storeToRefs(store);
-const onClose = () => {
+const onUploadIcon = (e: string) => {
+  editItem.icon = e;
+};
+
+const onUploadImage = (e: string) => {
+  editItem.image = e;
+};
+
+const close = () => {
   editItem = reactive({ ...defaultItem });
   dialog.value = false;
+};
+
+
+const save = async () => {
+  editItem.level = editItem.parentId === 0 ? 1 : 2;
+  let res = null;
+  if (editItem.id > 0) {
+    res = await BFSDK.updateCategory(editItem.id, editItem);
+  } else {
+    res = await BFSDK.addCategory(editItem);
+  }
+
+  const { success } = res;
+  if (success) {
+    useSnackbar("添加/更新分类成功");
+    close();
+  } else {
+    useSnackbar("添加分类失败");
+  }
 };
 </script>
 

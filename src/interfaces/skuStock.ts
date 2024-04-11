@@ -9,5 +9,10 @@ export interface SkuStock {
   salesVolumn: number;
   promotionPrice: number;
   lockStock: number;
-  skuAttributes: string;
+  skuAttributes: SkuAttribute[];
+}
+
+export interface SkuAttribute {
+  key: String;
+  value: string;
 }
