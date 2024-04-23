@@ -116,8 +116,7 @@ let refreshInterval: NodeJS.Timeout;
 const orderStore = useOrderStore();
 
 const onClickRow = async (e: any, selected: any) => {
-  console.log("selected:", selected);
-  console.log("e:", e);
+
   const copyItem = toRaw(selected.item);
   // to remove: 临时解决版本问题
   orderStore.setCurrentIndex(selected.index);
