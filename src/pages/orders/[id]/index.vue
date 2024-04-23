@@ -115,9 +115,6 @@ const copy = () => {
   }
 };
 
-onMounted(async () => {
-  await orderStore.getOrder(parseInt(id))
-});
 </script>
 
 <route lang="yaml">

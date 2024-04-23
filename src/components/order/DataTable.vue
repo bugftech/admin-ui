@@ -74,6 +74,7 @@ import { usePriceYuan } from "@/composables/price";
 import { formatDateTime } from "@/composables/time";
 import BFSDK from "@/api/sdk";
 import { OrderInfo } from "@/services/types";
+import { useOrderStore } from "@/store/orders";
 
 const headers: any[] = [
   {
@@ -110,8 +111,16 @@ const items = ref<OrderInfo[]>([]);
 
 let refreshInterval: NodeJS.Timeout;
 
-const onClickRow = (e: any, selected: any) => {
+// orderStore
+
+const orderStore = useOrderStore();
+
+const onClickRow = async (e: any, selected: any) => {
+  console.log("selected:", selected);
+  console.log("e:", e);
   const copyItem = toRaw(selected.item);
+  // to remove: 临时解决版本问题
+  orderStore.setCurrentIndex(selected.index);
   router.push({ name: "/orders/[id]/", params: { id: copyItem.id } });
 };
 
@@ -149,6 +158,8 @@ onMounted(async () => {
   if (success) {
     items.value = data;
   }
+  // to remove: 临时解决版本问题
+  await orderStore.fetch();
 });
 
 onBeforeUnmount(() => {
