@@ -155,7 +155,7 @@ watch(autoRefresh, (newVal) => {
 onMounted(async () => {
   const { success, data } = await BFSDK.getOrders();
   if (success) {
-    items.value = data;
+    items.value = data.reverse();
   }
   // to remove: 临时解决版本问题
   await orderStore.fetch();
