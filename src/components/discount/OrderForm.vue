@@ -67,7 +67,7 @@
                 :items="discountStrategies"
                 item-title="title"
                 item-value="value"
-                v-model="editItem.strategy"
+                v-model="editItem.priceStrategy"
               ></v-select>
             </v-col>
             <v-col cols="6">
@@ -76,11 +76,11 @@
                 variant="solo-filled"
                 flat
                 persistent-placeholder
-                :prefix="editItem.strategy === 'fixed_amount' ? '¥' : undefined"
+                :prefix="editItem.priceStrategy === 'fixed_amount' ? '¥' : undefined"
                 min="0"
                 step="0.01"
-                :suffix="editItem.strategy === 'fixed_amount' ? '元' : '%'"
-                v-model.number="editItem.strategyValue"
+                :suffix="editItem.priceStrategy === 'fixed_amount' ? '元' : '%'"
+                v-model.number="editItem.priceStrategyValue"
               >
               </v-text-field>
             </v-col>
@@ -310,7 +310,7 @@
             <v-col cols="12">
               <div class="text-caption font-weight-bold">折扣额</div>
               <div class="v-label text-caption">
-                {{ editItem.strategy + ": " + editItem.strategyValue }}
+                {{ editItem.priceStrategy + ": " + editItem.priceStrategyValue }}
               </div>
             </v-col>
 
@@ -417,17 +417,18 @@ const editItem = reactive<Discount>({
   way: "automatic",
   code: "8NYH4Q83ES9W",
   description: "",
-  strategy: "percentage_amount", // 默认百分比
-  strategyValue: 0,
+  priceStrategy: "percentage_amount", // 默认百分比
+  priceStrategyValue: 0,
+  priceStrategyPercent: 0,
   minPurchaseStrategy: "none",
   minPurchaseValue: 0,
   maxUsageCount: 0,
   oncePerCustomer: false,
   oncePerOrder: false,
   customerStrategy: "all",
-  status: "draft",
-  items: [],
-  startDate: new Date(),
+  published: false,
+  products: [],
+  startDate: 0,
   customers: [],
 });
 </script>

@@ -1,4 +1,4 @@
-import { SkuStock } from "./skuStock";
+import { SkuStock, SkuAttribute } from "./skuStock";
 
 // Product product model
 export interface Product {
@@ -50,4 +50,21 @@ export interface Product {
 
 export interface ProductAndSku extends Product {
   skuStockList: SkuStock[];
+}
+
+export interface ProductOrSkuDTO {
+  id: number;
+  productId: number;
+  productName: string;
+  productPic: string;
+  productPrice: number;
+  productStock: number;
+  productLowStock: number;
+  skuId: number;
+  skuPic: string;
+  skuCode: string;
+  skuStock: number;
+  skuLowStock: number;
+  variant: boolean;
+  skuAttributes: SkuAttribute[];
 }

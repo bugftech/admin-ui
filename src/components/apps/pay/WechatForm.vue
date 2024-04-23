@@ -1,13 +1,12 @@
 <template>
   <v-form :readonly="readonly" ref="form">
-    <AppLabel>AppId(只读)</AppLabel>
+    <AppLabel>AppId</AppLabel>
     <v-text-field
-      placeholder="请输入微信子商户ID"
+      placeholder="请输入微信AppId"
       hide-details="auto"
       density="compact"
       variant="solo-filled"
       flat
-      :readonly="pay.appId !== ''"
       :rules="nonEmptyRules"
       v-model="pay.appId"
     >
@@ -91,17 +90,18 @@
 
 <script setup lang="ts">
 import { nonEmptyRules } from "@/composables/formRules";
-import { wechatPay } from "@/store/pay";
+import { WechatPay } from "@/interfaces/pay";
 
 const props = defineProps({
   readonly: Boolean,
   edit: Boolean,
-  config: Object as () => wechatPay | undefined,
+  config: Object as () => WechatPay | undefined,
 });
 
-const defaultPay: wechatPay = {
+const defaultPay: WechatPay = {
   appId: "",
   mchId: "",
+  bfAppId: 0,
   subMchId: "",
   apiCert: "",
   apiV2Key: "",
@@ -111,7 +111,7 @@ const defaultPay: wechatPay = {
 };
 
 // 使用解构赋值合并默认对象和传入的 config 对象
-const pay = ref({ ...defaultPay, ...props.config });
+const pay = reactive({ ...defaultPay, ...props.config });
 const form = ref();
 
 defineExpose({

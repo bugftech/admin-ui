@@ -53,7 +53,6 @@
           </v-row>
         </v-card-text>
       </v-card>
-
       <v-card class="mt-4">
         <v-card-title class="text-caption">折扣</v-card-title>
         <v-card-text>
@@ -67,7 +66,7 @@
                 :items="discountStrategies"
                 item-title="title"
                 item-value="value"
-                v-model="editItem.strategy"
+                v-model="editItem.priceStrategy"
               ></v-select>
             </v-col>
             <v-col cols="6">
@@ -76,45 +75,54 @@
                 variant="solo-filled"
                 flat
                 persistent-placeholder
-                :prefix="editItem.strategy === 'fixed_amount' ? '¥' : undefined"
+                :prefix="
+                  editItem.priceStrategy === 'fixed_amount' ? '¥' : undefined
+                "
                 min="0"
                 step="0.01"
-                :suffix="editItem.strategy === 'fixed_amount' ? '元' : '%'"
-                v-model.number="editItem.strategyValue"
+                :suffix="editItem.priceStrategy === 'fixed_amount' ? '元' : '%'"
+                v-model.number="editItem.priceStrategyValue"
               >
               </v-text-field>
             </v-col>
             <v-col cols="12">
               <AppLabel>适用的产品</AppLabel>
-
               <v-select
                 density="compact"
                 variant="solo-filled"
                 flat
-                item-title="name"
-                item-value="id"
-                return-object
                 hide-details
                 multiple
-                single-line
+                item-value="id"
+                item-title="productName"
+                return-object
+                :items="products"
+                v-model="selectedProducts"
+                @update:modelValue="onUpdateProducts"
+                chips
               >
-                <template v-slot:selection="{ item, index }">
-                  <v-chip v-if="index < 2">
-                    <span>{{ item.title }}</span>
-                  </v-chip>
-                  <span
-                    v-if="index === 2"
-                    class="text-grey text-caption align-self-center"
-                  >
-                    (+ 其他)
-                  </span>
+                <template v-slot:item="{ props, item }">
+                  <v-list-item v-bind="props" class="text-caption">
+                    <v-list-item-subtitle class="text-caption">
+                      {{ convertToString(item.raw.skuAttributes) }}
+                    </v-list-item-subtitle>
+                    <template v-slot:append>
+                      <v-chip
+                        label
+                        size="x-small"
+                        variant="flat"
+                        :color="item.raw.variant ? 'green' : 'indigo'"
+                      >
+                        {{ item.raw.variant ? "sku" : "商品" }}</v-chip
+                      >
+                    </template>
+                  </v-list-item>
                 </template>
               </v-select>
             </v-col>
           </v-row>
         </v-card-text>
       </v-card>
-
       <v-card class="mt-4">
         <v-card-title class="text-caption">最低购买策略</v-card-title>
         <v-card-text>
@@ -142,6 +150,18 @@
                 ? '最低购买金额'
                 : '最低购买数量'
             "
+            persistent-placeholder
+            :prefix="
+              editItem.minPurchaseStrategy === 'min_purchase_amt'
+                ? '¥'
+                : undefined
+            "
+            :subfix="
+              editItem.minPurchaseStrategy === 'min_purchase_amt'
+                ? '/元'
+                : '/件'
+            "
+            type="number"
             v-model.number="editItem.minPurchaseValue"
             v-if="editItem.minPurchaseStrategy != 'none'"
           >
@@ -170,8 +190,21 @@
                 hide-details
                 placeholder="选择指定的客户"
                 multiple
+                chips
+                item-title="phone"
+                item-value="id"
+                :items="customers"
+                v-model="selectedCustomers"
+                @update:modelValue="onUpdateCustomers"
                 v-if="editItem.customerStrategy != 'all'"
               >
+                <template v-slot:item="{ props, item }">
+                  <v-list-item v-bind="props" class="text-caption">
+                    <v-list-item-subtitle class="text-caption">
+                      {{ item.raw.login ? item.raw.login : "" }}
+                    </v-list-item-subtitle>
+                  </v-list-item>
+                </template>
               </v-select>
             </v-col>
           </v-row>
@@ -220,7 +253,7 @@
                     variant="solo-filled"
                     flat
                     readonly
-                    v-model="startDate"
+                    :value="startDate"
                   >
                   </v-text-field>
                 </template>
@@ -229,7 +262,7 @@
                   <v-date-picker
                     hide-header
                     show-week
-                    @update:modelValue="onUpdateDate"
+                    @update:modelValue="onUpdateDate($event, 'start')"
                   >
                   </v-date-picker>
                 </v-card>
@@ -250,7 +283,10 @@
                   </v-text-field>
                 </template>
                 <v-card>
-                  <v-time-picker v-model="startTime" use-seconds full-width />
+                  <v-time-picker
+                    @update:modelValue="onUpdateTime($event, 'start')"
+                    format="24hr"
+                  />
                 </v-card>
               </v-menu>
             </v-col>
@@ -281,7 +317,7 @@
                     variant="solo-filled"
                     flat
                     readonly
-                    v-model="startDate"
+                    :value="endDate"
                   >
                   </v-text-field>
                 </template>
@@ -290,7 +326,7 @@
                   <v-date-picker
                     hide-header
                     show-week
-                    @update:modelValue="onUpdateDate"
+                    @update:modelValue="onUpdateDate($event, 'end')"
                   >
                   </v-date-picker>
                 </v-card>
@@ -306,12 +342,15 @@
                     variant="solo-filled"
                     flat
                     readonly
-                    v-model="startTime"
+                    :value="endTime"
                   >
                   </v-text-field>
                 </template>
                 <v-card>
-                  <v-time-picker v-model="startTime" use-seconds full-width />
+                  <v-time-picker
+                    @update:modelValue="onUpdateTime($event, 'end')"
+                    format="24hr"
+                  />
                 </v-card>
               </v-menu>
             </v-col>
@@ -337,7 +376,9 @@
             <v-col cols="12">
               <div class="text-caption font-weight-bold">折扣额</div>
               <div class="v-label text-caption">
-                {{ editItem.strategy + ": " + editItem.strategyValue }}
+                {{
+                  editItem.priceStrategy + ": " + editItem.priceStrategyValue
+                }}
               </div>
             </v-col>
 
@@ -406,7 +447,13 @@
 </template>
 
 <script setup lang="ts">
-import { Discount, DiscountStrategy } from "@/interfaces/discount";
+import BFSDK from "@/api/sdk";
+import { Discount, DiscountItem } from "@/interfaces/discount";
+import { ProductOrSkuDTO } from "@/interfaces/product";
+
+const props = defineProps({
+  item: Object,
+});
 
 const discountStrategies = [
   {
@@ -424,37 +471,166 @@ const startTime = ref("00:00:00");
 
 const endDate = ref("2018-03-02");
 const endTime = ref("00:00:00");
+
 const hasEndTime = ref(false);
 
-const onUpdateDate = (e: unknown) => {
+const onUpdateDate = (e: unknown, type: string) => {
   if (e instanceof Date) {
     const year = e.getFullYear();
     const month = String(e.getMonth() + 1).padStart(2, "0"); // 月份从0开始，所以需要加1，并且保证两位数格式
     const day = String(e.getDate()).padStart(2, "0"); // 保证两位数格式
     const dateString = `${year}-${month}-${day}`;
-    startDate.value = dateString;
+    if (type === "start") {
+      startDate.value = dateString;
+      // 更新到editItem
+      const combinedDateTimeString = `${startDate.value}T${startTime.value}`;
+      editItem.startDate = new Date(combinedDateTimeString).getTime();
+    } else if (type === "end") {
+      endDate.value = dateString;
+      // 更新到editItem
+      const combinedDateTimeString = `${endDate.value} ${endTime.value}`;
+      editItem.endDate = new Date(combinedDateTimeString).getTime();
+    }
   }
 };
 
-const editItem = reactive<Discount>({
+const onUpdateTime = (e: string, type: string) => {
+  if (type === "start") {
+    startTime.value = e;
+    // 更新到editItem
+    const combinedDateTimeString = `${startDate.value}T${startTime.value}`;
+    editItem.startDate = new Date(combinedDateTimeString).getTime();
+  } else if (type === "end") {
+    endTime.value = e;
+    // 更新到editItem
+    const combinedDateTimeString = `${endDate.value} ${endTime.value}`;
+    editItem.endDate = new Date(combinedDateTimeString).getTime();
+  }
+};
+
+const defaultItem: Discount = {
   id: 0,
   uid: "",
   name: "",
   type: "moneyOffProduct",
   way: "automatic",
-  code: "8NYH4Q83ES9W",
+  code: "",
   description: "",
-  strategy: "percentage_amount", // 默认百分比
-  strategyValue: 0,
+  priceStrategy: "percentage_amount", // 默认百分比
+  priceStrategyValue: 0,
+  priceStrategyPercent: 0,
   minPurchaseStrategy: "none",
   minPurchaseValue: 0,
   maxUsageCount: 0,
   oncePerCustomer: false,
   oncePerOrder: false,
   customerStrategy: "all",
-  status: "draft",
-  items: [],
-  startDate: new Date(),
-  customers: []
+  published: false,
+  products: [],
+  startDate: new Date().getTime(),
+  endDate: undefined,
+  customers: [],
+};
+
+const editItem = reactive<Discount>(defaultItem);
+const products = ref<ProductOrSkuDTO[]>([]);
+const customers = ref<any[]>([]);
+
+const selectedProducts = ref<any[]>([]);
+const selectedCustomers = ref<any[]>([]);
+
+const fetchProducts = async () => {
+  const { success, data } = await BFSDK.getProductsAndSkus();
+  if (success) {
+    products.value = data;
+  }
+};
+
+const fetchCustomers = async () => {
+  const { data, success } = await BFSDK.getUsers();
+  if (success) {
+    customers.value = data;
+  }
+};
+
+const convertToString = (list: any) => {
+  if (!Array.isArray(list)) {
+    return "";
+  }
+
+  return list
+    .map((item) => {
+      if (item && typeof item.value !== "undefined") {
+        return item.value;
+      } else {
+        return "";
+      }
+    })
+    .join("/");
+};
+
+watchEffect(() => {
+  Object.assign(editItem, props.item);
+  if (editItem.startDate) {
+    // 提取日期和时间部分
+    const date = new Date(editItem.startDate);
+    startDate.value = date.toISOString().slice(0, 10);
+    startTime.value = date.toTimeString().slice(0, 8);
+  }
+
+  if (editItem.endDate) {
+    hasEndTime.value = true
+    const date = new Date(editItem.endDate);
+    endDate.value = date.toISOString().slice(0, 10);
+    endTime.value = date.toTimeString().slice(0, 8);
+  }
+
+  if (editItem.products?.length > 0) {
+    selectedProducts.value = editItem.products.map((product: DiscountItem) => {
+      return products.value.find((p: ProductOrSkuDTO) => {
+        if (product.itemType === "sku") {
+          return p.skuId === product.itemId;
+        }
+
+        return p.productId === product.itemId;
+      });
+    });
+  }
+
+  if (editItem.customers?.length > 0) {
+    selectedCustomers.value = editItem.customers.map((customer: any) => {
+      return customers.value.find((p: any) => p.id === customer.userId);
+    });
+  }
+});
+
+const onUpdateProducts = (e: any) => {
+  editItem.products = e.map((item: ProductOrSkuDTO) => ({
+    itemId: item.id,
+    itemType: item.variant ? "sku" : "product",
+  }));
+};
+
+const onUpdateCustomers = (e: any) => {
+  editItem.customers = e.map((item: number) => ({
+    userId: item,
+  }));
+};
+
+onMounted(async () => {
+  await Promise.all([fetchProducts(), fetchCustomers()]);
+});
+
+const save = async () => {
+  if (!props.item) {
+    const { success, data } = await BFSDK.addDiscount(editItem);
+    if (success) {
+      Object.assign(editItem, data);
+    }
+  }
+};
+
+defineExpose({
+  save,
 });
 </script>

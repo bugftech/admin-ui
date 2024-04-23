@@ -1,20 +1,21 @@
 <template>
   <v-card>
-    <v-toolbar color="transparent">
+    <v-toolbar color="transparent" density="compact">
+      <v-toolbar-title class="text-subtitle-2 font-weight-bold">
+        服务账号
+      </v-toolbar-title>
       <v-spacer />
-      <v-btn color="orange-accent-2" variant="flat" size="small">添加新成员</v-btn>
+      <v-btn variant="outlined" size="small">添加新成员</v-btn>
     </v-toolbar>
     <v-divider />
-    <v-toolbar color="transparent">
-      <v-text-field
-        variant="text"
-        flat
-        class="ms-4"
-        placeholder="检索"
-        prepend-icon="mdi-magnify"
-      >
-      </v-text-field>
-    </v-toolbar>
+    <v-text-field
+      variant="text"
+      flat
+      class="ms-4"
+      placeholder="检索"
+      prepend-icon="mdi-magnify"
+    >
+    </v-text-field>
     <v-divider />
     <v-data-table :headers="headers" class="text-caption" :items="items">
       <template v-slot:[`item.member`]="{ item }">
@@ -33,7 +34,7 @@
         </v-list-item>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn icon="mdi-dots-vertical" variant="text"> </v-btn>
+        <v-btn icon="mdi-dots-vertical" variant="text">{{ item.name }}</v-btn>
       </template>
     </v-data-table>
   </v-card>

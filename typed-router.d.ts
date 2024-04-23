@@ -40,12 +40,17 @@ import type {
 declare module 'vue-router/auto/routes' {
   export interface RouteNamedMap {
     '/analytics/': RouteRecordInfo<'/analytics/', '/analytics', Record<never, never>, Record<never, never>>,
+    '/apps/': RouteRecordInfo<'/apps/', '/apps', Record<never, never>, Record<never, never>>,
+    '/apps/[id]/': RouteRecordInfo<'/apps/[id]/', '/apps/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/apps/new': RouteRecordInfo<'/apps/new', '/apps/new', Record<never, never>, Record<never, never>>,
     '/customers': RouteRecordInfo<'/customers', '/customers', Record<never, never>, Record<never, never>>,
     '/discounts/': RouteRecordInfo<'/discounts/', '/discounts', Record<never, never>, Record<never, never>>,
+    '/discounts/[id]': RouteRecordInfo<'/discounts/[id]', '/discounts/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/discounts/new': RouteRecordInfo<'/discounts/new', '/discounts/new', Record<never, never>, Record<never, never>>,
     '/editor': RouteRecordInfo<'/editor', '/editor', Record<never, never>, Record<never, never>>,
     '/landing/': RouteRecordInfo<'/landing/', '/', Record<never, never>, Record<never, never>>,
     '/login': RouteRecordInfo<'/login', '/login', Record<never, never>, Record<never, never>>,
+    '/onlinestore/': RouteRecordInfo<'/onlinestore/', '/onlinestore', Record<never, never>, Record<never, never>>,
     'orders': RouteRecordInfo<'orders', '/orders', Record<never, never>, Record<never, never>>,
     '/orders/[id]/': RouteRecordInfo<'/orders/[id]/', '/orders/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/orders/[id]/update': RouteRecordInfo<'/orders/[id]/update', '/orders/:id/update', { id: ParamValue<true> }, { id: ParamValue<false> }>,
@@ -58,12 +63,6 @@ declare module 'vue-router/auto/routes' {
     '/pms/products/[id]/': RouteRecordInfo<'/pms/products/[id]/', '/pms/products/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/pms/products/new': RouteRecordInfo<'/pms/products/new', '/pms/products/new', Record<never, never>, Record<never, never>>,
     '/pms/stocks/': RouteRecordInfo<'/pms/stocks/', '/pms/stocks', Record<never, never>, Record<never, never>>,
-    '/settings': RouteRecordInfo<'/settings', '/settings', Record<never, never>, Record<never, never>>,
-    '/settings/basic': RouteRecordInfo<'/settings/basic', '/settings/basic', Record<never, never>, Record<never, never>>,
-    '/settings/iam': RouteRecordInfo<'/settings/iam', '/settings/iam', Record<never, never>, Record<never, never>>,
-    '/settings/notification': RouteRecordInfo<'/settings/notification', '/settings/notification', Record<never, never>, Record<never, never>>,
-    '/settings/pay': RouteRecordInfo<'/settings/pay', '/settings/pay', Record<never, never>, Record<never, never>>,
-    '/settings/serviceaccount': RouteRecordInfo<'/settings/serviceaccount', '/settings/serviceaccount', Record<never, never>, Record<never, never>>,
   }
 }
 

@@ -95,10 +95,10 @@ import { Order, OrderItem } from "@/interfaces/order";
 const route = useRoute();
 const orderStore = useOrderStore();
 const order = ref<Order>({} as Order);
-  const orderItems = ref<OrderItem[]>([]);
+const orderItems = ref<OrderItem[]>([]);
 
 const id = (route.params as { id: string }).id;
-order.value = orderStore.currentOrder?.order || {} as Order;
+order.value = orderStore.currentOrder?.order || ({} as Order);
 orderItems.value = orderStore.currentOrder?.orderItems || [];
 
 const next = () => {
@@ -114,10 +114,14 @@ const copy = () => {
     copyOrderInfo({ ...order.value, items: orderItems.value });
   }
 };
+
+onMounted(async () => {
+  await orderStore.getOrder(parseInt(id))
+});
 </script>
 
 <route lang="yaml">
 meta:
-  title: "查看订单"
+  title: "编辑订单"
   breadcrumb: "查看"
 </route>

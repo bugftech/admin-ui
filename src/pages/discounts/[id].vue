@@ -5,18 +5,18 @@
         <v-toolbar color="transparent">
           <AppBackBtn />
           <v-toolbar-title class="text-body-1 font-weight-bold">
-            创建{{ FormTitle[discountType as SupportedTypes] }}
+            {{ item.name }}
           </v-toolbar-title>
           <v-spacer />
-          <v-btn size="small" class="me-2" variant="tonal">取消</v-btn>
-          <v-btn size="small" variant="elevated" @click="save">保存</v-btn>
+          <v-btn size="small" class="me-2" variant="tonal">复制</v-btn>
+          <v-btn size="small" variant="elevated" @click="update">更新</v-btn>
         </v-toolbar>
       </v-col>
     </v-row>
 
     <component
       :is="getComponentName(discountType as SupportedTypes)"
-      ref="formRef"
+      :item="item"
     />
   </v-container>
 </template>
@@ -25,9 +25,11 @@
 import DiscountProductForm from "@/components/discount/ProductForm.vue";
 import DiscountOrderForm from "@/components/discount/OrderForm.vue";
 import DiscountShippingForm from "@/components/discount/ShippingForm.vue";
+import BFSDK from "@/api/sdk";
+import { Discount } from "@/interfaces/discount";
 
 const route = useRoute();
-const router = useRouter();
+const uid = (route.params as { id: string }).id;
 
 const discountType = Array.isArray(route.query.type)
   ? route.query.type[0]
@@ -45,10 +47,6 @@ const FormTitle = {
   shipping: "运费折扣",
 };
 
-function isSupportedType(value: string | null): value is SupportedTypes {
-  return Object.values(SupportedTypes).includes(value as SupportedTypes);
-}
-
 const getComponentName = (type: string): any => {
   switch (type) {
     case SupportedTypes.product:
@@ -62,17 +60,36 @@ const getComponentName = (type: string): any => {
   }
 };
 
-const formRef = ref();
+const item = reactive<Discount>({
+  id: 0,
+  uid: "",
+  name: "",
+  type: "moneyOffProduct",
+  way: "automatic",
+  code: "",
+  description: "",
+  priceStrategy: "percentage_amount", // 默认百分比
+  priceStrategyValue: 0,
+  priceStrategyPercent: 0,
+  minPurchaseStrategy: "none",
+  minPurchaseValue: 0,
+  maxUsageCount: 0,
+  oncePerCustomer: false,
+  oncePerOrder: false,
+  customerStrategy: "all",
+  published: false,
+  products: [],
+  startDate: new Date().getTime(),
+  endDate: undefined,
+  customers: [],
+});
 
-const save = async () => {
-  if (!formRef.value.save) return;
-  await formRef.value.save()
-};
+const update = () => {};
 
-onMounted(() => {
-  if (!isSupportedType(discountType)) {
-    router.push("/discounts/new?type=product");
-    return;
+onMounted(async () => {
+  const { success, data } = await BFSDK.getDiscountByUid(uid);
+  if (success) {
+    Object.assign(item, data);
   }
 });
 </script>

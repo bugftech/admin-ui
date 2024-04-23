@@ -2,6 +2,7 @@ export interface WechatPay {
   id?: number;
   // 微信支付 AppID
   appId: string;
+  bfAppId: number;
   // 微信支付商户号
   mchId: string;
   // 微信支付子商户号

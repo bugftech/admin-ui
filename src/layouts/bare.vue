@@ -1,7 +1,12 @@
 <template>
-  <v-app>
+  <v-app theme="dark">
     <AppSnackBarQueue />
-    <v-main>
+    <v-app-bar flat app color="transparent">
+      <v-spacer />
+      <div class="logo font-weight-bold">BUGFREED</div>
+      <v-spacer />
+    </v-app-bar>
+    <v-main >
       <slot>
         <router-view v-slot="{ Component }">
           <v-fade-transition hide-on-leave>
@@ -10,6 +15,11 @@
         </router-view>
       </slot>
     </v-main>
+    <v-footer app class="d-flex justify-center" color="transparent">
+      <div class="text-caption font-weight-medium text-grey">
+        ©️ 沪ICP备2023008148号-1
+      </div>
+    </v-footer>
   </v-app>
 </template>
 

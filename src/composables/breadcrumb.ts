@@ -22,7 +22,8 @@ export const useBreadcrumbs = (breadcrumbs: ComputedRef<BreadcrumbItem[]>) => {
     return matchedRoutes.map(
       (record: RouteRecordNormalized, index: number): BreadcrumbItem => ({
         title: record.meta.breadcrumb as string,
-        disabled: index === matchedRoutes.length - 1, // 最后一个路由禁用链接
+        // disabled: index === matchedRoutes.length - 1, // 最后一个路由禁用链接.
+        disabled: false,
         href: record.path as string,
       })
     );

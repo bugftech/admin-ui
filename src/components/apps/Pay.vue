@@ -11,9 +11,11 @@
         <v-col cols="12" md="6">
           <div class="d-flex justify-center ga-4">
             <v-spacer />
-            <SettingPayAddDialog method="wechat" />
-            <v-divider class="my-4" vertical />
-            <v-btn icon="fa:fab fa-alipay" variant="outlined" disabled />
+            <AppsPayWeixinAddDialog
+              :id="id"
+              :appId="appId"
+              @refresh="onRefresh"
+            />
           </div>
         </v-col>
       </v-row>
@@ -21,8 +23,8 @@
     <v-divider />
     <v-card-text class="pa-0">
       <v-row no-gutters>
-        <v-col cols="12" md="4">
-          <v-list v-if="wechatpays.length">
+        <v-col cols="12" md="3" style="background: rgba(0, 0, 0, .1);">
+          <v-list v-if="wechatpays.length" bg-color="transparent">
             <v-list-subheader class="text-caption font-weight-regular"
               >微信支付</v-list-subheader
             >
@@ -43,41 +45,54 @@
             </v-list-item>
           </v-list>
         </v-col>
-        <v-divider vertical />
-        <v-col cols="12" md="8" class="px-4">
-          <SettingPayWechatConfig
-            :pay="currentPayForm"
-            v-if="wechatpays.length"
-          />
-          <v-card-text v-else> </v-card-text>
+        <v-col cols="12" md="9" class="px-4">
+          <AppsPayWechatConfig :pay="currentPayForm" v-if="wechatpays.length" />
         </v-col>
       </v-row>
     </v-card-text>
   </v-card>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import BFSDK from "@/api/sdk";
+import { WechatPay } from "@/interfaces/pay";
 import { PayType } from "@/interfaces/pay";
-import { usePayStore } from "@/store/pay";
 
-const payStore = usePayStore();
-const currentPayIndex = ref(0);
-const currentPayType = ref(PayType.Wechat);
-const { wechatpays, alipays } = storeToRefs(payStore);
-
-const currentPayForm = computed(() => {
-  const pays =
-    currentPayType.value === "wechat" ? wechatpays.value : alipays.value;
-  return pays[currentPayIndex.value];
+const props = defineProps({
+  id: Number, // bfAppId
+  appId: String, // 小程序appid
 });
 
+const localId = ref();
+const localAppId = ref();
+
+watchEffect(() => {
+  localId.value = props.id;
+  localAppId.value = props.appId;
+});
+
+const currentPayIndex = ref(0);
+const currentPayType = ref(PayType.Wechat);
+const wechatpays = ref<WechatPay[]>([]);
+
+const currentPayForm = computed(() => {
+  return wechatpays.value[currentPayIndex.value];
+});
+
+const onView = (type: string, id: number) => {};
+
+const fetchApps = async () => {
+  const { success, data } = await BFSDK.getAppPays(localId.value);
+  if (success) wechatpays.value = data;
+};
+
+const onRefresh = async () => {
+  await fetchApps()
+};
+
 onMounted(async () => {
-  try {
-    const res = await payStore.fetch(5);
-    console.log(res);
-  } catch (error) {
-    console.error("Failed to fetch pays from payStore:", error);
-  }
+  if (!localId.value || localId.value === 0) return;
+  await fetchApps()
 });
 </script>
 

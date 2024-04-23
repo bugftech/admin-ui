@@ -10,7 +10,7 @@ declare global {
   const NoteTranslation: typeof import('./src/composables/order')['NoteTranslation']
   const PayType: typeof import('./src/interfaces/pay')['PayType']
   const ProductTranslation: typeof import('./src/composables/order')['ProductTranslation']
-  const backToPrev: typeof import('./src/composables/backToPrev')['backToPrev']
+  const backToPrev: typeof import('./src/composables/routerBack')['backToPrev']
   const camelize: typeof import('vue')['camelize']
   const computed: typeof import('vue')['computed']
   const copyOrderInfo: typeof import('./src/composables/order')['copyOrderInfo']

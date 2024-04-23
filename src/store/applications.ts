@@ -15,6 +15,7 @@ export type RootState = {
   miniprograms: WechatApp[];
   alipays: MiniConfig[]; // 注意这里类型的统一
   currentAppIndex: number;
+  currentApp: WechatApp | AlipayApp | null;
   currentAppType: AppType; // 使用枚举代替字符串
 };
 
@@ -23,6 +24,7 @@ export const useApplicationStore = defineStore({
   state: (): RootState => ({
     miniprograms: [],
     alipays: [],
+    currentApp: null,
     currentAppIndex: 0,
     currentAppType: AppType.Wechat,
   }),

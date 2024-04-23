@@ -30,29 +30,30 @@ export interface Discount {
   way: DiscountWay;
   code: string;
   description: string;
-  strategy: DiscountStrategy;
-  strategyValue: number;
+  published: boolean;
+  priceStrategy: DiscountStrategy;
+  priceStrategyValue: number;
+  priceStrategyPercent: number;
   minPurchaseStrategy: MinPurchaseStrategy;
   minPurchaseValue: number;
   maxUsageCount: number;
   oncePerCustomer: boolean;
   oncePerOrder: boolean;
   customerStrategy: CustomerStrategy;
-  status: string;
-  startDate: Date; // 注意：时间类型可能需要调整
-  endDate?: Date; // 注意：时间类型可能需要调整
-  items: DiscountItem[]; // 折扣关联商品
+  startDate: number; // 注意：时间类型可能需要调整
+  endDate?: number; // 注意：时间类型可能需要调整
+  products: DiscountItem[]; // 折扣关联商品
   customers: number[]; // 满足购买条件的客户
 }
 
 // 折扣关联商品接口
 export interface DiscountItem {
-  id: number;
-  discountId: number;
+  id?: number;
+  discountId?: number;
   itemId: number;
   itemType: string; // "product" or "sku"
-  createdAt: string; // 注意：时间类型可能需要调整
-  updatedAt: string; // 注意：时间类型可能需要调整
+  // createdAt: string; // 注意：时间类型可能需要调整
+  // updatedAt: string; // 注意：时间类型可能需要调整
 }
 
 // isDiscountType 判断是否为discounttype

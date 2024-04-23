@@ -1,41 +1,52 @@
 <template>
-  <v-app-bar flat theme="dark">
-    <v-spacer />
-    <div class="logo">BUGFREED.CO</div>
-    <v-spacer />
-  </v-app-bar>
-  <v-container class="section fill-height" fluid>
+  <v-container class="fill-height">
     <v-row align="center" justify="center">
-      <v-col cols="12" xl="10" lg="6">
-        <v-card class="pa-12 text-center" flat>
-          <v-card-text class="pb-12">
-            <div class="subtitle">websites are under reconstruction</div>
-            <div class="text-nowrap title pt-12">coming soon</div>
+      <v-col cols="12" md="8">
+        <v-card class="pa-12 text-center" flat color="transparent">
+          <v-card-text class="pb-12 text-center">
+            <v-img src="./world.svg" max-height="400" contain />
+            <div class="subtitle mt-4">点亮梦想从一个APP开始</div>
           </v-card-text>
-          <v-card-actions class="justify-center pt-12">
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="4">
+        <v-card flat color="transparent">
+          <v-card-title class="text-h6"> 立刻加入 </v-card-title>
+          <v-card-text>
+            <v-btn class="my-4" to="/login" rounded="pill" block variant="tonal"
+              >微信注册</v-btn
+            >
+            <v-btn class="my-4" to="/login" rounded="pill" block variant="tonal"
+              >支付宝注册</v-btn
+            >
+            <v-divider class="my-4" />
             <v-btn
-              prepend-icon="mdi-location-enter"
+              class="my-4"
+              to="/login"
+              rounded="pill"
+              block
               variant="flat"
               color="orange-accent-2"
-              width="200"
+              >创建账号</v-btn
+            >
+          </v-card-text>
+        </v-card>
+        <v-card flat class="mt-6" color="transparent">
+          <v-card-title class="text-body-2"> 已有账号 </v-card-title>
+          <v-card-text>
+            <v-btn
+              variant="tonal"
+              prepend-icon="mdi-location-enter"
               to="/login"
-              >内部开始</v-btn
+              block
+              rounded="pill"
+              >登录</v-btn
             >
-
-            <v-btn prepend-icon="mdi-play-network" width="200" variant="tonal"
-              >演示环境</v-btn
-            >
-          </v-card-actions>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
   </v-container>
-
-  <v-footer app class="d-flex justify-center" theme="dark" style="height: 56px">
-    <div class="text-caption font-weight-medium text-grey">
-      ©️ 沪ICP备2023008148号-1
-    </div>
-  </v-footer>
 </template>
 
 <script setup></script>

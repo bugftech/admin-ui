@@ -33,9 +33,7 @@ export enum PayType {
 type alipay = {};
 
 type RootState = {
-  loading: boolean;
   wechatpays: wechatPay[];
-  alipays: alipay[];
   currentPayIndex: number;
   currentPayType: PayType;
 };
@@ -44,7 +42,6 @@ export const usePayStore = defineStore({
   id: "pay",
   state: () =>
     ({
-      loading: false,
       wechatpays: [
         {
           appId: "112231231231",
@@ -54,7 +51,6 @@ export const usePayStore = defineStore({
           notifyUrl: "https://localhost:8080/notify",
         },
       ],
-      alipays: [],
       currentPayIndex: 0,
       currentPayType: PayType.Wechat,
     } as RootState),
@@ -67,11 +63,6 @@ export const usePayStore = defineStore({
     addWxPay(pay: wechatPay) {
       this.wechatpays.push(pay);
     },
-    updateWxPay(pay: wechatPay) {
-      const idx = this.wechatpays.findIndex((item) => item.appId === pay.appId);
-      if (idx > -1) {
-        this.wechatpays[idx] = pay;
-      }
-    },
+
   },
 });

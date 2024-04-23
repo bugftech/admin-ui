@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <AppBarBar />
     <AppSnackBarQueue />
     <AppDrawerDrawer />
+    <AppBarBar />
     <v-main :class="mode">
       <slot>
         <router-view v-slot="{ Component }">
@@ -24,11 +24,10 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 const theme = useTheme();
 
-const mode = computed(()=>{
-  return theme.global.name.value 
-})
+const mode = computed(() => {
+  return theme.global.name.value;
+});
 </script>
-
 
 <style>
 .dark {

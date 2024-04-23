@@ -1,12 +1,12 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { WechatApp, App } from "@/interfaces/apps";
 import { WechatPay } from "@/interfaces/pay";
-import { Product, ProductAndSku } from "@/interfaces/product";
-import { AllCategory, Category } from "@/interfaces/category";
-import { Order } from "@/interfaces/order";
+import { Product, ProductAndSku, ProductOrSkuDTO } from "@/interfaces/product";
+import { AllCategory } from "@/interfaces/category";
 import { OrderInfo } from "@/services/types";
-import { wechatPay } from "@/store/pay";
 import { Collection } from "@/interfaces/collection";
+import { Discount } from "@/interfaces/discount";
+import { IdResponse } from "@/interfaces/reponse";
 
 const url = import.meta.env.VITE_API_SERVER_URL;
 
@@ -168,10 +168,21 @@ class SDK extends BaseClient {
     return await this.get<App[]>(url);
   }
 
+  async getAppByUid(uid: string): Promise<APIResponse<App>> {
+    const url = `/apps/uid/${uid}`;
+    return await this.get<App>(url);
+  }
+
   // TODO: 通用的config。不区分type
   async addWxApp(config: WechatApp): Promise<APIResponse<WechatApp[]>> {
     const url = "/apps";
     return await this.post<WechatApp[]>(url, config);
+  }
+
+  // 返回uid
+  async createApp(config: App): Promise<APIResponse<IdResponse>> {
+    const url = "/apps";
+    return await this.post<IdResponse>(url, config);
   }
 
   async deleteApp(id: number): Promise<APIResponse<WechatApp[]>> {
@@ -195,6 +206,13 @@ class SDK extends BaseClient {
   async getProducts(pagination?: Pagination): Promise<APIResponse<Product[]>> {
     const url = this.listWrapperUrl("/pms/products", pagination);
     return await this.get<Product[]>(url);
+  }
+
+  async getProductsAndSkus(
+    pagination?: Pagination
+  ): Promise<APIResponse<ProductOrSkuDTO[]>> {
+    const url = this.listWrapperUrl("/pms/products-skus", pagination);
+    return await this.get<ProductOrSkuDTO[]>(url);
   }
 
   async getProduct(id: number): Promise<APIResponse<ProductAndSku>> {
@@ -256,8 +274,17 @@ class SDK extends BaseClient {
 
   // Applications Pay
   async addPay(id: number, config: WechatPay): Promise<APIResponse<WechatPay>> {
-    const url = `/${id}/pays`;
-    return await this.post<wechatPay>(url, config);
+    const url = `/apps/${id}/pays`;
+    return await this.post<WechatPay>(url, config);
+  }
+
+  async updateAppPay(
+    id: number,
+    payId: number,
+    config: WechatPay
+  ): Promise<APIResponse<WechatPay>> {
+    const url = `/apps/${id}/pays/${payId}`;
+    return await this.put<WechatPay>(url, config);
   }
 
   // Collection
@@ -274,6 +301,23 @@ class SDK extends BaseClient {
   async getCollection(id: number): Promise<APIResponse<Collection[]>> {
     const url = `/pms/collections/${id}`;
     return await this.get<Collection[]>(url);
+  }
+
+  async getDiscounts(
+    pagination?: Pagination
+  ): Promise<APIResponse<Discount[]>> {
+    const url = this.listWrapperUrl("/discounts", pagination);
+    return await this.get<Discount[]>(url);
+  }
+
+  async addDiscount(config: Discount): Promise<APIResponse<Discount>> {
+    const url = "/discounts";
+    return await this.post<Discount>(url, config);
+  }
+
+  async getDiscountByUid(uid: string): Promise<APIResponse<Discount>> {
+    const url = `/discounts/uid/${uid}`;
+    return await this.get<Discount>(url);
   }
 
   async updateCollectionItems(

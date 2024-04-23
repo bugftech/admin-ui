@@ -21,7 +21,6 @@
     </v-text-field>
     <v-divider />
     <v-data-table
-      density="comfortable"
       show-select
       return-object
       class="text-caption"

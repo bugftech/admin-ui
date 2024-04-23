@@ -1,7 +1,6 @@
 <template>
-  <v-app-bar density="comfortable">
+  <v-app-bar flat>
     <template v-slot:prepend>
-      <AppBarLogo />
       <v-btn
         icon="mdi-menu"
         v-if="route.meta.layout !== 'home' && mdAndDown"

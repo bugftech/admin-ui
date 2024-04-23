@@ -1,8 +1,8 @@
 [
   {
-    "title": "订单(OMS)",
-    "inactiveIcon": "mdi-archive",
-    "activeIcon": "mdi-archive-outline",
+    "title": "订单",
+    "inactiveIcon": "mdi-archive-outline",
+    "activeIcon": "mdi-archive",
     "items": [
       {
         "title": "订单",
@@ -11,9 +11,9 @@
     ]
   },
   {
-    "title": "产品(PMS)",
-    "inactiveIcon": "mdi-tag-multiple",
-    "activeIcon": "mdi-tag-multiple-outline",
+    "title": "产品",
+    "inactiveIcon": "mdi-tag-multiple-outline",
+    "activeIcon": "mdi-tag-multiple",
     "items": [
       {
         "title": "商品",
@@ -40,25 +40,25 @@
   {
     "title": "客户",
     "to": "/customers",
-    "inactiveIcon": "mdi-account-box",
-    "activeIcon": "mdi-account-box-outline"
+    "inactiveIcon": "mdi-account-box-outline",
+    "activeIcon": "mdi-account-box"
   },
   {
     "title": "分析",
     "to": "/analytics",
-    "inactiveIcon": "mdi-chart-box",
-    "activeIcon": "mdi-chart-box-outline"
+    "inactiveIcon": "mdi-chart-box-outline",
+    "activeIcon": "mdi-chart-box"
   },
   {
     "title": "折扣",
     "to": "/discounts",
-    "inactiveIcon": "mdi-sale",
-    "activeIcon": "mdi-sale-outline"
+    "inactiveIcon": "mdi-sale-outline",
+    "activeIcon": "mdi-sale"
   },
   {
     "title": "富文本",
     "to": "/editor",
-    "inactiveIcon": "mdi-view-dashboard-edit",
-    "activeIcon": "mdi-view-dashboard-edit-outline"
+    "inactiveIcon": "mdi-view-dashboard-edit-outline",
+    "activeIcon": "mdi-view-dashboard-edit"
   }
 ]
