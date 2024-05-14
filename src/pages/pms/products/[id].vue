@@ -44,8 +44,8 @@
                 variant="solo-filled"
                 flat
                 density="compact"
-                placeholder="PSN2026010101"
-                v-model="item.subTitle"
+                placeholder="产品副标题"
+                v-model="item.subtitle"
               ></v-text-field>
 
               <AppLabel class="mt-4">描述</AppLabel>
@@ -178,7 +178,7 @@
             </v-card-text>
           </v-card>
           <ProductAlbumPics v-model="item.albumPics" class="mt-4" />
-          <ProductUpsertSku :skus="item.skuStockList" ref="skuRef" />
+          <ProductUpsertSku :skus="item.skus" ref="skuRef" />
         </v-col>
         <v-col cols="12" md="4">
           <v-card>
@@ -189,7 +189,7 @@
                 density="compact"
                 variant="solo-filled"
                 flat
-                v-model="item.isPublished"
+                v-model="item.published"
                 :items="publishedOptions"
               >
               </v-select>
@@ -206,8 +206,8 @@
             <v-card-text>
               <AppLabel>分类</AppLabel>
               <CategorySelect
-                v-model:id="item.productCategoryId"
-                v-model:name="item.productCategoryName"
+                v-model:id="item.categoryId"
+                v-model:name="item.categoryName"
                 :parentId="0"
               />
 
@@ -269,45 +269,36 @@ const defaultProduct: ProductAndSku = {
   tenantId: 0,
   brandId: 0,
   brandName: "",
-  productCategoryId: 0,
-  productCategoryName: "",
-  productAttributeCategoryId: 0,
-  productAttributeCategoryValues: [],
+  categoryId: 0,
+  categoryName: "",
   id: 0,
+  productType: "",
   name: "",
   banner: "",
   productSn: "",
-  isDeleted: false,
-  isPublished: false,
-  isNew: false,
-  isRecommand: false,
-  isVerified: false,
+  published: false,
+  newArrvial: false,
+  recommand: false,
   sort: 0,
   sale: 0,
   price: 0,
-  promotionPrice: 0,
   originalPrice: 0,
   costPrice: 0,
-  giftGrowth: 0,
-  giftPoint: 0,
-  usePointLimit: 0,
-  subTitle: "",
+  subtitle: "",
   description: "",
   stock: 0,
   lowStock: 0,
   unit: "",
   weight: "",
-  isPreview: false,
+  preview: false,
   serviceIds: "",
-  keywords: "",
+  keywords: [],
   note: "",
   albumPics: [],
   detailTitle: "",
   detailDesc: "",
   detailHtml: "",
-  promotionPerLimit: 0,
-  promotionType: 0,
-  skuStockList: [],
+  skus: [],
 };
 
 // 现在 defaultProduct 对象包含了所有字段，并且每个字段都有默认值。
@@ -340,10 +331,13 @@ const onEditHtml = (productId: number) => {
 
 onMounted(async () => {
   const intId = parseInt(id);
-  const { data, success } = await BFSDK.getProduct(intId);
+  const { data, success } = await BFSDK.getProduct(intId, true);
   if (success) {
     data.albumPics = data.albumPics ? data.albumPics : [];
-    item.value = data;
+    data.price = data.price / 100;
+    data.originalPrice = data.originalPrice / 100;
+    data.costPrice = data.costPrice / 100;
+    Object.assign(item.value, data);
   }
 });
 
@@ -354,9 +348,12 @@ const save = async () => {
   if (!valid) return;
   let copyItem = item.value;
   if (skuRef.value.items) {
-    copyItem.skuStockList = skuRef.value.items;
+    copyItem.skus = skuRef.value.items;
+    copyItem.price = copyItem.price * 100;
+    copyItem.originalPrice = copyItem.originalPrice * 100;
+    copyItem.costPrice = copyItem.costPrice * 100;
   }
-  const { success, data } = await BFSDK.updateProduct(id, item.value);
+  const { success, data } = await BFSDK.updateProduct(id, copyItem);
   if (success) {
     console.log(data);
   }

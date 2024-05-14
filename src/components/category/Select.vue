@@ -7,9 +7,9 @@
     placeholder="选择分类"
     v-model="selectedCategory"
     :items="items"
-    return-object
     item-title="name"
     item-value="id"
+    return-object
     clearable
     @click:clear="onClear"
     :disabled="disabled"
@@ -50,10 +50,12 @@ const props = defineProps({
 
 const items = ref<AllCategory[]>([]);
 const { id, name, parentId } = toRefs(props);
+
 const selectedCategory = ref<any>({
   id: props.parentId > 0 ? parentId.value : id.value,
   name: name.value,
 });
+
 const onClear = () => {
   selectedCategory.value.id = 0;
   selectedCategory.value.name = "";
@@ -110,7 +112,7 @@ watch(props, () => {
 onMounted(async () => {
   let res = null;
   if (props.parentId > 0) {
-    res = await BFSDK.getCategories(1);
+    res = await BFSDK.filterCategories("1");
   } else {
     res = await BFSDK.getCategories();
   }

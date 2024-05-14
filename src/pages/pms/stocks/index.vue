@@ -111,7 +111,7 @@ const headers: any[] = [
 const router = useRouter();
 
 const edit = (item: SkuStock) => {
-  router.push({ name: "/pms/products/[id]/", params: { id: item.productId } });
+  router.push({ name: "/pms/products/[id]", params: { id: item.productId } });
 };
 
 const convertToString = (list: any) => {

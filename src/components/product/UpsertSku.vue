@@ -198,7 +198,7 @@
               />
             </v-col>
             <v-col cols="12" md="4">
-              <AppLabel>促销价格</AppLabel>
+              <AppLabel>市场价格</AppLabel>
               <v-text-field
                 variant="solo-filled"
                 flat
@@ -208,7 +208,7 @@
                 type="number"
                 step="0.01"
                 min="0"
-                v-model.number="editedSku.promotionPrice"
+                v-model.number="editedSku.originalPrice"
               />
             </v-col>
           </v-row>
@@ -373,7 +373,7 @@ const defaultSku = ref({
   lowStock: 0,
   lockStock: 0,
   price: 0,
-  promotionPrice: 0,
+  originalPrice: 0,
   skuAttributes: [],
   pic: "",
 });

@@ -8,7 +8,7 @@ export interface Category {
   sort: number;
   icon: string;
   image: string;
-  keywords: string;
+  keywords: string[];
   description: string;
 }
 

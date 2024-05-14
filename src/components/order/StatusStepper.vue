@@ -126,7 +126,6 @@ const updateStatus = async (expectStatus) => {
           bfAppId: bfAppId,
         });
 
-        console.log("success:", success);
         if (success) {
           app.snackbar("", { message: "订单状态更新成功" });
           step.value = expectStatus;

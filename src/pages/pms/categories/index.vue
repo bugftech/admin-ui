@@ -4,16 +4,9 @@
       <v-col cols="12">
         <!--面包屑-->
         <AppBreadcrumb>
-          <v-btn variant="tonal" size="small"> 导入 </v-btn>
-          <v-btn
-            variant="tonal"
-            size="small"
-            class="mx-2"
-            @click.stop="download"
-          >
-            导出
+          <v-btn rounded="lg" size="small" to="/pms/categories/new" variant="elevated">
+            新增分类
           </v-btn>
-          <CategoryUpsertDialog />
         </AppBreadcrumb>
         <CategoryDataTable ref="data" />
       </v-col>
@@ -21,13 +14,7 @@
   </v-container>
 </template>
 
-<script setup>
-const data = ref();
-
-const download = () => {
-  console.log(data.value.items);
-};
-</script>
+<script setup></script>
 
 <route lang="yaml">
 meta:

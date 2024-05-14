@@ -3,6 +3,10 @@ export enum AppType {
   Alipay = "alipay",
 }
 
+export enum EnvType {
+  DevelopmentEnv = "dev",
+  ProductionEnv = "prod",
+}
 
 export interface App {
   id?: number;
@@ -10,24 +14,28 @@ export interface App {
   uid?: string;
   appId: string;
   appSecret: string;
-  appType: number;
+  wechatPayId: number;
+  alipayPayId: number;
+  appType: AppType;
+  env: EnvType;
 }
-
 
 export interface WechatApp {
-  id?: number;
+  id: number;
   name: string;
   uid?: string;
   appId: string;
   appSecret: string;
 }
 
-
-
 export interface AlipayApp {
-  id?: number;
+  id: number;
   name: string;
   uid?: string;
   appId: string;
   appSecret: string;
+}
+
+export interface BindWechatPay {
+  wechatPayId: number;
 }

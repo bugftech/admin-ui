@@ -129,7 +129,7 @@ const remove = (item: any) => {
 const fetch = async (level?: number) => {
   let res = null;
   if (level && level === 1) {
-    res = await BFSDK.getCategories(1);
+    res = await BFSDK.filterCategories("1");
   } else {
     res = await BFSDK.getCategories();
   }

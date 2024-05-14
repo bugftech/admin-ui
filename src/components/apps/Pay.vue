@@ -21,9 +21,9 @@
       </v-row>
     </v-card-text>
     <v-divider />
-    <v-card-text class="pa-0">
+    <v-card-text class="pa-0" v-if="hasPays">
       <v-row no-gutters>
-        <v-col cols="12" md="3" style="background: rgba(0, 0, 0, .1);">
+        <v-col cols="12" md="3" style="background: rgba(0, 0, 0, 0.1)">
           <v-list v-if="wechatpays.length" bg-color="transparent">
             <v-list-subheader class="text-caption font-weight-regular"
               >微信支付</v-list-subheader
@@ -34,7 +34,6 @@
               color="indigo"
               prepend-icon="mdi-wechat"
               :active="i === currentPayIndex && currentPayType === 'wechat'"
-              @click="onView('wechat', i)"
             >
               <v-list-item-title class="text-subtitle-2">{{
                 wx.mchId
@@ -49,6 +48,12 @@
           <AppsPayWechatConfig :pay="currentPayForm" v-if="wechatpays.length" />
         </v-col>
       </v-row>
+    </v-card-text>
+    <v-card-text v-else class="text-center">
+      <v-img src="@/assets/mobile-pay.svg" height="200px" width="100%">
+      </v-img>
+
+      <v-btn size="small" class="mt-12" variant="tonal">添加支付</v-btn>
     </v-card-text>
   </v-card>
 </template>
@@ -79,20 +84,22 @@ const currentPayForm = computed(() => {
   return wechatpays.value[currentPayIndex.value];
 });
 
-const onView = (type: string, id: number) => {};
-
 const fetchApps = async () => {
   const { success, data } = await BFSDK.getAppPays(localId.value);
   if (success) wechatpays.value = data;
 };
 
+const hasPays = computed(() => {
+  return wechatpays.value.length > 0;
+});
+
 const onRefresh = async () => {
-  await fetchApps()
+  await fetchApps();
 };
 
 onMounted(async () => {
   if (!localId.value || localId.value === 0) return;
-  await fetchApps()
+  await fetchApps();
 });
 </script>
 

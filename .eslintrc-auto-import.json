@@ -102,6 +102,8 @@
     "usePriceRef": true,
     "backToPrev": true,
     "useRouterBack": true,
-    "isDiscountType": true
+    "isDiscountType": true,
+    "EnvType": true,
+    "SourceFlag": true
   }
 }

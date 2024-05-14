@@ -7,9 +7,11 @@ export {}
 declare global {
   const AppType: typeof import('./src/interfaces/apps')['AppType']
   const BasicTranslation: typeof import('./src/composables/order')['BasicTranslation']
+  const EnvType: typeof import('./src/interfaces/apps')['EnvType']
   const NoteTranslation: typeof import('./src/composables/order')['NoteTranslation']
   const PayType: typeof import('./src/interfaces/pay')['PayType']
   const ProductTranslation: typeof import('./src/composables/order')['ProductTranslation']
+  const SourceFlag: typeof import('./src/interfaces/user')['SourceFlag']
   const backToPrev: typeof import('./src/composables/routerBack')['backToPrev']
   const camelize: typeof import('vue')['camelize']
   const computed: typeof import('vue')['computed']
@@ -67,9 +69,11 @@ declare module 'vue' {
   interface ComponentCustomProperties {
     readonly AppType: UnwrapRef<typeof import('./src/interfaces/apps')['AppType']>
     readonly BasicTranslation: UnwrapRef<typeof import('./src/composables/order')['BasicTranslation']>
+    readonly EnvType: UnwrapRef<typeof import('./src/interfaces/apps')['EnvType']>
     readonly NoteTranslation: UnwrapRef<typeof import('./src/composables/order')['NoteTranslation']>
     readonly PayType: UnwrapRef<typeof import('./src/interfaces/pay')['PayType']>
     readonly ProductTranslation: UnwrapRef<typeof import('./src/composables/order')['ProductTranslation']>
+    readonly SourceFlag: UnwrapRef<typeof import('./src/interfaces/user')['SourceFlag']>
     readonly camelize: UnwrapRef<typeof import('vue')['camelize']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly copyOrderInfo: UnwrapRef<typeof import('./src/composables/order')['copyOrderInfo']>
@@ -124,9 +128,11 @@ declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     readonly AppType: UnwrapRef<typeof import('./src/interfaces/apps')['AppType']>
     readonly BasicTranslation: UnwrapRef<typeof import('./src/composables/order')['BasicTranslation']>
+    readonly EnvType: UnwrapRef<typeof import('./src/interfaces/apps')['EnvType']>
     readonly NoteTranslation: UnwrapRef<typeof import('./src/composables/order')['NoteTranslation']>
     readonly PayType: UnwrapRef<typeof import('./src/interfaces/pay')['PayType']>
     readonly ProductTranslation: UnwrapRef<typeof import('./src/composables/order')['ProductTranslation']>
+    readonly SourceFlag: UnwrapRef<typeof import('./src/interfaces/user')['SourceFlag']>
     readonly camelize: UnwrapRef<typeof import('vue')['camelize']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly copyOrderInfo: UnwrapRef<typeof import('./src/composables/order')['copyOrderInfo']>

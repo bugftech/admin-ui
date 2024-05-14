@@ -7,6 +7,7 @@
     floating
   >
     <template v-slot:prepend>
+      <v-divider />
       <AppDrawerPrepend />
     </template>
     <v-divider />
@@ -18,7 +19,9 @@
           <v-icon
             size="small"
             :icon="
-              isActive ? 'mdi-application-array' : 'mdi-application-array-outline'
+              isActive
+                ? 'mdi-application-array'
+                : 'mdi-application-array-outline'
             "
           />
         </template>

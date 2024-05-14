@@ -8,6 +8,7 @@ import { defineStore } from "pinia";
 
 // Notification 消息通知
 export type Notification = {
+  title?: string;
   message: string;
   timeout?: number;
   color?: string;

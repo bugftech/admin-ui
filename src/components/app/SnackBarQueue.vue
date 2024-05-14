@@ -1,22 +1,29 @@
 <template>
   <v-snackbar
-    style="margin-top: 56px"
     v-if="isVisible && current"
     v-model="isActive"
     :timeout="current.event ? 1000 : current.timeout"
     location="right top"
-    color="grey-darken-4"
+    :color="current.color ? current.color : 'grey-darken-4'"
+    vertical
     @after-leave="onAfterLeave"
   >
-    <div class="text-caption font-weight-bold py-1 d-flex align-center">
+    <div class="text-subtitle-2 pb-2" v-if="current.title">
       <v-icon start v-if="current.icon" color="green">{{
         current.icon
       }}</v-icon>
+      {{ current.title }}
+    </div>
+    <div class="text-caption">
       {{ current.message }}
     </div>
     <template v-slot:actions>
       <v-btn variant="tonal" v-if="current.event" size="small" @click="toggle">
         去查看
+      </v-btn>
+
+      <v-btn variant="tonal" size="small" @click="isActive = false">
+        关闭
       </v-btn>
     </template>
   </v-snackbar>

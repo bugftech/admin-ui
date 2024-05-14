@@ -9,7 +9,7 @@
           <h6 class="text-caption mt-8 d-flex align-center">
             <div class="text-medium-emphasis">还未拥有账号？</div>
             <div
-              href="/signup"
+              href="/register"
               variant="outlined"
               class="text-decoration-underline"
             >

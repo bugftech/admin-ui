@@ -24,3 +24,14 @@ export enum PayType {
   Wechat = "wechat",
   Alipay = "alipay",
 }
+
+
+export interface PayInfo {
+  id: number;
+  tenantId: number;
+  name: string;
+  method: string;
+  appRelated: boolean;
+  bfAppName: string;
+  bfAppId: number;
+}

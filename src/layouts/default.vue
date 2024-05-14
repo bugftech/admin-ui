@@ -1,8 +1,9 @@
 <template>
   <v-app>
     <AppSnackBarQueue />
-    <AppDrawerDrawer />
     <AppBarBar />
+
+    <AppDrawerDrawer />
     <v-main :class="mode">
       <slot>
         <router-view v-slot="{ Component }">

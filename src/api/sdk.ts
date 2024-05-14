@@ -1,12 +1,14 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import { WechatApp, App } from "@/interfaces/apps";
-import { WechatPay } from "@/interfaces/pay";
+import { WechatApp, App, BindWechatPay } from "@/interfaces/apps";
+import { PayInfo, WechatPay } from "@/interfaces/pay";
 import { Product, ProductAndSku, ProductOrSkuDTO } from "@/interfaces/product";
 import { AllCategory } from "@/interfaces/category";
 import { OrderInfo } from "@/services/types";
 import { Collection } from "@/interfaces/collection";
 import { Discount } from "@/interfaces/discount";
 import { IdResponse } from "@/interfaces/reponse";
+import { Brand } from "@/interfaces/brand";
+import { UserReferral, UserReferralInfo } from "@/interfaces/userReferral";
 
 const url = import.meta.env.VITE_API_SERVER_URL;
 
@@ -173,6 +175,11 @@ class SDK extends BaseClient {
     return await this.get<App>(url);
   }
 
+  async getAppById(id: number): Promise<APIResponse<App>> {
+    const url = `/apps/${id}`;
+    return await this.get<App>(url);
+  }
+
   // TODO: 通用的config。不区分type
   async addWxApp(config: WechatApp): Promise<APIResponse<WechatApp[]>> {
     const url = "/apps";
@@ -192,7 +199,7 @@ class SDK extends BaseClient {
 
   async updateApp(
     id: number,
-    config: WechatApp
+    config: App
   ): Promise<APIResponse<WechatApp>> {
     const url = `/apps/${id}`;
     return await this.put<WechatApp>(url, config);
@@ -215,8 +222,14 @@ class SDK extends BaseClient {
     return await this.get<ProductOrSkuDTO[]>(url);
   }
 
-  async getProduct(id: number): Promise<APIResponse<ProductAndSku>> {
-    const url = `/pms/products/${id}`;
+  async getProduct(
+    id: number,
+    withSkus: boolean
+  ): Promise<APIResponse<ProductAndSku>> {
+    let url = `/pms/products/${id}`;
+    if (withSkus) {
+      url = url + "?withSkus=true";
+    }
     return await this.get<ProductAndSku>(url);
   }
 
@@ -239,18 +252,19 @@ class SDK extends BaseClient {
   }
 
   async getSkus(): Promise<APIResponse<any>> {
-    const url = "/tenant/skus";
+    const url = "/pms/skus";
     return await this.get<any[]>(url);
   }
 
-  async getCategories(level?: number): Promise<APIResponse<AllCategory[]>> {
-    let url = "";
-    if (level === 1) {
-      url = "/pms/categories";
-    } else {
-      url = "/pms/categories/all";
-    }
+  async getCategories(
+    pagination?: Pagination
+  ): Promise<APIResponse<AllCategory[]>> {
+    const url = this.listWrapperUrl("/pms/categories", pagination);
+    return await this.get<AllCategory[]>(url);
+  }
 
+  async filterCategories(level: string): Promise<APIResponse<AllCategory[]>> {
+    const url = `/pms/categories?level=${level}`;
     return await this.get<AllCategory[]>(url);
   }
 
@@ -273,9 +287,22 @@ class SDK extends BaseClient {
   }
 
   // Applications Pay
-  async addPay(id: number, config: WechatPay): Promise<APIResponse<WechatPay>> {
-    const url = `/apps/${id}/pays`;
+  async addWechatPay(config: WechatPay): Promise<APIResponse<WechatPay>> {
+    const url = "/pays/wechat";
     return await this.post<WechatPay>(url, config);
+  }
+
+  async getWechatPays(): Promise<APIResponse<WechatPay[]>> {
+    const url = "/pays/wechat";
+    return await this.get<WechatPay[]>(url);
+  }
+
+  async bindWechatPay(
+    id: number,
+    config: BindWechatPay
+  ): Promise<APIResponse<WechatPay>> {
+    const url = `/apps/${id}/wxpay`;
+    return await this.put<WechatPay>(url, config);
   }
 
   async updateAppPay(
@@ -285,6 +312,11 @@ class SDK extends BaseClient {
   ): Promise<APIResponse<WechatPay>> {
     const url = `/apps/${id}/pays/${payId}`;
     return await this.put<WechatPay>(url, config);
+  }
+
+  async getPays(): Promise<APIResponse<PayInfo[]>> {
+    const url = "/pays";
+    return await this.get<PayInfo[]>(url);
   }
 
   // Collection
@@ -328,9 +360,31 @@ class SDK extends BaseClient {
     return await this.put<Collection>(url, { Products: config });
   }
 
+  // brands
+  async getBrands(pagination?: Pagination): Promise<APIResponse<Brand[]>> {
+    const url = this.listWrapperUrl("/pms/brands", pagination);
+    return await this.get<Brand[]>(url);
+  }
+
+  async addBrand(brand: Brand): Promise<APIResponse<Brand>> {
+    const url = "/pms/brands";
+    return await this.post<Brand>(url, brand);
+  }
+
+  // 添加推荐人
+  async addReferralUser(ur: UserReferral): Promise<APIResponse<UserReferral>> {
+    const url = "/referrals";
+    return await this.post<UserReferral>(url, ur);
+  }
+
+  async getReferrals(): Promise<APIResponse<UserReferralInfo[]>> {
+    const url = "/referrals";
+    return await this.get<UserReferralInfo[]>(url);
+  }
+
   // listWrapperUrl 获取列表的方式
   private listWrapperUrl(url: string, pagination?: Pagination): string {
-    if (!pagination) return url + "/all";
+    if (!pagination) return url;
 
     let queryString = "";
     if (pagination.limit > 0 && pagination.page > 0) {

@@ -24,6 +24,10 @@
         "to": "/pms/collections"
       },
       {
+        "title": "品牌",
+        "to": "/pms/brands"
+      },
+      {
         "title": "归纳",
         "to": "/pms/categories"
       },
@@ -39,9 +43,24 @@
   },
   {
     "title": "客户",
-    "to": "/customers",
     "inactiveIcon": "mdi-account-box-outline",
-    "activeIcon": "mdi-account-box"
+    "activeIcon": "mdi-account-box",
+    "items": [
+      {
+        "title": "用户",
+        "to": "/customers"
+      },
+      {
+        "title": "推荐人",
+        "to": "/referrals"
+      }
+    ]
+  },
+  {
+    "title": "支付",
+    "to": "/pays",
+    "inactiveIcon": "mdi-account-credit-card-outline",
+    "activeIcon": "mdi-account-credit-card"
   },
   {
     "title": "分析",

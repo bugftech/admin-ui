@@ -137,7 +137,7 @@ const defaultItem = reactive<AllCategory>({
   icon: "",
   image: "",
   level: 0,
-  keywords: "",
+  keywords: [],
   description: "",
   count: 0,
 });

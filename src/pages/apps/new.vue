@@ -43,9 +43,9 @@
                     class="border"
                     divided
                   >
-                    <v-btn value="0" size="small">微信</v-btn>
-                    <v-btn value="1" size="small">支付宝</v-btn>
-                    <v-btn value="2" size="small" disabled>WEB</v-btn>
+                    <v-btn value="weixin" size="small">微信</v-btn>
+                    <v-btn value="alipay" size="small">支付宝</v-btn>
+                    <v-btn value="web" size="small" disabled>WEB</v-btn>
                   </v-btn-toggle>
                 </div>
               </div>
@@ -85,10 +85,12 @@ import BFSDK from "@/api/sdk";
 const defaultItem: App = {
   id: 0,
   name: "",
-  uid: "",
   appId: "",
   appSecret: "",
-  appType: 0,
+  wechatPayId: 0,
+  alipayPayId:0,
+  appType: AppType.Wechat,
+  env: EnvType.DevelopmentEnv,
 };
 
 const editItem = reactive<App>(defaultItem);
@@ -108,13 +110,13 @@ const save = async () => {
     useSnackbar("添加成功");
     router
       .push({
-        name: "/apps/[id]/",
+        name: "/apps/[id]",
         params: {
-          id: data.uid,
+          id: data.id,
         },
       })
       .then(() => {
-        Object.assign(editItem, defaultItem)
+        Object.assign(editItem, defaultItem);
       });
   } else {
     useSnackbar("创建应用失败");

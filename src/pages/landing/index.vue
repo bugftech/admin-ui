@@ -22,7 +22,7 @@
             <v-divider class="my-4" />
             <v-btn
               class="my-4"
-              to="/login"
+              to="/register"
               rounded="pill"
               block
               variant="flat"
