@@ -68,23 +68,13 @@
           </v-card>
         </v-col>
         <v-col cols="12" md="5">
-          <v-card>
-            <v-card-text>
-              <AppLabel>图标（icon）</AppLabel>
-              <v-sheet class="border" v-if="editItem.icon">
-                <v-img :src="editItem.icon" contain />
-              </v-sheet>
-              <UploadImage v-else @change="onUploadIcon" />
-            </v-card-text>
-          </v-card>
-
           <v-card class="mt-4">
             <v-card-text>
               <AppLabel class="mt-4">横幅（banner）</AppLabel>
-              <v-sheet class="border" v-if="editItem.image">
-                <v-img :src="editItem.image" contain />
+              <v-sheet class="border" v-if="editItem.pic">
+                <v-img :src="editItem.pic" contain />
               </v-sheet>
-              <UploadImage v-else @change="onUploadImage" />
+              <UploadImage v-else @change="onUploadPic" />
             </v-card-text>
           </v-card>
         </v-col>
@@ -124,15 +114,14 @@ const loading = ref(false);
 const defaultItem = reactive<AllCategory>({
   id: 0,
   name: "",
-  unit: "",
   parentId: 0,
   sort: 0,
-  icon: "",
-  image: "",
+  pic: "",
   level: 0,
   keywords: [],
   description: "",
   count: 0,
+  published: false,
 });
 
 let editItem = reactive({ ...defaultItem });
@@ -141,12 +130,8 @@ if (props.edit) {
   editItem = reactive({ ...defaultItem, ...props.item });
 }
 
-const onUploadIcon = (e: string) => {
-  editItem.icon = e;
-};
-
-const onUploadImage = (e: string) => {
-  editItem.image = e;
+const onUploadPic = (e: string) => {
+  editItem.pic = e;
 };
 
 const close = () => {
@@ -154,8 +139,8 @@ const close = () => {
 };
 
 const cancel = () => {
-  close()
-}
+  close();
+};
 
 const save = async () => {
   loading.value = true;
@@ -178,3 +163,9 @@ const save = async () => {
   loading.value = false;
 };
 </script>
+
+<route lang="yaml">
+meta:
+  title: "新建分类"
+  breadcrumb: "新建产品分类"
+</route>

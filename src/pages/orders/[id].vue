@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row dense>
+    <v-row>
       <v-col cols="12">
         <v-toolbar color="transparent">
           <AppBackBtn />
@@ -31,29 +31,11 @@
             size="small"
             >分享</v-btn
           >
-          <v-sheet class="rounded-pill elevation-1">
-            <v-btn
-              icon="mdi-menu-left"
-              rounded="0"
-              class="px-4 rounded-l-pill"
-              size="x-small"
-              @click="prev"
-            ></v-btn>
-            <v-divider vertical />
-            <v-btn
-              icon="mdi-menu-right"
-              rounded="0"
-              class="px-4"
-              size="x-small"
-              @click="next"
-            ></v-btn>
-          </v-sheet>
         </v-toolbar>
       </v-col>
-    </v-row>
-    <v-row>
       <v-col cols="12">
         <OrderStatusStepper
+          v-if="order"
           :status="order.status"
           :orderId="order.id"
           :bfAppId="order.bfAppId"
@@ -62,59 +44,59 @@
       <v-col cols="12" md="8">
         <OrderBasicInfoSection :item="order" />
         <OrderNoteSection class="mt-4" :note="order.note" v-if="order?.note" />
-        <v-card class="elevation-1 mt-4">
+      </v-col>
+      <v-col cols="12" md="4">
+        <v-card class="elevation-1 mb-4">
           <v-toolbar color="transparent" density="compact">
             <v-card-title class="text-caption">订单商品</v-card-title>
           </v-toolbar>
           <v-divider />
-          <v-card-text>
+          <v-card-text class="pa-0">
             <template v-if="orderItems">
               <OrderItemsSection :items="orderItems" />
             </template>
           </v-card-text>
         </v-card>
-      </v-col>
-      <v-col cols="12" md="4">
         <OrderPriceSection
+          v-if="order"
           :totalAmount="order.totalAmount"
           :payAmount="order.payAmount"
           :promotionAmount="order.promotionAmount"
         />
 
         <OrderBillSection class="mt-4" />
+
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import { useOrderStore } from "@/store/orders";
 import { copyOrderInfo } from "@/composables/order";
-import { useRoute } from "vue-router";
+import BFSDK from "@/api/sdk";
 import { Order, OrderItem } from "@/interfaces/order";
 const route = useRoute();
-const orderStore = useOrderStore();
-const order = ref<Order>({} as Order);
+const id = (route.params as { id: number }).id;
+
+const order = ref<Order>();
 const orderItems = ref<OrderItem[]>([]);
-
-const id = (route.params as { id: string }).id;
-order.value = orderStore.currentOrder?.order || ({} as Order);
-orderItems.value = orderStore.currentOrder?.orderItems || [];
-
-const next = () => {
-  orderStore.next();
-};
-
-const prev = () => {
-  orderStore.prev();
-};
-
 const copy = () => {
-  if (order.value) {
-    copyOrderInfo({ ...order.value, items: orderItems.value });
+  if (order) {
+    copyOrderInfo({
+      ...order.value,
+      items: orderItems.value,
+    });
   }
 };
 
+onMounted(async () => {
+  if (!id) return;
+  const { success, data } = await BFSDK.getOrderById(id, true);
+  if (success) {
+    order.value = data.order;
+    orderItems.value = data.orderItems;
+  }
+});
 </script>
 
 <route lang="yaml">

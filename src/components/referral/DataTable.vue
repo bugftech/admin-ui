@@ -23,10 +23,21 @@
       :headers="headers"
       :loading="loading"
       hover
-      @click:row="onClickRow"
     >
       <template v-slot:loading>
         <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
+      </template>
+      <template v-slot:[`item.invalid`]="{ item }">
+        <v-checkbox-btn readonly v-model="item.invalid" />
+      </template>
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-btn
+          icon="mdi-google-analytics"
+          size="x-small"
+          class="me-2"
+          @click="onAnalytics(item)"
+        ></v-btn>
+        <v-btn icon="mdi-pencil" size="x-small" @click="edit(item)"></v-btn>
       </template>
     </v-data-table>
   </v-card>
@@ -39,6 +50,7 @@ import { UserReferralInfo } from "@/interfaces/userReferral";
 const items = ref<UserReferralInfo[]>([]);
 const search = ref("");
 const loading = ref(false);
+
 const headers: any[] = [
   {
     title: "应用",
@@ -50,15 +62,19 @@ const headers: any[] = [
   },
   {
     title: "用户手机号",
-    key: "userPhone",
+    key: "phone",
   },
   {
     title: "推荐码",
     key: "referralCode",
   },
   {
-    title: "二维码",
-    key: "qrcodeUrl",
+    title: "无效",
+    key: "invalid",
+  },
+  {
+    title: "操作",
+    key: "actions",
   },
 ];
 
@@ -80,10 +96,20 @@ onMounted(async () => {
   await fetch();
 });
 
-const router = useRouter()
+const router = useRouter();
 
-const onClickRow = (e: any, selected: any) => {
-  const { id } = selected.item;
-  router.push({ name: "/referrals/[id]", params: {id: id} });
+const edit = (item: UserReferralInfo) => {
+  const { id } = item;
+  router.push({ name: "/referrals/[id]", params: { id: id} });
+};
+
+const onAnalytics = (item: UserReferralInfo) => {
+  const { id } = item;
+  router.push({
+    name: "/referrals/analytics",
+    query: {
+      id: id,
+    },
+  });
 };
 </script>

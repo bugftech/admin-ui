@@ -1,13 +1,5 @@
 <template>
-  <!--
-  <div class="ms-4">
-    <v-img
-      :src="logo"
-      style="width: 100px"
-    ></v-img>
-  </div>
- -->
-  <div class="logo">BUGFREED.CO</div>
+  <v-img :src="logo" width="100" />
 </template>
 
 <script setup lang="ts">

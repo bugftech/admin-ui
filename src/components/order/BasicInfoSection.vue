@@ -1,7 +1,9 @@
 <template>
   <v-card class="elevation-1">
     <v-toolbar color="transparent" density="compact">
-      <v-toolbar-title class="text-caption">基础信息</v-toolbar-title>
+      <v-toolbar-title class="text-caption font-weight-bold"
+        >基础信息</v-toolbar-title
+      >
     </v-toolbar>
     <v-divider />
     <v-card-text>
@@ -63,23 +65,17 @@ const props = defineProps({
   },
 });
 
-const filtered = ref([]);
-
-if (props.item) {
-  // 遍历对象的所有键
-  Object.keys(props.item).forEach((key) => {
-    // 获取键对应的值
+const filtered = computed(() => {
+  if (!props.item) return [];
+  return Object.keys(props.item).reduce((acc, key) => {
     const value = props.item[key];
-    // 获取对应的翻译名称，如果找不到则使用原始键
     const translatedKey = translation[key] || key;
-    // 如果找不到对应的翻译，则跳过
-    if (translatedKey === key) {
-      return;
+    if (translatedKey !== key) {
+      acc.push({ title: key, name: translatedKey, value });
     }
-    // 构建新的对象并放入新数组中
-    filtered.value.push({ title: key, name: translatedKey, value: value });
-  });
-}
+    return acc;
+  }, []);
+});
 
 const useBool = (key) => {
   const boolItems = ["confirmStatus", "deleteStatus"];
@@ -90,4 +86,8 @@ const useTime = (key) => {
   const timeItems = ["commentTime", "modifyTime", "createTime", "paymentTime"];
   return timeItems.find((item) => item === key);
 };
+
+watch(props.item, () => {
+  propsToFilter();
+});
 </script>

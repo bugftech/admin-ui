@@ -4,12 +4,11 @@ export interface Category {
   name: string;
   level: number;
   count: number;
-  unit: string;
   sort: number;
-  icon: string;
-  image: string;
+  pic: string;
   keywords: string[];
   description: string;
+  published: boolean;
 }
 
 export interface AllCategory extends Category {

@@ -2,6 +2,10 @@
   <v-card>
     <v-toolbar color="transparent" density="compact">
       <v-card-title class="text-caption">价格信息</v-card-title>
+      <v-spacer />
+      <v-btn variant="tonal" prepend-icon="mdi-help-circle" size="small"
+        >对价格有疑问</v-btn
+      >
     </v-toolbar>
     <v-divider />
     <v-card-text>
@@ -19,13 +23,6 @@
         </v-col>
       </v-row>
     </v-card-text>
-    <v-divider />
-    <v-card-actions>
-      <v-spacer />
-      <v-btn variant="tonal" prepend-icon="mdi-help-circle" size="small"
-        >对价格有疑问</v-btn
-      >
-    </v-card-actions>
   </v-card>
 </template>
 

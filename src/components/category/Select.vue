@@ -1,9 +1,12 @@
 <template>
   <v-select
-    hide-details
-    density="compact"
+    density="comfortable"
     variant="solo-filled"
     flat
+    label="分类"
+    hint="商品所属分类。"
+    persistent-hint
+    persistent-placeholder
     placeholder="选择分类"
     v-model="selectedCategory"
     :items="items"
@@ -80,12 +83,11 @@ function flattenCategories(
         name: categoryName,
         level: category.level,
         count: category.count,
-        unit: category.unit,
         sort: category.sort,
-        icon: category.icon,
-        image: category.image,
+        pic: category.pic,
         keywords: category.keywords,
         description: category.description,
+        published: category.published,
       };
       result.push(newCategory);
     }
@@ -112,7 +114,7 @@ watch(props, () => {
 onMounted(async () => {
   let res = null;
   if (props.parentId > 0) {
-    res = await BFSDK.filterCategories("1");
+    res = await BFSDK.filterCategories(1);
   } else {
     res = await BFSDK.getCategories();
   }

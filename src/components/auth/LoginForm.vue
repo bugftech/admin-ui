@@ -87,7 +87,7 @@ const login = async () => {
       setCookie("rememberMe", "", -1);
     }
 
-    const redirect = route.query.redirect || "/overview";
+    const redirect = route.query.redirect || "/apps";
     router.push(redirect).catch((err)=>{
       console.error(err)
     }).finally(() => {

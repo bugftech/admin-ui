@@ -3,7 +3,7 @@
     <AppSnackBarQueue />
     <v-app-bar flat app color="transparent">
       <v-spacer />
-      <div class="logo font-weight-bold">BUGFREED</div>
+      <v-img src="@/assets/bugfreed-text-light.svg" height="16px"/>
       <v-spacer />
     </v-app-bar>
     <v-main >

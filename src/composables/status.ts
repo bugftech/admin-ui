@@ -1,5 +1,3 @@
-import { ref, computed } from "vue";
-
 interface StatusItem {
   value: number;
   title?: string;
@@ -24,7 +22,7 @@ const statusItems: StatusItem[] = [
     value: 2,
     title: "已发货",
     icon: "mdi-truck-check", // Icon for "已发货"
-    color: "blue",
+    color: "teal",
   },
   {
     value: 3,

@@ -50,8 +50,6 @@
       >
         {{ productTypes[filters["productType"]] }}
       </v-chip>
-
-      
     </v-toolbar>
     <v-divider />
     <v-text-field
@@ -137,9 +135,25 @@
         </div>
       </template>
       <template v-slot:[`item.productType`]="{ item }">
-        <v-chip size="x-small" variant="flat" color="orange-accent-2">{{
+        <v-chip size="x-small" variant="tonal" color="indigo">{{
           productTypes[item.productType]
         }}</v-chip>
+      </template>
+      <template v-slot:[`no-data`]>
+        <v-sheet>
+          <v-img src="@/assets/shopping_bags.svg" height="200px" class="my-8">
+          </v-img>
+          <div class="v-card-title text-subtitle-2">商品库存</div>
+          <div class="text-caption v-card-subtitle">商品库存记录商品的状态</div>
+          <v-btn
+            size="small"
+            class="ma-4"
+            color="orange-accent-2"
+            variant="flat"
+            to="/pms/products/new"
+            >添加商品</v-btn
+          >
+        </v-sheet>
       </template>
     </v-data-table>
   </v-card>
@@ -206,7 +220,10 @@ const filter = ref(false);
 const filters = ref<{ [key: string]: any }>({});
 
 const onClickRow = (e: any, selected: any) => {
-  const id = items.value[selected.index].id;
+  const { item } = selected;
+  const idx = items.value.findIndex((prod) => prod.id === item.id);
+  if (idx < 0) return;
+  const id = items.value[idx].id;
   router.push(`/pms/products/${id}`);
 };
 

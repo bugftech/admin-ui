@@ -12,6 +12,7 @@ export interface App {
   id?: number;
   name: string;
   uid?: string;
+  tenantId?: number;
   appId: string;
   appSecret: string;
   wechatPayId: number;
@@ -38,4 +39,16 @@ export interface AlipayApp {
 
 export interface BindWechatPay {
   wechatPayId: number;
+}
+
+export interface AppWebhookConfig {
+  id: number;
+  bfAppId: number;
+  tenantId?: number;
+  name: string;
+  url: string;
+  contentType: string;
+  template: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

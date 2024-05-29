@@ -11,16 +11,6 @@
               appConfig.appType
             }}</v-chip>
           </v-toolbar-title>
-          <!--
-          <template v-slot:extension>
-            <v-tabs v-model="tab" density="compact" class="text-caption">
-              <v-tab value="one" class="text-caption">基础信息</v-tab>
-              <v-tab value="two" class="text-caption">支付</v-tab>
-              <v-tab value="three" class="text-caption">服务账号</v-tab>
-              <v-tab value="four" class="text-caption">APIKeys</v-tab>
-            </v-tabs>
-          </template>
-          -->
           <v-spacer />
           <v-btn
             variant="elevated"
@@ -39,6 +29,16 @@
               >APP配置</v-toolbar-title
             >
             <v-spacer />
+            <v-btn
+              variant="tonal"
+              size="small"
+              class="me-2"
+              append-icon="mdi-content-copy"
+              @click="copyId"
+              >{{
+                "X-Bugfreed-App-Id: " + appConfig.tenantId + "-" + appConfig.id
+              }}</v-btn
+            >
           </v-toolbar>
           <v-divider />
           <div class="d-flex flex-row">
@@ -140,8 +140,7 @@
                         <v-icon icon="mdi-cloud-key" start />APP身份验证密钥
                       </div>
 
-                      <div class="text-caption v-card-subtitle"
-                      >
+                      <div class="text-caption v-card-subtitle">
                         第三方APP身份验证密钥配置，只有正确配置ID和密钥，才可唤起第三APP接口能力。无需对应平台的能力，可跳过此选项。
                       </div>
 
@@ -171,6 +170,7 @@
                         persistent-hint
                         :rules="nonEmptyRules"
                         v-model="appConfig.appSecret"
+                        append-icon="mdi-circle-edit-outline"
                       ></v-text-field>
                     </v-form>
                   </v-card-text>
@@ -241,10 +241,179 @@
                 </v-card>
               </v-tabs-window-item>
               <v-tabs-window-item value="three">
-                <v-card> </v-card>
+                <v-card flat>
+                  <v-card-item color="transparent" flat>
+                    <v-card-title class="text-subtitle-2 font-weight-bold">
+                      微信客服
+                    </v-card-title>
+                    <v-card-subtitle class="text-caption">
+                      微信客服可在小程序绑定跳转到制定的企业微信客服。如果未指定。则请使用默认的客服
+                    </v-card-subtitle>
+                    <template v-slot:append>
+                      <v-btn
+                        @click="addKF"
+                        size="small"
+                        color="indigo"
+                        variant="text"
+                        >添加一个</v-btn
+                      >
+                    </template>
+                  </v-card-item>
+                  <v-divider />
+                  <v-card-text>
+                    <v-list
+                      slim
+                      density="comfortable"
+                      lines="two"
+                      class="border rounded-lg"
+                      v-if="kfs.length > 0"
+                    >
+                      <template v-for="(kf, i) in kfs" :key="i">
+                        <v-list-item @click="onEditKF(i)">
+                          <v-list-item-title>
+                            <div class="text-subtitle-2">
+                              {{ kf.name }}
+                              <v-chip
+                                size="x-small"
+                                variant="flat"
+                                color="indigo"
+                                >{{ kf.corpId }}</v-chip
+                              >
+                            </div>
+                          </v-list-item-title>
+                          <v-list-item-subtitle class="text-caption">
+                            {{ kf.url }}
+                          </v-list-item-subtitle>
+
+                          <template v-slot:append>
+                            <v-radio hide-details v-model="kf.isDefault">
+                              <template v-slot:label>
+                                <div class="text-caption font-weight-bold">
+                                  默认客服
+                                </div>
+                              </template>
+                            </v-radio>
+                          </template>
+                        </v-list-item>
+                        <v-divider v-if="i !== kfs.length - 1" />
+                      </template>
+                    </v-list>
+
+                    <div v-else class="text-center">
+                      <v-img
+                        src="@/assets/product_explainer.svg"
+                        height="250"
+                        class="mt-8"
+                      ></v-img>
+
+                      <div class="text-caption mt-8 v-card-subtitle">
+                        APP尚未配置微信客服
+                      </div>
+                      <v-btn
+                        class="my-4"
+                        size="small"
+                        color="indigo"
+                        variant="flat"
+                        @click="addKF"
+                        >添加一个客服</v-btn
+                      >
+                    </div>
+                  </v-card-text>
+                </v-card>
               </v-tabs-window-item>
               <v-tabs-window-item value="four">
-                <v-card> </v-card>
+                <v-card flat>
+                  <v-card-item color="transparent" flat>
+                    <v-card-title class="text-subtitle-2 font-weight-bold">
+                      企业微信机器人
+                    </v-card-title>
+                    <v-card-subtitle class="text-caption">
+                      绑定企业微信机器人，即可推送相关的订单消息
+                    </v-card-subtitle>
+                    <template v-slot:append>
+                      <v-btn
+                        @click="addWebhook"
+                        size="small"
+                        color="indigo"
+                        variant="text"
+                        >添加一个</v-btn
+                      >
+                    </template>
+                  </v-card-item>
+                </v-card>
+                <v-divider />
+                <v-card
+                  v-for="(hook, i) in hooks"
+                  :key="i"
+                  flat
+                  class="ma-4 border rounded-lg"
+                >
+                  <v-toolbar color="transparent">
+                    <v-spacer />
+                    <v-btn
+                      rounded="lg"
+                      variant="elevated"
+                      size="small"
+                      @click="onEditHook(i)"
+                      prepend-icon="mdi-pencil"
+                      >编辑</v-btn
+                    >
+                  </v-toolbar>
+                  <v-divider />
+                  <v-card-text>
+                    <v-text-field
+                      v-model="hook.name"
+                      placeholder="请输入hook名称"
+                      label="名称"
+                      variant="solo-filled"
+                      flat
+                      persistent-hint
+                      persistent-placeholder
+                      density="comfortable"
+                      hint="名称方便管理员识别客服人员。请填入准确的信息。"
+                    >
+                    </v-text-field>
+                    <v-text-field
+                      v-model="hook.url"
+                      placeholder="请输入webhook url"
+                      label="url"
+                      variant="solo-filled"
+                      flat
+                      persistent-hint
+                      persistent-placeholder
+                      density="comfortable"
+                      hint="webhook url地址，用于推送消息的服务地址。"
+                      class="mt-4"
+                    >
+                    </v-text-field>
+                    <v-text-field
+                      v-model="hook.contentType"
+                      placeholder="UTF-8"
+                      label="content type"
+                      variant="solo-filled"
+                      flat
+                      persistent-hint
+                      persistent-placeholder
+                      density="comfortable"
+                      hint="选择payload发送的类型。"
+                      class="mt-4"
+                    >
+                    </v-text-field>
+                    <v-textarea
+                      v-model="hook.template"
+                      placeholder="请输入hook模版"
+                      label="模版"
+                      variant="solo-filled"
+                      flat
+                      persistent-hint
+                      persistent-placeholder
+                      density="comfortable"
+                      hint="webhook发送的内容模版"
+                      class="mt-4"
+                    >
+                    </v-textarea>
+                  </v-card-text>
+                </v-card>
               </v-tabs-window-item>
             </v-tabs-window>
           </div>
@@ -255,17 +424,161 @@
       </v-col>
     </v-row>
   </v-container>
+
+  <v-dialog max-width="800" v-model="kfDialog">
+    <v-card>
+      <v-toolbar density="compact">
+        <v-toolbar-title class="text-subtitle-2 font-weight-bold">
+          微信客服
+        </v-toolbar-title>
+        <v-spacer />
+        <v-btn icon="mdi-close" size="small" @click="cancelKF"> </v-btn>
+      </v-toolbar>
+      <v-divider />
+      <v-card-text>
+        <v-text-field
+          v-model="editKF.name"
+          variant="solo-filled"
+          flat
+          label="客服名称"
+          persistent-hint
+          persistent-placeholder
+          density="comfortable"
+          placeholder="请输入微信客服名称"
+          hint="名称方便管理员识别客服人员。请填入准确的信息。"
+        >
+        </v-text-field>
+        <v-text-field
+          v-model="editKF.url"
+          class="mt-4"
+          variant="solo-filled"
+          flat
+          label="webhoook URL"
+          persistent-hint
+          persistent-placeholder
+          density="comfortable"
+          placeholder="webhoook URL"
+          hint="企业微信客服绑定的客户URL"
+        >
+        </v-text-field>
+        <v-text-field
+          v-model="editKF.corpId"
+          class="mt-4"
+          variant="solo-filled"
+          flat
+          label="企业ID"
+          persistent-hint
+          persistent-placeholder
+          density="comfortable"
+          placeholder="请输入企业微信的企业ID"
+          hint="企业微信的企业ID"
+        >
+        </v-text-field>
+        <v-switch
+          v-model="editKF.isDefault"
+          hide-details
+          color="indigo"
+          density="compact"
+          class="ml-2"
+        >
+          <template v-slot:label>
+            <div class="text-caption font-weight">默认</div>
+          </template>
+        </v-switch>
+      </v-card-text>
+      <v-divider />
+      <v-card-actions>
+        <v-spacer />
+        <v-btn color="indigo" size="small" @click="cancelKF"> 取消 </v-btn>
+        <v-btn color="indigo" size="small" @click="upsertKF"> 确定 </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog max-width="800" v-model="hookDialog">
+    <v-card>
+      <v-toolbar density="compact">
+        <v-toolbar-title class="text-subtitle-2 font-weight-bold">
+          webhook
+        </v-toolbar-title>
+        <v-spacer />
+        <v-btn icon="mdi-close" size="small" @click="cancelHook"> </v-btn>
+      </v-toolbar>
+      <v-divider />
+      <v-card-text>
+        <v-text-field
+          class="mt-4"
+          v-model="editWebhook.name"
+          placeholder="请输入hook名称"
+          label="名称"
+          variant="solo-filled"
+          flat
+          persistent-hint
+          persistent-placeholder
+          density="comfortable"
+          hint="名称方便管理员识别客服人员。请填入准确的信息。"
+        >
+        </v-text-field>
+        <v-text-field
+          v-model="editWebhook.url"
+          placeholder="请输入webhook url"
+          label="url"
+          variant="solo-filled"
+          flat
+          persistent-hint
+          persistent-placeholder
+          density="comfortable"
+          hint="webhook url地址，用于推送消息的服务地址。"
+          class="mt-4"
+        >
+        </v-text-field>
+        <v-text-field
+          v-model="editWebhook.contentType"
+          placeholder="UTF-8"
+          label="content type"
+          variant="solo-filled"
+          flat
+          persistent-hint
+          persistent-placeholder
+          density="comfortable"
+          hint="选择payload发送的类型。"
+          class="mt-4"
+        >
+        </v-text-field>
+        <v-textarea
+          v-model="editWebhook.template"
+          placeholder="请输入hook模版"
+          label="模版"
+          variant="solo-filled"
+          flat
+          persistent-hint
+          persistent-placeholder
+          density="comfortable"
+          hint="webhook发送的内容模版"
+          class="mt-4"
+        >
+        </v-textarea>
+      </v-card-text>
+      <v-divider />
+      <v-card-actions>
+        <v-spacer />
+        <v-btn size="small" color="indigo" @click="cancelHook">取消</v-btn>
+        <v-btn size="small" color="indigo" @click="upsertWebhook"> 确定</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">
 import BFSDK from "@/api/sdk";
-import { App } from "@/interfaces/apps";
+import { App, AppWebhookConfig } from "@/interfaces/apps";
 import { WechatPay } from "@/interfaces/pay";
+import { AppWechatKF } from "@/interfaces/wechat";
 
 const tab = ref();
-
 const route = useRoute();
 const id = (route.params as { id: number }).id;
+const kfDialog = ref(false);
 
 const appConfig = reactive<App>({
   id: 0,
@@ -281,7 +594,6 @@ const appConfig = reactive<App>({
 
 const bindWechatPayId = ref<number | null>(null);
 const bindAliPayId = ref<number | null>(null);
-
 const pays = ref<WechatPay[]>([]);
 
 const fetchApp = async () => {
@@ -301,9 +613,9 @@ const updateApp = async () => {
   if (!appConfig.id) return;
   const { success } = await BFSDK.updateApp(appConfig.id, appConfig);
   if (!success) {
-    useSnackbar("更新APP失败")
+    useSnackbar("更新APP失败");
   } else {
-    useSnackbar("更新APP成功")
+    useSnackbar("更新APP成功");
   }
 };
 
@@ -315,8 +627,78 @@ const fetchWechatPays = async () => {
   pays.value = data;
 };
 
+const defaultKF: AppWechatKF = {
+  tenantId: 0,
+  bfAppId: 0,
+  id: 0,
+  name: "",
+  url: "",
+  corpId: "",
+  isDefault: false,
+};
+
+const editKF = reactive<AppWechatKF>(defaultKF);
+const kfs = ref<AppWechatKF[]>([]);
+const fetchKFs = async () => {
+  const { success, data } = await BFSDK.getWechatKFs(id);
+  if (success) {
+    kfs.value = data;
+  }
+};
+
+const addKF = async () => {
+  Object.assign(editKF, defaultKF);
+  kfDialog.value = true;
+};
+
+const onEditKF = (kfIdx: number) => {
+  Object.assign(editKF, kfs.value[kfIdx]);
+  kfDialog.value = true;
+};
+
+const upsertKF = async () => {
+  // 不存在id，则为新增
+  if (editKF.id === 0) {
+    const { success } = await BFSDK.addWechatKF(id, editKF);
+    if (!success) {
+      useSnackbar("添加客服失败");
+    } else {
+      useSnackbar("添加客服成功");
+    }
+
+    await fetchKFs();
+    cancelKF();
+  } else {
+    const { success } = await BFSDK.updateWechatKF(id, editKF.id, editKF);
+    if (!success) {
+      useSnackbar("添加客服失败");
+    } else {
+      useSnackbar("添加客服成功");
+    }
+
+    await fetchKFs();
+    cancelKF();
+  }
+};
+
+const cancelKF = () => {
+  Object.assign(editKF, defaultKF);
+  kfDialog.value = false;
+};
+
 const copy = () => {
   return copyToClipboardFormatted(appConfig.uid);
+};
+
+const copyId = () => {
+  const str =
+    '"X-Bugfreed-App-Id": ' +
+    '"' +
+    appConfig.tenantId +
+    "-" +
+    appConfig.id +
+    '"';
+  copyToClipboardFormatted(str);
 };
 
 const bindWechatPay = async () => {
@@ -331,8 +713,70 @@ const bindWechatPay = async () => {
   }
 };
 
-onMounted(async () => {
-  await Promise.all([fetchApp(), fetchWechatPays()]);
+const hookDialog = ref(false);
+
+const defaultHook: AppWebhookConfig = {
+  tenantId: 0,
+  bfAppId: 0,
+  id: 0,
+  name: "",
+  url: "",
+  contentType: "application/json",
+  template: "",
+};
+const editWebhook = reactive<AppWebhookConfig>(defaultHook);
+const hooks = ref<AppWebhookConfig[]>([]);
+
+// qywechat webhhok
+const addWebhook = async () => {
+  Object.assign(editWebhook, defaultHook);
+  hookDialog.value = true;
+};
+
+const upsertWebhook = async () => {
+  if (editWebhook.id > 0) {
+    const { success } = await BFSDK.updateWebookById(
+      id,
+      editWebhook.id,
+      editWebhook
+    );
+    if (!success) {
+      useSnackbar("更新webhook失败");
+    } else {
+      useSnackbar("更新webhook成功");
+      await fetchHooks();
+      cancelHook();
+    }
+  } else {
+    const { success } = await BFSDK.addAppWebook(id, editWebhook);
+    if (!success) {
+      useSnackbar("添加webhook失败");
+    } else {
+      useSnackbar("添加webhook成功");
+      await fetchHooks();
+      cancelHook();
+    }
+  }
+};
+
+const fetchHooks = async () => {
+  const { success, data } = await BFSDK.getWebooksByAppId(id);
+  if (!success) return;
+  hooks.value = data;
+};
+
+const onEditHook = (hookIdx: number) => {
+  Object.assign(editWebhook, hooks.value[hookIdx]);
+  hookDialog.value = true;
+};
+
+const cancelHook = () => {
+  Object.assign(editWebhook, defaultHook);
+  hookDialog.value = false;
+};
+
+onMounted(() => {
+  Promise.all([fetchApp(), fetchWechatPays(), fetchKFs(), fetchHooks()]);
 });
 </script>
 

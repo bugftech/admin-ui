@@ -55,6 +55,7 @@ const emit = defineEmits(['refresh'])
 
 const save = async () => {
   if (!localId.value || localId.value === 0) return;
+  /*
   const res = await child.value.form?.validate();
   if (!res || !res.valid) return;
   const copyPay = toRaw(child.value.pay);
@@ -65,6 +66,7 @@ const save = async () => {
   } else {
     useSnackbar("添加失败");
   }
+  */
   onClose();
 };
 

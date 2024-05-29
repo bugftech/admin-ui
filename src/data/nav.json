@@ -75,9 +75,21 @@
     "activeIcon": "mdi-sale"
   },
   {
+    "title": "短链接",
+    "to": "/editor",
+    "inactiveIcon": "mdi-link-circle-outline",
+    "activeIcon": "mdi-link-circle"
+  },
+  {
     "title": "富文本",
     "to": "/editor",
     "inactiveIcon": "mdi-view-dashboard-edit-outline",
     "activeIcon": "mdi-view-dashboard-edit"
+  },
+  {
+    "title": "CMS",
+    "to": "/wireless",
+    "inactiveIcon": "mdi-transit-connection-variant",
+    "activeIcon": "mdi-transit-connection-variant"
   }
 ]

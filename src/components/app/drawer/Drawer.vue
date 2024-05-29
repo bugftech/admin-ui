@@ -8,26 +8,24 @@
   >
     <template v-slot:prepend>
       <v-divider />
-      <AppDrawerPrepend />
+      <v-list nav density="compact" slim>
+        <v-list-item link to="/apps">
+          <template v-slot:prepend="{ isActive }">
+            <v-icon
+              size="small"
+              :icon="
+                isActive
+                  ? 'mdi-application-array'
+                  : 'mdi-application-array-outline'
+              "
+            />
+          </template>
+          <v-list-item-title class="text-caption">应用</v-list-item-title>
+        </v-list-item>
+      </v-list>
     </template>
     <v-divider />
     <AppDrawerList :items="app.navItems" />
-    <v-divider />
-    <v-list nav density="compact" slim>
-      <v-list-item link to="/apps">
-        <template v-slot:prepend="{ isActive }">
-          <v-icon
-            size="small"
-            :icon="
-              isActive
-                ? 'mdi-application-array'
-                : 'mdi-application-array-outline'
-            "
-          />
-        </template>
-        <v-list-item-title class="text-caption">所有应用</v-list-item-title>
-      </v-list-item>
-    </v-list>
     <template v-slot:append>
       <AppDrawerAppend />
     </template>

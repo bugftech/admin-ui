@@ -4,7 +4,7 @@
       <v-col cols="12">
         <!--面包屑-->
         <AppBreadcrumb>
-          <v-btn variant="elevated" size="small">添加客户</v-btn>
+          <v-btn variant="elevated" size="small" to="/customers/new">添加客户</v-btn>
         </AppBreadcrumb>
         <CustomerDataTable />
       </v-col>

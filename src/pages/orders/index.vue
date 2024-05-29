@@ -15,8 +15,6 @@
         </AppBreadcrumb>
         <!--工具栏-->
       </v-col>
-    </v-row>
-    <v-row justify="center">
       <v-col cols="12" md="12">
         <OrderDataTable />
       </v-col>

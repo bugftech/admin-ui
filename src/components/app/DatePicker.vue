@@ -1,12 +1,12 @@
 <template>
-  <v-menu location="bottom" :close-on-content-click="false">
+  <v-menu location="bottom" :close-on-content-click="false" v-model="menu">
     <template v-slot:activator="{ props }">
       <v-btn
         v-bind="props"
         size="small"
         prepend-icon="mdi-calendar"
-        variant="tonal"
-        >今天</v-btn
+        variant="elevated"
+        >{{ filterDays[dayIndex].title }}</v-btn
       >
     </template>
     <v-card>
@@ -72,8 +72,10 @@
           <v-divider />
           <v-card-actions>
             <v-spacer />
-            <v-btn variant="tonal" size="small">取消</v-btn>
-            <v-btn variant="flat" color="indigo" size="small">确定</v-btn>
+            <v-btn variant="tonal" size="small" @click="cancel">取消</v-btn>
+            <v-btn variant="flat" color="indigo" size="small" @click="save"
+              >确定</v-btn
+            >
           </v-card-actions>
         </v-card>
       </div>
@@ -83,8 +85,12 @@
 
 <script setup>
 import { formatDateTime } from "@/composables/time";
-const startTime = ref();
-const endTime = ref();
+const now = new Date();
+
+const startTime = ref(now);
+const endTime = ref(now);
+const menu = ref(false);
+const dayIndex = ref(0);
 
 const formatted = (str) => {
   return str ? formatDateTime(str).substr(0, 11) : "";
@@ -109,11 +115,20 @@ const filterDays = [
   },
 ];
 
-const now = new Date();
-
 const onSelected = (id) => {
   const { days } = filterDays[id];
   endTime.value = now;
+  dayIndex.value = id
   startTime.value = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
+};
+
+const cancel = () => {
+  menu.value = false;
+};
+
+const emit = defineEmits(["change"]);
+const save = () => {
+  emit("change", { startTime: startTime.value, endTime: endTime.value });
+  menu.value = false;
 };
 </script>

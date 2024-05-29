@@ -1,6 +1,9 @@
 <template>
   <v-app-bar flat>
     <template v-slot:prepend>
+      <v-app-bar-title class="ml-2">
+        <AppBarLogo />
+      </v-app-bar-title>
       <v-btn
         icon="mdi-menu"
         v-if="route.meta.layout !== 'home' && mdAndDown"

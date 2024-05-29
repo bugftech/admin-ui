@@ -29,7 +29,7 @@
                 <v-card-text>
                   <ckeditor
                     v-model="editorData"
-                    :editor="DocumentEditor"
+                    :editor="editor"
                     :config="editConfig"
                     @ready="onReady"
                   >
@@ -64,6 +64,8 @@ import DocumentEditor from "@ckeditor/ckeditor5-build-decoupled-document";
 import { copyToClipboardFormatted } from "@/composables/copy";
 
 const editorData = ref("<p>Content of the editor.</p>");
+
+const editor = DocumentEditor
 const ckeditor = CKEditor.component;
 
 const tab = ref(1);
@@ -121,6 +123,7 @@ const copy = () => {
 const title = ref("");
 
 onMounted(async () => {
+  /*
   if (id) {
     const intId = parseInt(id);
     const { data, success } = await BFSDK.getProduct(intId);
@@ -129,12 +132,13 @@ onMounted(async () => {
       editorData.value = data.detailHtml;
     }
   }
+  */
 });
 </script>
 
 
 <route lang="yaml">
 meta:
-  title: "客户中心"
-  breadcrumb: "客户"
+  title: "富文本"
+  breadcrumb: "富文本"
 </route>

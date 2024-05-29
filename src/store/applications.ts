@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import BFSDK from "@/api/sdk";
-import { WechatApp, AlipayApp, AppType } from "@/interfaces/apps";
+import { WechatApp, AlipayApp, AppType, App } from "@/interfaces/apps";
 
 // MiniConfig 小程序配置
 export type MiniConfig = {
@@ -37,7 +37,6 @@ export const useApplicationStore = defineStore({
     async fetch() {
       const { data, success } = await BFSDK.getApps();
       if (!success) return;
-      this.miniprograms = data;
     },
 
     async addApp(appType: AppType, config: WechatApp | AlipayApp) {
@@ -55,7 +54,7 @@ export const useApplicationStore = defineStore({
       this.fetch();
     },
 
-    async updateApp(id: number, config: MiniConfig) {
+    async updateApp(id: number, config: App) {
       const { success } = await BFSDK.updateApp(id, config);
       if (!success) return;
       this.fetch();

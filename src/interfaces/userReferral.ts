@@ -25,3 +25,13 @@ export interface UserReferralInfo {
   qrcodeUrl: string;
   invalid: boolean; // 标识该code是否有效
 }
+
+export interface UserReferralRelation {
+  id: number;
+  tenantId?: number;
+  bfAppId: number;
+  referreId: number;
+  referredId: number;
+  expiredAt?: number;
+  expired: boolean;
+}

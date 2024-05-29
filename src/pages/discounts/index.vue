@@ -82,6 +82,27 @@
             <template v-slot:loading>
               <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
             </template>
+            <template v-slot:no-data>
+              <v-sheet>
+                <v-img src="@/assets/discount.svg" height="200px" class="my-8">
+                </v-img>
+
+                <div class="text-subtitle-2 v-card-title">产品折扣</div>
+                <div class="text-caption v-card-subtitle">
+                  产品折扣允许自定义组合，帮助您更好的营销产品。
+                </div>
+                <v-btn
+                  size="small"
+                  class="ma-4"
+                  color="orange-accent-2"
+                  variant="flat"
+                  to="/discounts/new"
+                  >添加折扣
+                  
+                  </v-btn
+                >
+              </v-sheet>
+            </template>
           </v-data-table>
         </v-card>
       </v-col>

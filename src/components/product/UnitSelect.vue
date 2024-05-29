@@ -1,10 +1,13 @@
 <template>
-  <AppLabel>单位</AppLabel>
   <v-select
     variant="solo-filled"
     flat
-    hide-details
-    density="compact"
+    label="单位"
+    hint="物理商品必须选择单位"
+    density="comfortable"
+    persistent-hint
+    persistent-placeholder
+    placeholder="请选择商品单位"
     v-model="unit"
     :items="packageOptions"
   >

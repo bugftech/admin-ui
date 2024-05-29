@@ -8,8 +8,9 @@
           <v-btn
             v-bind="props"
             variant="flat"
-            color="black"
             size="small"
+            rounded="lg"
+            color="orange-accent-2"
             prepend-icon="mdi-update"
           >
             更新状态

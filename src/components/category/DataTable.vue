@@ -1,16 +1,33 @@
 <template>
   <v-card class="mt-4">
     <v-toolbar color="transparent">
+      <v-select
+        density="compact"
+        hide-details
+        max-width="100"
+        variant="solo"
+        flat
+        color="indigo"
+        :items="levels"
+        item-value="level"
+        item-title="title"
+        class="text-caption ms-4"
+        v-model="defaultFilterLevel"
+        return-object
+        @update:model-value="filterByLevel"
+      >
+        <template v-slot:selection="{ item }">
+          <div class="text-caption font-weight-bold">{{ item.title }}</div>
+        </template>
+      </v-select>
+
+      <v-spacer />
       <v-btn
-        variant="flat"
-        size="small"
-        color="orange-accent-2"
-        @click="viewAll"
-        >所有</v-btn
-      >
-      <v-btn variant="tonal" size="small" class="mx-2" @click="viewFirstLevel"
-        >一级</v-btn
-      >
+        icon="mdi-filter-variant"
+        size="x-small"
+        variant="tonal"
+        rounded="lg"
+      ></v-btn>
     </v-toolbar>
     <v-divider />
     <v-text-field
@@ -36,7 +53,7 @@
         <v-list-item class="pa-0">
           <template v-slot:prepend>
             <v-avatar class="rounded-lg border">
-              <v-img :src="item.icon" v-if="item.icon" />
+              <v-img :src="item.pic" v-if="item.pic" />
               <v-icon icon="mdi-image" v-else />
             </v-avatar>
 
@@ -54,9 +71,9 @@
           size="small"
           rounded="pill"
           prepend-icon="mdi-eye-outline"
-          v-if="item.items"
+          v-if="item.level === 1"
           @click="viewChildren(item)"
-          >{{ item.items?.length }}</v-btn
+          >查看</v-btn
         >
       </template>
       <template v-slot:loading>
@@ -68,24 +85,35 @@
             <v-icon icon="mdi-dots-vertical" size="x-large" v-bind="props">
             </v-icon>
           </template>
-          <v-list>
-            <v-list-item>
-              <CategoryUpsertDialog
-                edit
-                :item="toRaw(item)"
-              ></CategoryUpsertDialog>
+          <v-list nav>
+            <v-list-item @click="updateCategory(item)">
+              <v-list-item-title> 编辑分类 </v-list-item-title>
             </v-list-item>
-            <v-list-item>
-              <v-btn
-                prepend-icon="mdi-delete"
-                size="small"
-                @click="remove(item)"
-              >
-                删除
-              </v-btn>
+            <v-list-item @click="remove(item)">
+              <v-list-item-title> 删除分类 </v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
+      </template>
+      <template v-slot:[`item.published`]="{ item }">
+        <v-checkbox-btn v-model="item.published" readonly></v-checkbox-btn>
+      </template>
+      <template v-slot:[`no-data`]>
+        <v-sheet>
+          <v-img src="@/assets/category.svg" height="200px" class="my-8">
+          </v-img>
+          <div class="v-card-title text-subtitle-2">商品分类</div>
+          <div class="text-caption v-card-subtitle">
+            商品分类将商品归纳为一个长期标记的状态。适合长期的管理。
+          </div>
+          <v-btn
+            size="small"
+            class="ma-4"
+            color="orange-accent-2"
+            variant="flat"
+            >添加商品</v-btn
+          >
+        </v-sheet>
       </template>
     </v-data-table>
   </v-card>
@@ -93,7 +121,6 @@
 </template>
 
 <script setup lang="ts">
-import { toRaw } from "vue";
 import { AllCategory } from "@/interfaces/category";
 import BFSDK from "@/api/sdk";
 
@@ -101,8 +128,8 @@ const headers: any[] = [
   { title: "名称", key: "name" },
   { title: "等级", key: "level" },
   { title: "商品数量", key: "count" },
-  { title: "单位", key: "unit" },
-  { title: "子分类数量", key: "child" },
+  { title: "发布", key: "published" },
+  { title: "下一级", key: "child" },
   { title: "操作", key: "actions", align: "end" },
 ];
 
@@ -110,6 +137,49 @@ const search = ref();
 const confirm = ref();
 const items = ref<AllCategory[]>([]);
 const loading = ref(false);
+const router = useRouter();
+
+// 过滤分类
+interface Level {
+  level: number;
+  title: string;
+}
+
+const levels: Level[] = [
+  {
+    level: 0,
+    title: "所有",
+  },
+  {
+    level: 1,
+    title: "一级",
+  },
+];
+
+const defaultFilterLevel = reactive<Level>({ level: 0, title: "所有" });
+
+const filterByLevel = async (item: Level) => {
+  defaultFilterLevel.level = item.level;
+  defaultFilterLevel.title = item.title;
+  if (loading.value) return;
+  loading.value = true;
+  const { success, data } = await fetch(defaultFilterLevel.level);
+  if (!success) {
+    useSnackbar("获取分类失败");
+  } else {
+    items.value = data.flatMap((obj: any) => {
+      if (obj.items && obj.items.length > 0) {
+        // If obj has items property, flatten obj and its items
+        return [obj, ...obj.items];
+      } else {
+        // If obj doesn't have items property, return obj itself
+        return obj;
+      }
+    });
+  }
+
+  loading.value = false;
+};
 
 const remove = (item: any) => {
   if (!item) return;
@@ -129,17 +199,12 @@ const remove = (item: any) => {
 const fetch = async (level?: number) => {
   let res = null;
   if (level && level === 1) {
-    res = await BFSDK.filterCategories("1");
+    res = await BFSDK.filterCategories(1);
   } else {
     res = await BFSDK.getCategories();
   }
 
   return res;
-};
-
-const viewFirstLevel = () => {
-  // Filter items array to include only items with level equal to 1
-  items.value = items.value.filter((item) => item.level === 1);
 };
 
 const viewAll = async () => {
@@ -160,10 +225,26 @@ const viewAll = async () => {
   loading.value = false;
 };
 
-const viewChildren = (item: AllCategory) => {
-  if (item.items && item.items.length) {
-    items.value = item.items;
+const viewChildren = async (item: AllCategory) => {
+  if (loading.value) return;
+  loading.value = true;
+  const { success, data } = await BFSDK.getCategoriesByParentId(item.id);
+  if (!success) {
+    useSnackbar("获取分类失败");
+  } else {
+    items.value = data;
   }
+
+  loading.value = false;
+};
+
+const updateCategory = async (item: AllCategory) => {
+  router.push({
+    name: "/pms/categories/[id]",
+    params: {
+      id: item.id,
+    },
+  });
 };
 
 onMounted(async () => {

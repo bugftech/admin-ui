@@ -55,6 +55,7 @@
 path: "/"
 meta:
   layout: bare
+  title: "起点"
   breadcrumb: "BUGFREED"
 </route>
 

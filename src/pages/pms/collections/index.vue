@@ -54,6 +54,26 @@
             <template v-slot:loading>
               <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
             </template>
+            <template v-slot:[`no-data`]>
+              <v-sheet>
+                <v-img src="@/assets/collection.svg" height="200px" class="my-8">
+                </v-img>
+                <div class="v-card-title text-subtitle-2">
+                  商品系列
+                </div>
+                <div class="text-caption v-card-subtitle ">
+                  商品系列,可临时管理商品集合。适用于特定的场景。
+                </div>
+                <v-btn
+                  size="small"
+                  class="ma-4"
+                  color="orange-accent-2"
+                  variant="flat"
+                  to="/pms/collections/new"
+                  >添加系列</v-btn
+                >
+              </v-sheet>
+            </template>
           </v-data-table>
         </v-card>
       </v-col>

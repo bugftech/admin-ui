@@ -1,13 +1,7 @@
 <template>
   <v-card class="mt-2">
     <v-toolbar density="compact" color="transparent">
-      <v-btn
-        icon="mdi-sync"
-        @click="fetch"
-        size="x-small"
-        variant="elevated"
-        rounded="lg"
-      />
+      <v-btn icon="mdi-sync" @click="fetch" size="x-small" rounded="lg" />
       <v-spacer />
       <v-btn
         icon="mdi-filter-variant"
@@ -34,7 +28,7 @@
       :headers="headers"
       :loading="loading"
       hover
-      @click="onClickRow"
+      @click:row="onClickRow"
     >
       <template v-slot:[`item.method`]="{ item }">
         <v-chip size="x-small" color="green" variant="flat">{{
@@ -69,6 +63,7 @@
 <script setup lang="ts">
 import BFSDK from "@/api/sdk";
 import { PayInfo } from "@/interfaces/pay";
+import router from "@/router";
 
 const items = ref<PayInfo[]>([]);
 const search = ref("");
@@ -111,9 +106,17 @@ const fetch = async () => {
   loading.value = false;
 };
 
-const onClickRow = (e: any,selected: any) => {
-
-}
+const onClickRow = (e: any, selected: any) => {
+  const { id, method } = selected.item;
+  if (method === "wechat") {
+    router.push({
+      name: "/pays/wechat/[id]",
+      params: {
+        id: id,
+      }
+    });
+  }
+};
 
 onMounted(async () => {
   await fetch();

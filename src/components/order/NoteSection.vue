@@ -12,7 +12,7 @@
           v-for="(item, i) in filtered"
           :key="i"
         >
-          <v-label class="text-caption font-weight-medium">{{
+          <v-label class="text-caption">{{
             item.name
           }}</v-label>
           <div class="text-caption font-weight-medium" style="max-width: 80%">

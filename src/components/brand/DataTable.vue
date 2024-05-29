@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-toolbar color="transparent">
-      <v-btn icon="mdi-sync" size="small" />
+      <v-btn icon="mdi-sync" size="small" @click="fetch"/>
       <v-spacer />
       <v-btn
         icon="mdi-filter-variant"
@@ -25,12 +25,24 @@
     </v-text-field>
     <v-divider />
 
-    <v-data-table :items="items" :headers="headers" class="text-caption">
+    <v-data-table :items="items" :headers="headers" class="text-caption" :loading="loading">
+      <template v-slot:loading>
+        <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
+      </template>
       <template v-slot:[`no-data`]>
         <v-sheet>
           <v-img src="@/assets/404.svg" height="200px" class="my-8"> </v-img>
-          <div class="text-caption">品牌用于整理产品的类别。在程序中可帮助用户快速过滤品牌的归属商品</div>
-          <v-btn size="small" class="ma-4" color="orange-accent-2" variant="flat">添加品牌</v-btn>
+          <div class="text-caption">
+            品牌用于整理产品的类别。在程序中可帮助用户快速过滤品牌的归属商品
+          </div>
+          <v-btn
+            size="small"
+            class="ma-4"
+            color="orange-accent-2"
+            variant="flat"
+            to="/pms/brands/new"
+            >添加品牌</v-btn
+          >
         </v-sheet>
       </template>
     </v-data-table>
@@ -44,7 +56,7 @@ const search = ref("");
 import BFSDK from "@/api/sdk";
 import { Brand } from "@/interfaces/brand";
 const items = ref<Brand[]>([]);
-const loading = ref(false)
+const loading = ref(false);
 
 const headers: any[] = [
   { title: "名称", key: "name" },
@@ -55,7 +67,6 @@ const headers: any[] = [
   { title: "操作", key: "actions", align: "end" },
 ];
 
-
 const fetch = async () => {
   if (loading.value) return;
   loading.value = true;
@@ -65,12 +76,11 @@ const fetch = async () => {
     return;
   }
 
-  items.value = data
+  items.value = data;
   loading.value = false;
-}
+};
 
-
-onMounted(async ()=>{
-  await fetch()
-})
+onMounted(async () => {
+  await fetch();
+});
 </script>

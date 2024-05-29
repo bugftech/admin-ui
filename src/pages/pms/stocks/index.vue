@@ -3,10 +3,20 @@
     <v-row>
       <v-col cols="12">
         <!--面包屑-->
-        <AppBreadcrumb>
-        </AppBreadcrumb>
+        <AppBreadcrumb> </AppBreadcrumb>
 
         <v-card class="mt-4">
+          <v-toolbar color="transparent">
+            <v-btn size="small" icon="mdi-sync" @click="fetch" />
+            <v-spacer />
+            <v-btn
+              icon="mdi-filter-variant"
+              size="x-small"
+              variant="tonal"
+              rounded="lg"
+            ></v-btn>
+          </v-toolbar>
+          <v-divider />
           <v-text-field
             flat
             density="compact"
@@ -23,6 +33,7 @@
             hover
             :search="search"
             :items="skus"
+            :loading="loading"
           >
             <template v-slot:[`item.variant`]="{ item }">
               <v-list-item class="pa-0">
@@ -64,6 +75,30 @@
                 </v-list>
               </v-menu>
             </template>
+
+            <template v-slot:loading>
+              <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
+            </template>
+
+            <template v-slot:[`no-data`]>
+              <v-sheet>
+                <v-img src="@/assets/stock_prices.svg" height="200px" class="my-8">
+                </v-img>
+                <div class="v-card-title text-subtitle-2">
+                  商品库存
+                </div>
+                <div class="text-caption v-card-subtitle ">
+                  库存会显示商品的可售卖的状态
+                </div>
+                <v-btn
+                  size="small"
+                  class="ma-4"
+                  color="orange-accent-2"
+                  variant="flat"
+                  >添加商品</v-btn
+                >
+              </v-sheet>
+            </template>
           </v-data-table>
         </v-card>
         <AppConfirmDialog ref="confirm"> </AppConfirmDialog>
@@ -79,6 +114,7 @@ import { SkuStock } from "@/interfaces/skuStock";
 const skus = ref<SkuStock[]>([]);
 const search = ref("");
 const confirm = ref();
+const loading = ref(false);
 
 const headers: any[] = [
   {
@@ -114,6 +150,19 @@ const edit = (item: SkuStock) => {
   router.push({ name: "/pms/products/[id]", params: { id: item.productId } });
 };
 
+const fetch = async () => {
+  if (loading.value) return;
+  loading.value = true;
+  const { data, success } = await BFSDK.getSkus();
+  if (success) {
+    skus.value = data;
+  } else {
+    useSnackbar("获取数据失败");
+  }
+
+  loading.value = false;
+};
+
 const convertToString = (list: any) => {
   if (!Array.isArray(list)) {
     return "";
@@ -131,10 +180,7 @@ const convertToString = (list: any) => {
 };
 
 onMounted(async () => {
-  const { data, success } = await BFSDK.getSkus();
-  if (success) {
-    skus.value = data;
-  }
+  await fetch();
 });
 </script>
 

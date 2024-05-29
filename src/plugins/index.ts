@@ -9,6 +9,7 @@ import vuetify from './vuetify'
 import pinia from '../store'
 import router from '../router'
 import head from "./head"
+// import CKEditor from '@ckeditor/ckeditor5-vue';
 
 // Types
 import type { App } from 'vue'

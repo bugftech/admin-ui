@@ -1,24 +1,9 @@
 <template>
-  <v-card height="400">
-    <v-card-title class="text-subtitle-2 d-flex align-center">
-      <v-hover>
-        <template v-slot:default="{ isHovering, props }">
-          <div v-bind="props" :class="isHovering ? 'text-indigo' : undefined">
-            <v-icon start class="mb-1">mdi-account-circle</v-icon>订单
-          </div>
-        </template>
-      </v-hover>
-      <v-divider vertical class="ma-2" /><span class="text-disabled ml-2"
-        >订单趋势</span
-      >
-    </v-card-title>
-    <v-card-text>
-      <div
-        ref="chartRef"
-        style="font-family: unset !important; color: black; height: 300px"
-      ></div>
-    </v-card-text>
-  </v-card>
+  <div
+    ref="chartRef"
+    class="text-caption"
+    style="font-family: unset !important; color: black; height: 300px"
+  ></div>
 </template>
 
 <script setup lang="ts">
@@ -161,6 +146,8 @@ const initChart = () => {
     false
   );
 };
+
+
 
 onMounted(() => {
   initChart();

@@ -19,5 +19,5 @@
 <route lang="yaml">
 meta:
   title: "商品分类"
-  breadcrumb: 分类
+  breadcrumb: "分类"
 </route>

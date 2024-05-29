@@ -1,28 +1,28 @@
 <template>
   <v-card>
-    <v-toolbar color="transparent">
-      <AppDatePicker />
-      <v-spacer />
-      <v-checkbox
-        hide-details
-        v-model="autoRefresh"
-        true-icon="fa:fas fa-check-square"
-        false-icon="fa:far fa-square"
-      >
-        <template v-slot:label>
-          <div class="text-caption font-weight-bold">5S刷新一次</div>
-        </template>
-      </v-checkbox>
+    <v-toolbar color="transparent" density="compact">
       <v-tooltip text="刷新" class="text-caption" location="bottom">
         <template v-slot:activator="{ props }">
           <v-btn
             icon="mdi-sync"
             size="small"
             v-bind="props"
-            @click="refreshData"
+            @click="fetchOrders"
           />
         </template>
       </v-tooltip>
+      <v-spacer />
+      <v-checkbox
+        hide-details
+        density="compact"
+        v-model="autoRefresh"
+        true-icon="fa:fas fa-check-square"
+        false-icon="fa:far fa-square"
+      >
+        <template v-slot:label>
+          <div class="text-caption font-weight-bold me-2">5S</div>
+        </template>
+      </v-checkbox>
     </v-toolbar>
     <v-divider />
     <v-text-field
@@ -68,13 +68,12 @@
 
 <script setup lang="ts">
 // Utilities
-import { ref, computed, onBeforeUnmount, watch, toRaw } from "vue";
+import { ref, computed, onBeforeUnmount, watch } from "vue";
 import { useRouter } from "vue-router";
 import { usePriceYuan } from "@/composables/price";
 import { formatDateTime } from "@/composables/time";
 import BFSDK from "@/api/sdk";
-import { OrderInfo } from "@/services/types";
-import { useOrderStore } from "@/store/orders";
+import { OrderInfo } from "@/interfaces/order";
 
 const headers: any[] = [
   {
@@ -111,16 +110,10 @@ const items = ref<OrderInfo[]>([]);
 
 let refreshInterval: NodeJS.Timeout;
 
-// orderStore
-
-const orderStore = useOrderStore();
-
 const onClickRow = async (e: any, selected: any) => {
-
-  const copyItem = toRaw(selected.item);
-  // to remove: 临时解决版本问题
-  orderStore.setCurrentIndex(selected.index);
-  router.push({ name: "/orders/[id]/", params: { id: copyItem.id } });
+  const { id } = selected.item;
+  if (!id) return;
+  router.push({ name: "/orders/[id]", params: { id: id } });
 };
 
 const filtered = computed(() => {
@@ -128,18 +121,11 @@ const filtered = computed(() => {
 });
 
 const startRefreshInterval = () => {
-  refreshInterval = setInterval(refreshData, 5000); // 每5秒刷新一次，可以根据需求调整时间间隔
+  refreshInterval = setInterval(fetchOrders, 5000); // 每5秒刷新一次，可以根据需求调整时间间隔
 };
 
 const stopRefreshInterval = () => {
   clearInterval(refreshInterval);
-};
-
-const refreshData = async () => {
-  const { success, data } = await BFSDK.getOrders();
-  if (success) {
-    items.value = data;
-  }
 };
 
 watch(autoRefresh, (newVal) => {
@@ -152,13 +138,19 @@ watch(autoRefresh, (newVal) => {
   }
 });
 
-onMounted(async () => {
+const fetchOrders = async () => {
+  if (loading.value) return;
+  loading.value = true;
   const { success, data } = await BFSDK.getOrders();
   if (success) {
     items.value = data.reverse();
   }
-  // to remove: 临时解决版本问题
-  await orderStore.fetch();
+
+  loading.value = false;
+};
+
+onMounted(() => {
+  fetchOrders();
 });
 
 onBeforeUnmount(() => {

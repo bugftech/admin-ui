@@ -8,13 +8,13 @@
           <AuthLoginForm />
           <h6 class="text-caption mt-8 d-flex align-center">
             <div class="text-medium-emphasis">还未拥有账号？</div>
-            <div
-              href="/register"
+            <router-link
+              to="/register"
               variant="outlined"
-              class="text-decoration-underline"
+              class="text-decoration-underline text-indigo"
             >
               创建账号
-            </div>
+            </router-link>
           </h6>
         </v-card>
       </v-col>

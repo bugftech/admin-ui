@@ -23,6 +23,7 @@
       :headers="headers"
       :loading="loading"
       hover
+      @click:row="onClickRow"
     >
       <template v-slot:[`item.nickName`]="{ item }">
         <v-list-item slim class="pa-0">
@@ -65,14 +66,7 @@
             </v-btn>
           </template>
           <v-list nav density="compact">
-            <v-list-item slim link @click="upateReferral(item)">
-              <template v-slot:prepend>
-                <v-icon>mdi-account-star</v-icon>
-              </template>
-              <v-list-item-title class="text-caption">
-                设置为推荐人
-              </v-list-item-title>
-            </v-list-item>
+            {{ item }}
           </v-list>
         </v-menu>
       </template>
@@ -89,6 +83,7 @@
 import BFSDK from "@/api/sdk";
 import { User } from "@/interfaces/user";
 import { formatDateTime } from "@/composables/time";
+import router from "@/router";
 
 const items = ref<User[]>([]);
 const search = ref("");
@@ -133,31 +128,16 @@ onMounted(async () => {
   loading.value = false;
 });
 
-const upateReferral = (item: User) => {
-  confirm.value
-    .open(
-      "将用户设置为推荐人",
-      "推荐人可能会享有订单收益分成，具体查看推荐人设置。"
-    )
-    .then(async (ok: boolean) => {
-      if (ok) {
-        const { success, data } = await BFSDK.addReferralUser({
-          id: 0,
-          tenantId: item.tenantId,
-          bfAppId: item.bfAppId,
-          userId: item.id,
-          referralCode: "",
-          invalid: false,
-          qrcodeUrl: "",
-        });
+const onClickRow = (e: any, selected: any) => {
+  const { id } = selected.item;
+  if (!id) return;
 
-        if (success) {
-          useSnackbar("设置为推荐成功");
-        } else {
-          useSnackbar("设置为推荐失败");
-        }
-      }
-    });
+  router.push({
+    name: "/customers/[id]",
+    params: {
+      id: id,
+    },
+  });
 };
 
 defineExpose({

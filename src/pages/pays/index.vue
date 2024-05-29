@@ -15,13 +15,17 @@
                 <template v-slot:prepend>
                   <v-icon>mdi-wechat</v-icon>
                 </template>
-                <v-list-item-title>微信支付</v-list-item-title>
+                <v-list-item-title class="text-caption"
+                  >微信支付</v-list-item-title
+                >
               </v-list-item>
               <v-list-item link>
                 <template v-slot:prepend>
                   <v-icon>mdi-cellphone</v-icon>
                 </template>
-                <v-list-item-title>支付宝</v-list-item-title>
+                <v-list-item-title class="text-caption"
+                  >支付宝</v-list-item-title
+                >
               </v-list-item>
             </v-list>
           </v-menu>
@@ -33,8 +37,7 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <route lang="yaml">
 meta:

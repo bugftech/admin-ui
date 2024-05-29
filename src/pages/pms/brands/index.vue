@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-row>
+    <v-row justify="center">
       <v-col cols="12">
         <!--面包屑-->
         <AppBreadcrumb>

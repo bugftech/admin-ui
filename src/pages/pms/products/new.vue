@@ -46,6 +46,17 @@
                 placeholder="PSN2026010101"
                 v-model="item.description"
               ></v-text-field>
+              <AppLabel class="mt-4">关键词</AppLabel>
+              <v-combobox
+                placeholder="A"
+                variant="solo-filled"
+                flat
+                chips
+                multiple
+                density="compact"
+                hide-details
+                v-model="item.keywords"
+              ></v-combobox>
 
               <AppLabel class="mt-4">输入商品号</AppLabel>
               <v-text-field
@@ -57,20 +68,35 @@
               ></v-text-field>
 
               <v-card flat>
-                <v-toolbar density="compact" color="transparent" class="mt-1">
+                <v-toolbar density="compact" color="transparent" class="mt-2">
                   <AppLabel>商品详情</AppLabel>
                   <v-spacer />
                   <v-btn
                     icon="mdi-pencil"
-                    size="small"
-                    @click="onEditHtml(item.id)"
-                  ></v-btn>
+                    size="x-small"
+                    variant="elevated"
+                    class="me-2"
+                    @click="editHtml = true"
+                  />
+                  <v-btn
+                    icon="mdi-eye"
+                    size="x-small"
+                    variant="elevated"
+                    @click="editHtml = false"
+                  />
                 </v-toolbar>
                 <v-card-text
                   style="height: 200px"
                   class="overflow-y-auto border rounded-lg"
                 >
-                  <div v-html="item.detailHtml"></div>
+                  <v-textarea
+                    variant="solo-filled"
+                    flat
+                    auto-grow
+                    v-if="editHtml"
+                    v-model="item.detailHtml"
+                  ></v-textarea>
+                  <div v-html="item.detailHtml" v-else></div>
                 </v-card-text>
               </v-card>
             </v-card-text>
@@ -293,6 +319,7 @@ const defaultProduct: ProductAndSku = {
 
 // 现在 defaultProduct 对象包含了所有字段，并且每个字段都有默认值。
 
+const editHtml = ref(false);
 const item = ref<ProductAndSku>(defaultProduct);
 
 interface PublishedOption {
@@ -330,15 +357,15 @@ const save = async () => {
   }
 
   // 处理价格YuanToFen
-  copyItem.price = copyItem.price * 100
-  copyItem.costPrice = copyItem.costPrice * 100
-  copyItem.originalPrice = copyItem.originalPrice * 100
+  copyItem.price = copyItem.price * 100;
+  copyItem.costPrice = copyItem.costPrice * 100;
+  copyItem.originalPrice = copyItem.originalPrice * 100;
 
   const { success } = await BFSDK.addProduct(copyItem);
   if (success) {
-    useSnackbar("添加商品成功")
+    useSnackbar("添加商品成功");
   } else {
-    useSnackbar("添加商品失败")
+    useSnackbar("添加商品失败");
   }
 };
 

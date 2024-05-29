@@ -1,14 +1,16 @@
 <template>
   <v-container>
     <v-row class="justify-center">
-      <v-col cols="12">
+      <v-col cols="12" md="8">
         <v-toolbar color="transparent">
           <AppBackBtn />
           <v-toolbar-title class="text-body-1 font-weight-bold">
             添加推荐人
           </v-toolbar-title>
           <v-spacer />
-          <v-btn size="small" class="me-2" variant="tonal">取消</v-btn>
+          <v-btn size="small" class="me-2" variant="tonal" @click="cancel"
+            >取消</v-btn
+          >
           <v-btn size="small" variant="elevated" @click="save">保存</v-btn>
         </v-toolbar>
       </v-col>
@@ -24,10 +26,11 @@
                 variant="solo-filled"
                 flat
                 :rules="nonEmptyRules"
-                v-model="editItem.userId"
+                v-model="chooseUser"
                 :items="users"
-                item-title="email"
+                item-title="phone"
                 item-value="id"
+                return-object
                 class="text-caption"
               ></v-select>
               <AppLabel class="mt-4">公司</AppLabel>
@@ -36,6 +39,7 @@
                 hide-details
                 variant="solo-filled"
                 class="text-caption"
+                v-model="editItem.company"
                 flat
               ></v-text-field>
               <AppLabel class="mt-4">公司地址</AppLabel>
@@ -44,6 +48,7 @@
                 hide-details
                 class="text-caption"
                 variant="solo-filled"
+                v-model="editItem.companyAddress"
                 flat
               ></v-text-field>
 
@@ -52,6 +57,7 @@
                 placeholder="公司联系人"
                 hide-details
                 variant="solo-filled"
+                v-model="editItem.contactPerson"
                 flat
               ></v-text-field>
 
@@ -61,6 +67,7 @@
                 hide-details
                 class="text-caption"
                 variant="solo-filled"
+                v-model="editItem.phoneNumber"
                 flat
               ></v-text-field>
               <AppLabel class="mt-4">网站</AppLabel>
@@ -69,24 +76,10 @@
                 hide-details
                 class="text-caption"
                 variant="solo-filled"
+                v-model="editItem.website"
                 flat
               ></v-text-field>
             </v-form>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col cols="12" md="4">
-        <v-card>
-          <v-card-text class="dot text-center rounded-lg ma-2">
-            <div>
-              <v-img
-                class="rounded-lg"
-                src="@/assets/fingerprint.svg"
-                max-width="60%"
-              >
-              </v-img>
-            </div>
-            <v-btn size="small" color="indigo">点击生成</v-btn>
           </v-card-text>
         </v-card>
       </v-col>
@@ -98,6 +91,8 @@
 import BFSDK from "@/api/sdk";
 import { User } from "@/interfaces/user";
 import { UserReferral } from "@/interfaces/userReferral";
+
+const chooseUser = ref<User>();
 
 const defaultItem: UserReferral = {
   id: 0,
@@ -120,12 +115,18 @@ const users = ref<User[]>([]);
 const fetchUsers = async () => {
   const { success, data } = await BFSDK.getUsers();
   if (!success) return;
-  users.value = data;
+  if (data && data.length) {
+    const usersWithPhone = data.filter((item: User) => item.phone !== "");
+    users.value = usersWithPhone;
+  }
 };
 
 const save = async () => {
-  if (!editItem.userId) return;
-  const { success, data, message } = await BFSDK.addReferralUser(editItem);
+  if (chooseUser === undefined || !chooseUser.value) return;
+
+  editItem.bfAppId = chooseUser.value.bfAppId;
+  editItem.userId = chooseUser.value.id;
+  const { success, message } = await BFSDK.addReferralUser(editItem);
   if (!success) {
     useSnackbar("添加推荐人失败", {
       title: "添加推荐人失败",
@@ -134,6 +135,12 @@ const save = async () => {
   } else {
     useSnackbar("添加推荐人成功");
   }
+};
+
+const router = useRouter();
+const cancel = () => {
+  Object.assign(editItem, defaultItem);
+  router.back();
 };
 
 onMounted(() => {

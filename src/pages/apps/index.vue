@@ -4,7 +4,7 @@
       <v-col cols="12" md="8">
         <AppBreadcrumb />
 
-        <v-row class="mt-2">
+        <v-row>
           <v-col cols="12" md="4">
             <v-card
               @click="onAddApp"
@@ -71,6 +71,57 @@
               </v-card>
             </v-col>
           </template>
+          <v-col cols="12">
+            <v-divider class="my-2" />
+          </v-col>
+          <v-col cols="12" md="4">
+            <v-card height="200" variant="outlined">
+              <div class="d-flex flex-column justify-space-between h-100">
+                <div>
+                  <v-card-item>
+                    <v-card-title class="text-subtitle-2">
+                      演示项目(开发中)
+                    </v-card-title>
+                    <v-icon> </v-icon>
+                  </v-card-item>
+                </div>
+                <div class="d-flex w-100">
+                  <v-tooltip
+                    :text="'此项目为微信小程序项目'"
+                    location="bottom"
+                    content-class="custom-tooltip"
+                  >
+                    <template v-slot:activator="{ props }">
+                      <v-btn
+                        rounded="0"
+                        variant="text"
+                        size="small"
+                        class="rounded-te-lg"
+                        icon="mdi-wechat"
+                        v-bind="props"
+                      ></v-btn>
+                    </template>
+                  </v-tooltip>
+                </div>
+              </div>
+            </v-card>
+          </v-col>
+          <v-col cols="12" md="8">
+            <v-card height="200" variant="outlined">
+              <div class="d-flex flex-no-wrap justify-space-between">
+                <div>
+                  <v-card-title class="text-subtitle-2 text-wrap">
+                    BUGFREED应用是应用运行时核心
+                  </v-card-title>
+                  <v-card-subtitle class="text-caption text-wrap">
+                    在应用运行时内，部分功能可以通过管理APP配置来动态变更程序的功能。
+                  </v-card-subtitle>
+                </div>
+
+                <v-img src="@/assets/subscribe.svg" width="200" class="ma-3"></v-img>
+              </div>
+            </v-card>
+          </v-col>
         </v-row>
       </v-col>
     </v-row>
