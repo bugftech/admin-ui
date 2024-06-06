@@ -1,18 +1,18 @@
 export interface TableMeta {
   id: number;
-  tenantId?: number;  // Optional, as it's not exposed in JSON
-  userId?: number;    // Optional, as it's not exposed in JSON
+  tenantId?: number; // Optional, as it's not exposed in JSON
+  userId?: number; // Optional, as it's not exposed in JSON
   name: string;
-  fullTableName?: string;  // Optional, as it's not exposed in JSON
-  uuid: string;
+  fullTableName?: string; // Optional, as it's not exposed in JSON
+  uuid?: string;
   pic: string;
   description: string;
 }
 
 export interface ColumnMeta {
-  tenantId?: number;  // Optional, as it's not exposed in JSON
-  userId?: number;    // Optional, as it's not exposed in JSON
-  tableId?: number;   // Optional, as it's not exposed in JSON
+  tenantId?: number; // Optional, as it's not exposed in JSON
+  userId?: number; // Optional, as it's not exposed in JSON
+  tableId?: number; // Optional, as it's not exposed in JSON
 
   id: number;
   parentColumnId: number;
@@ -28,4 +28,9 @@ export interface ColumnMeta {
   fixedLength: boolean;
   sort: number;
   ordered: boolean;
+
+  // TODO： 零食解决json映射问题
+  columnType?: string;
+  columnLength?: number;
+  columnName?: string;
 }

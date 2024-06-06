@@ -1,13 +1,12 @@
 <template>
-  <v-list
-    nav
-    :lines="false"
-    density="compact"
-    slim
-    variant="text"
-  >
+  <v-list nav :lines="false" density="compact" slim variant="text">
     <template v-for="(item, i) in items" :key="i">
-      <v-list-item v-if="!item.items" :to="item.to">
+      <v-list-item
+        v-if="!item.items"
+        :to="item.to"
+        rounded="xl"
+        variant="flat"
+      >
         <template v-slot:prepend="{ isActive }">
           <v-icon
             :icon="isActive ? item.activeIcon : item.inactiveIcon"
@@ -20,7 +19,9 @@
       </v-list-item>
       <v-list-group v-else :value="item.items">
         <template v-slot:activator="{ props }">
-          <v-list-item v-bind="props">
+          <v-list-item
+            v-bind="props"
+          >
             <template v-slot:prepend="{ isActive }">
               <v-icon
                 :icon="isActive ? item.activeIcon : item.inactiveIcon"
@@ -38,6 +39,8 @@
           v-for="(child, idx) in item.items"
           :key="idx"
           :to="child.to"
+          rounded="xl"
+          variant="flat"
         >
           <template v-slot:prepend="{ isActive }">
             <v-icon

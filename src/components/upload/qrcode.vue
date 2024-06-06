@@ -64,9 +64,8 @@ const generateQRCode = () => {
     },
   };
 
-  const codeUrl = `https://apiv4.beta.bugfreed.com/${uid.value}/referral?code=${code.value}`;
+  const codeUrl = `https://apiv4.bugfreed.com/${uid.value}/referral/${code.value}`;
 
-  // const codeUrl = `http://localhost:8080/referral?code=${code.value}`;
   // 使用 QRCode.toDataURL 生成二维码的 Data URL，
   // 重载函数 可能会导致ts检查错误
   // @ts-ignore

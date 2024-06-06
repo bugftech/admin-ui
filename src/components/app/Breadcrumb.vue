@@ -1,5 +1,10 @@
 <template>
-  <v-toolbar class="rounded-lg" color="transparent" density="compact">
+  <v-toolbar
+    class="rounded-0"
+    density="comfortable"
+    variant="flat"
+    color="transparent"
+  >
     <v-breadcrumbs :items="breadcrumbs" class="text-h6"> </v-breadcrumbs>
     <v-spacer />
     <template v-slot:append>

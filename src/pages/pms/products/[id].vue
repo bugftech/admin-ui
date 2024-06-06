@@ -94,7 +94,7 @@
                     icon="mdi-pencil"
                     size="x-small"
                     variant="elevated"
-                    @click="onEditHtml(item.id)"
+                    @click="editHtmlDialog = true"
                   ></v-btn>
                 </v-toolbar>
                 <v-divider />
@@ -366,6 +366,10 @@
       </v-row>
     </v-form>
   </v-container>
+
+  <v-dialog fullscreen v-model="editHtmlDialog">
+
+  </v-dialog>
 </template>
 
 <script setup lang="ts">
@@ -377,6 +381,7 @@ import { nonEmptyRules } from "@/composables/formRules";
 const route = useRoute();
 const router = useRouter();
 const id = (route.params as { id: string }).id;
+const editHtmlDialog = ref(false)
 
 const productTypes: { [key: string]: string } = {
   digital: "虚拟商品",

@@ -551,6 +551,32 @@ class SDK extends BaseClient {
     return await this.get<TableMeta[]>(url);
   }
 
+  async getAirTable(id: number): Promise<APIResponse<TableMeta>> {
+    const url = `/airtables/${id}`;
+    return await this.get<TableMeta>(url);
+  }
+
+  async addAirTable(config: TableMeta): Promise<APIResponse<TableMeta>> {
+    const url = "/airtables";
+    return await this.post<TableMeta>(url, config);
+  }
+
+  async updateAirTable(
+    id: number,
+    config: TableMeta
+  ): Promise<APIResponse<TableMeta>> {
+    const url = `/airtables/${id}`;
+    return await this.put<TableMeta>(url, config);
+  }
+
+  async addAirTableColumn(
+    id: number,
+    config: ColumnMeta
+  ): Promise<APIResponse<TableMeta>> {
+    const url = `/airtables/${id}/col`;
+    return await this.post<TableMeta>(url, config);
+  }
+
   async getAirTableColumns(id: number): Promise<APIResponse<ColumnMeta[]>> {
     const url = `/airtables/${id}/cols`;
     return await this.get<ColumnMeta[]>(url);
@@ -561,7 +587,35 @@ class SDK extends BaseClient {
     return await this.get<any[]>(url);
   }
 
-  async uploadQrcodeFile(code: string, formData: FormData): Promise<APIResponse<any>> {
+  async addAirTableRow(
+    tabId: number,
+    config: any
+  ): Promise<APIResponse<any>> {
+    const url = `/airtables/${tabId}/row`;
+    return await this.post<any>(url, config);
+  }
+
+  async updateAirTableRow(
+    tabId: number,
+    rowId: number,
+    config: any
+  ): Promise<APIResponse<any>> {
+    const url = `/airtables/${tabId}/rows/${rowId}`;
+    return await this.put<any>(url, config);
+  }
+
+  async deleteAirTableRow(
+    tabId: number,
+    rowId: number
+  ): Promise<APIResponse<any>> {
+    const url = `/airtables/${tabId}/rows/${rowId}`;
+    return await this.delete<any>(url);
+  }
+
+  async uploadQrcodeFile(
+    code: string,
+    formData: FormData
+  ): Promise<APIResponse<any>> {
     const url = `/oss/${code}/qrcode`;
     return this.post(url, formData, {
       headers: {

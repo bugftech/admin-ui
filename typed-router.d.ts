@@ -77,6 +77,7 @@ declare module 'vue-router/auto/routes' {
     '/referrals/analytics': RouteRecordInfo<'/referrals/analytics', '/referrals/analytics', Record<never, never>, Record<never, never>>,
     '/referrals/new': RouteRecordInfo<'/referrals/new', '/referrals/new', Record<never, never>, Record<never, never>>,
     '/register': RouteRecordInfo<'/register', '/register', Record<never, never>, Record<never, never>>,
+    '/settings/user': RouteRecordInfo<'/settings/user', '/settings/user', Record<never, never>, Record<never, never>>,
     '/wireless/': RouteRecordInfo<'/wireless/', '/wireless', Record<never, never>, Record<never, never>>,
     '/wireless/[id]': RouteRecordInfo<'/wireless/[id]', '/wireless/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/wireless/new': RouteRecordInfo<'/wireless/new', '/wireless/new', Record<never, never>, Record<never, never>>,

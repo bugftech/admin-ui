@@ -28,5 +28,8 @@ library.add(fas); // Include needed solid icons
 library.add(far); // Include needed regular icons
 library.add(fab); // Include needed brand icons
 
+// fix warning injected property "decorationClasses" is a ref and will be auto-unwrapped
+// https://github.com/ueberdosis/tiptap/issues/1719
+
 registerPlugins(app);
 app.mount("#app");

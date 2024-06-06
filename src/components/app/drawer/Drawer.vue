@@ -2,7 +2,7 @@
   <v-navigation-drawer
     id="app-drawer"
     v-model="app.drawer"
-    width="240"
+    :rail="rail"
     :order="mobile ? -1 : undefined"
     floating
   >
@@ -26,8 +26,18 @@
     </template>
     <v-divider />
     <AppDrawerList :items="app.navItems" />
+    <v-divider />
     <template v-slot:append>
-      <AppDrawerAppend />
+      <v-sheet
+        class="d-flex align-center text-caption text-medium-emphasis pa-2"
+      >
+        <v-btn
+          :icon="rail ? 'mdi-menu-left' : 'mdi-menu-right'"
+          @click="rail = !rail"
+          size="small"
+          variant="flat"
+        />
+      </v-sheet>
     </template>
   </v-navigation-drawer>
 </template>
@@ -35,6 +45,7 @@
 <script setup>
 import { useAppStore } from "@/store/app";
 
+const rail = ref(false);
 const app = useAppStore();
 const { mobile } = useDisplay();
 </script>

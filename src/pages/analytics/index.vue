@@ -1,14 +1,11 @@
 <template>
+  <AppBreadcrumb>
+    <v-btn prepend-icon="mdi-fullscreen" size="small" variant="tonal"
+      >全屏</v-btn
+    >
+  </AppBreadcrumb>
   <v-container>
     <v-row>
-      <v-col cols="12">
-        <!--面包屑-->
-        <AppBreadcrumb>
-          <v-btn prepend-icon="mdi-fullscreen" size="small" variant="tonal"
-            >全屏</v-btn
-          >
-        </AppBreadcrumb>
-      </v-col>
       <v-col cols="12" class="py-0">
         <v-toolbar color="transparent" density="compact">
           <AppDatePicker @change="onDateChange" />

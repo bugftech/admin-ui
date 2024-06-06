@@ -27,7 +27,8 @@
     "qrcode": "^1.5.3",
     "roboto-fontface": "*",
     "vue": "^3.3.0",
-    "vuetify": "^3.6.5"
+    "vuetify": "^3.6.5",
+    "vuetify-pro-tiptap": "^2.5.0"
   },
   "devDependencies": {
     "@babel/types": "^7.23.0",

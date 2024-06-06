@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar flat>
+  <v-app-bar flat scroll-behavior="elevate">
     <template v-slot:prepend>
       <v-app-bar-title class="ml-2">
         <AppBarLogo />

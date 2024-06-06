@@ -75,28 +75,14 @@
                     icon="mdi-pencil"
                     size="x-small"
                     variant="elevated"
-                    class="me-2"
                     @click="editHtml = true"
-                  />
-                  <v-btn
-                    icon="mdi-eye"
-                    size="x-small"
-                    variant="elevated"
-                    @click="editHtml = false"
                   />
                 </v-toolbar>
                 <v-card-text
                   style="height: 200px"
                   class="overflow-y-auto border rounded-lg"
                 >
-                  <v-textarea
-                    variant="solo-filled"
-                    flat
-                    auto-grow
-                    v-if="editHtml"
-                    v-model="item.detailHtml"
-                  ></v-textarea>
-                  <div v-html="item.detailHtml" v-else></div>
+                  <div v-html="item.detailHtml"></div>
                 </v-card-text>
               </v-card>
             </v-card-text>
@@ -272,6 +258,24 @@
       </v-row>
     </v-form>
   </v-container>
+
+  <v-dialog
+    v-model="editHtml"
+    transition="dialog-bottom-transition"
+    max-width="800"
+  >
+    <v-card>
+      <v-toolbar> </v-toolbar>
+      <v-divider />
+      <TiptapEditor v-model="item.detailHtml" />
+      <v-divider />
+      <v-card-actions>
+        <v-spacer />
+        <v-btn color="indigo" size="small">取消</v-btn>
+        <v-btn color="indigo" size="small">确定</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">

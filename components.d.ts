@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AirtableColumnTable: typeof import('./src/components/airtable/ColumnTable.vue')['default']
     AppBackBtn: typeof import('./src/components/app/BackBtn.vue')['default']
     AppBarBar: typeof import('./src/components/app/bar/Bar.vue')['default']
     AppBarLogo: typeof import('./src/components/app/bar/Logo.vue')['default']
@@ -72,6 +73,7 @@ declare module 'vue' {
     ReferralDataTable: typeof import('./src/components/referral/DataTable.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TiptapEditor: typeof import('./src/components/tiptap/Editor.vue')['default']
     UploadImage: typeof import('./src/components/upload/image.vue')['default']
     UploadQrcode: typeof import('./src/components/upload/qrcode.vue')['default']
   }
