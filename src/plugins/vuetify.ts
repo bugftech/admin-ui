@@ -3,7 +3,7 @@ import "@mdi/font/css/materialdesignicons.css";
 import "vuetify/styles";
 import "@fortawesome/fontawesome-free/css/all.css";
 import { VTimePicker } from "vuetify/labs/VTimePicker";
-import { VStepperVertical } from 'vuetify/labs/VStepperVertical';
+import { VStepperVertical,VStepperVerticalItem } from 'vuetify/labs/VStepperVertical';
 import { VCalendar } from 'vuetify/labs/VCalendar';
 
 
@@ -31,6 +31,7 @@ export default createVuetify({
   components: {
     VTimePicker,
     VStepperVertical,
+    VStepperVerticalItem,
     VCalendar,
   },
   date: {

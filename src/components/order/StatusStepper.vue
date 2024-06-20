@@ -47,9 +47,6 @@
         </template>
       </v-stepper-header>
     </v-stepper>
-
-    <v-stepper-vertical :items="['Step 1', 'Step 2', 'Step 3']"></v-stepper-vertical>
-
   </v-card>
 
   <AppConfirmDialog ref="confirm" />
