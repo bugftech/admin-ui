@@ -129,27 +129,32 @@
                 persistent-placeholder
               >
               </v-text-field>
-
-              <v-text-field
-                placeholder="请输入微信支付回调通知地址"
-                hide-details="auto"
-                density="comfortable"
-                variant="solo-filled"
-                flat
-                readonly
-                persistent-hint
-                hint="该接口用于微信服务器端往应用服务推送订单支付信息"
-                v-model="pay.notifyUrl"
-                class="mt-4"
-                label="notifyURL"
-                persistent-placeholder
-              >
-              </v-text-field>
             </v-form>
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="12" md="8">
+      <v-col cols="12" md="4">
+        <v-card>
+          <v-card-text>
+            <v-text-field
+              placeholder="请输入微信支付回调通知地址"
+              hide-details="auto"
+              density="comfortable"
+              variant="solo-filled"
+              flat
+              readonly
+              persistent-hint
+              hint="暂不开放自定义"
+              v-model="pay.notifyUrl"
+              class="mt-4"
+              label="微信服务器回调地址"
+              persistent-placeholder
+            >
+            </v-text-field>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="12">
         <v-btn size="small" color="red">删除此支付</v-btn>
       </v-col>
     </v-row>
@@ -172,7 +177,7 @@ const defaultPay: WechatPay = {
   apiV2Key: "",
   apiV3Key: "",
   isProvider: false,
-  notifyUrl: "https://apiv3.bugfreed.com/pays/wechat/callback",
+  notifyUrl: "https://apiv4.bugfreed.com/pays/wechat/callback",
 };
 
 // 使用解构赋值合并默认对象和传入的 config 对象
@@ -192,8 +197,8 @@ const update = async () => {
 
 const id = (route.params as { id: number }).id;
 const copyAppId = () => {
-  copyToClipboardFormatted(pay.appId)
-}
+  copyToClipboardFormatted(pay.appId);
+};
 
 const cancel = () => {
   router.back();

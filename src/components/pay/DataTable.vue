@@ -27,8 +27,6 @@
       :items="items"
       :headers="headers"
       :loading="loading"
-      hover
-      @click:row="onClickRow"
     >
       <template v-slot:[`item.method`]="{ item }">
         <v-chip size="x-small" color="green" variant="flat">{{
@@ -42,6 +40,13 @@
 
       <template v-slot:loading>
         <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
+      </template>
+
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-icon class="me-2" @click="onEditPay(item)">mdi-pencil</v-icon>
+        <v-icon :disabled="item.appRelated" @click="onDeletePay(item)"
+          >mdi-trash-can</v-icon
+        >
       </template>
 
       <template v-slot:no-data>
@@ -58,17 +63,21 @@
       </template>
     </v-data-table>
   </v-card>
+
+  <app-confirm-dialog ref="confirm" />
 </template>
 
 <script setup lang="ts">
-import BFSDK from "@/api/sdk";
-import { PayInfo } from "@/interfaces/pay";
 import router from "@/router";
+import bugfreed from "@/sdk";
+import { Pay } from "@/sdk/pay/pay";
+import { PayInfo } from "@/sdk/pay/types";
+
+const pay = new Pay({ bugfreed });
 
 const items = ref<PayInfo[]>([]);
 const search = ref("");
 const loading = ref(false);
-
 const headers: any[] = [
   {
     title: "名称",
@@ -95,7 +104,7 @@ const headers: any[] = [
 const fetch = async () => {
   if (loading.value) return;
   loading.value = true;
-  const { success, data } = await BFSDK.getPays();
+  const { success, data } = await pay.list();
   if (!success) {
     useSnackbar("获取支付配置列表失败");
     loading.value = false;
@@ -106,15 +115,33 @@ const fetch = async () => {
   loading.value = false;
 };
 
-const onClickRow = (e: any, selected: any) => {
-  const { id, method } = selected.item;
-  if (method === "wechat") {
+const onEditPay = (item: PayInfo) => {
+  if (item.method === "wechat") {
     router.push({
       name: "/pays/wechat/[id]",
       params: {
-        id: id,
-      }
+        id: item.id,
+      },
     });
+  }
+};
+
+const confirm = ref();
+
+const onDeletePay = async (item: PayInfo) => {
+  const ok = await confirm.value.open(
+    "删除支付",
+    "删除的数据无法恢复，确定删除支付配置吗？"
+  );
+  if (!ok) return;
+  if (item.method === "wechat") {
+    const { success } = await pay.deleteWechatPay(item.id);
+    if (!success) {
+      useSnackbar("删除支付配置列表失败");
+    } else {
+      useSnackbar("删除支付配置列表成功");
+      await fetch();
+    }
   }
 };
 

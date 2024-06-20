@@ -20,7 +20,6 @@ import { fab } from "@fortawesome/free-brands-svg-icons";
 
 // Components
 import App from "./App.vue";
-
 const app = createApp(App);
 
 app.component("font-awesome-icon", FontAwesomeIcon); // Register component globally

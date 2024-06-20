@@ -19,7 +19,6 @@ declare module 'vue' {
     AppConfirmDialog: typeof import('./src/components/app/ConfirmDialog.vue')['default']
     AppDataTable: typeof import('./src/components/app/DataTable.vue')['default']
     AppDatePicker: typeof import('./src/components/app/DatePicker.vue')['default']
-    AppDrawerAppend: typeof import('./src/components/app/drawer/Append.vue')['default']
     AppDrawerDrawer: typeof import('./src/components/app/drawer/Drawer.vue')['default']
     AppDrawerList: typeof import('./src/components/app/drawer/List.vue')['default']
     AppLabel: typeof import('./src/components/app/Label.vue')['default']

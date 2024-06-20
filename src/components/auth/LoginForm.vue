@@ -4,7 +4,7 @@
       >用户名/邮件</v-label
     >
     <v-text-field
-      v-model="username"
+      v-model="authForm.username"
       hide-details="auto"
       density="compact"
       variant="solo-filled"
@@ -17,7 +17,7 @@
     >
     <v-text-field
       flat
-      v-model="password"
+      v-model="authForm.password"
       type="password"
       hide-details="auto"
       density="compact"
@@ -61,24 +61,30 @@
 <script setup>
 import { setCookie, getCookie } from "@/composables/cookie";
 import { encrypt, decrypt } from "@/composables/crypto";
-import BFSDK from "@/api/sdk";
+import bugfreed from "@/sdk";
+import { Auth } from "@/sdk/index";
 
-const username = ref("");
-const password = ref("");
+const auth = new Auth({ bugfreed });
+
+const authForm = reactive({
+  username: "",
+  password: "",
+});
+
 const rememberMe = ref(false);
-const router = useRouter();
-const route = useRoute();
 const loading = ref(false);
+const route = useRoute();
+const router = useRouter();
 
 const login = async () => {
   loading.value = true;
-  const { success } = await BFSDK.login(username.value, password.value);
+  const { success } = await auth.login(authForm);
   if (success) {
-    useSnackbar("登录成功")
+    useSnackbar("登录成功");
     if (rememberMe.value) {
       // 有效期设置为7天
-      setCookie("rememberedUsername", username.value, 7);
-      setCookie("rememberedPassword", encrypt(password.value), 7);
+      setCookie("rememberedUsername", authForm.username, 7);
+      setCookie("rememberedPassword", encrypt(authForm.password), 7);
       setCookie("rememberMe", "true", 7);
     } else {
       // 如果用户未选择记住我，则移除Cookie中的相关数据
@@ -88,14 +94,13 @@ const login = async () => {
     }
 
     const redirect = route.query.redirect || "/apps";
-    router.push(redirect).catch((err)=>{
-      console.error(err)
-    }).finally(() => {
-      loading.value = false;
+    router.push(redirect).catch((err) => {
+      console.error(err);
     });
   } else {
-    useSnackbar("登录失败")
+    useSnackbar("登录失败");
   }
+  loading.value = false;
 };
 
 onMounted(() => {
@@ -106,8 +111,8 @@ onMounted(() => {
 
   if (remembered === "true" && rememberedUsername && rememberedPassword) {
     rememberMe.value = true;
-    username.value = rememberedUsername;
-    password.value = decrypt(rememberedPassword);
+    authForm.username = rememberedUsername;
+    authForm.password = decrypt(rememberedPassword);
   }
 });
 </script>

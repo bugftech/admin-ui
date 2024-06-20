@@ -1,7 +1,6 @@
 <template>
-  <v-card class="mb-2">
+  <v-card class="ma-1">
     <v-toolbar color="transparent">
-      <v-card-title class="text-subtitle-2"> 列COLUMN数据 </v-card-title>
       <v-spacer />
       <v-btn
         size="small"
@@ -26,14 +25,22 @@
       <template v-slot:[`item.visible`]="{ item }">
         <v-checkbox-btn v-model="item.visible" readonly />
       </template>
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-icon v-if="item.editable">mdi-pencil</v-icon>
+        <v-icon class="ms-2" @click="deleteColumn(item)" v-if="item.deletable"
+          >mdi-trash-can</v-icon
+        >
+      </template>
     </v-data-table>
   </v-card>
 
   <v-dialog v-model="dialog" max-width="800">
     <v-card>
-      <v-card-title class="text-subtitle-2">
-        {{ editColumn.id > 0 ? "编辑" : "新增" }}
-      </v-card-title>
+      <v-toolbar>
+        <v-card-title class="text-subtitle-2">
+          {{ editColumn.id > 0 ? "编辑" : "新增" }}
+        </v-card-title>
+      </v-toolbar>
       <v-divider />
       <v-card-text>
         <v-text-field
@@ -83,6 +90,30 @@
           class="mt-4"
         >
         </v-text-field>
+        <v-select
+          placeholder="doctor"
+          hide-details="auto"
+          density="comfortable"
+          variant="solo-filled"
+          flat
+          label="类型"
+          hint="使用类型字段来标记列的内容类型，并在 JSON 序列化和反序列化时正确处理该字段"
+          persistent-hint
+          required
+          persistent-placeholder
+          :items="contentTypes"
+          v-model="editColumn.contentType"
+          class="mt-4"
+        >
+        </v-select>
+
+        <v-checkbox v-model="editColumn.editable">
+          <template v-slot:label>
+            <div class="text-caption font-weight-bold">
+              可编辑
+            </div>
+          </template>
+        </v-checkbox>
       </v-card-text>
       <v-divider />
       <v-card-actions>
@@ -92,16 +123,30 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <app-confirm-dialog ref="confirm"> </app-confirm-dialog>
 </template>
 
 <script setup lang="ts">
-import BFSDK from "@/api/sdk";
-import { ColumnMeta } from "@/interfaces/airtable";
+import { ColumnMeta } from "@/sdk/airtable/types";
 import { nonEmptyRules } from "@/composables/formRules";
+import { Airtable } from "@/sdk/airtable/airtable";
 
+import bugfreed from "@/sdk";
+
+const airtable = new Airtable({ bugfreed });
 const props = defineProps({
-  id: Number || undefined,
+  id: String || undefined,
 });
+
+const contentTypes: string[] = [
+  "number",
+  "text",
+  "image",
+  "array",
+  "richText",
+  "images",
+];
 
 const headers = [
   {
@@ -113,25 +158,30 @@ const headers = [
     key: "key",
   },
   {
-    title: "type",
-    key: "type",
+    title: "类型",
+    key: "contentType",
   },
   {
     title: "可见",
     key: "visible",
   },
+  {
+    title: "操作",
+    key: "actions",
+  },
 ];
 
 const dialog = ref(false);
-
 const items = ref<ColumnMeta[]>([]);
-
 const tabId = computed(() => {
   return props.id;
 });
 
+const confirm = ref();
+
 const defaultColumn: ColumnMeta = {
   id: 0,
+  uuid: "",
   parentColumnId: 0,
   name: "",
   subtitle: "",
@@ -144,6 +194,7 @@ const defaultColumn: ColumnMeta = {
   fixedLength: false,
   sort: 0,
   ordered: true,
+  contentType: "text",
   columnType: "string",
   columnLength: 255,
   columnName: "",
@@ -153,17 +204,17 @@ const editColumn = reactive<ColumnMeta>(defaultColumn);
 
 const fetchColumns = async () => {
   if (!tabId.value) return;
-  const { success, data } = await BFSDK.getAirTableColumns(tabId.value);
+  const { success, data } = await airtable.getColumns(tabId.value);
   if (!success) return;
-  items.value = data;
+  items.value = data.filter((item) => item.editable);
 };
 
 const addCol = async () => {
   if (!tabId.value) return;
-  const { success } = await BFSDK.addAirTableColumn(tabId.value, editColumn);
+  const { success } = await airtable.addColumn(tabId.value, editColumn);
   if (success) {
     useSnackbar("添加成功");
-    await fetchColumns()
+    await fetchColumns();
   } else {
     useSnackbar("添加列失败");
   }
@@ -174,6 +225,22 @@ const addCol = async () => {
 const closeCol = () => {
   dialog.value = false;
   Object.assign(editColumn, defaultColumn);
+};
+
+const deleteColumn = async (item: ColumnMeta) => {
+  if (!tabId.value || item.uuid === "") return;
+  const ok = await confirm.value.open("删除列", "此操作不可恢复");
+  if (!ok) return;
+  const { success, message } = await airtable.deleteColumn(
+    tabId.value,
+    item.uuid
+  );
+  if (!success) {
+    useSnackbar(`删除列错误: ${message}`);
+  } else {
+    useSnackbar("删除列成功");
+    await fetchColumns();
+  }
 };
 
 onMounted(async () => {

@@ -3,12 +3,7 @@
     <v-toolbar color="transparent" density="compact">
       <v-tooltip text="刷新" class="text-caption" location="bottom">
         <template v-slot:activator="{ props }">
-          <v-btn
-            icon="mdi-sync"
-            size="small"
-            v-bind="props"
-            @click="fetchOrders"
-          />
+          <v-btn icon="mdi-sync" size="small" v-bind="props" @click="fetch" />
         </template>
       </v-tooltip>
       <v-spacer />
@@ -50,6 +45,9 @@
       <template v-slot:[`item.status`]="{ item }">
         <OrderStatusChip :status="item.status" />
       </template>
+      <template v-slot:[`item.orderSn`]="{ item }">
+        <v-chip size="x-small" variant="tonal">{{ item.orderSn }}</v-chip>
+      </template>
       <template v-slot:[`item.createTime`]="{ item }">
         <div>{{ formatDateTime(item.createTime) }}</div>
       </template>
@@ -72,20 +70,23 @@ import { ref, computed, onBeforeUnmount, watch } from "vue";
 import { useRouter } from "vue-router";
 import { usePriceYuan } from "@/composables/price";
 import { formatDateTime } from "@/composables/time";
-import BFSDK from "@/api/sdk";
-import { OrderInfo } from "@/interfaces/order";
+
+import { OrderInfo } from "@/sdk/order/types";
+import bugfreed from "@/sdk";
+import { OrderService } from "@/sdk/order/order";
+const order = new OrderService({ bugfreed });
 
 const headers: any[] = [
   {
     title: "订单编号",
-    key: "id",
+    key: "orderSn",
   },
   {
     title: "订单总金额",
     key: "totalAmount",
   },
   {
-    title: "实付金额",
+    title: "应付金额",
     key: "payAmount",
   },
   {
@@ -121,7 +122,7 @@ const filtered = computed(() => {
 });
 
 const startRefreshInterval = () => {
-  refreshInterval = setInterval(fetchOrders, 5000); // 每5秒刷新一次，可以根据需求调整时间间隔
+  refreshInterval = setInterval(fetch, 5000); // 每5秒刷新一次，可以根据需求调整时间间隔
 };
 
 const stopRefreshInterval = () => {
@@ -138,10 +139,10 @@ watch(autoRefresh, (newVal) => {
   }
 });
 
-const fetchOrders = async () => {
+const fetch = async () => {
   if (loading.value) return;
   loading.value = true;
-  const { success, data } = await BFSDK.getOrders();
+  const { success, data } = await order.list();
   if (success) {
     items.value = data.reverse();
   }
@@ -150,7 +151,7 @@ const fetchOrders = async () => {
 };
 
 onMounted(() => {
-  fetchOrders();
+  fetch();
 });
 
 onBeforeUnmount(() => {

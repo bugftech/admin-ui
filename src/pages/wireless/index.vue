@@ -1,93 +1,110 @@
 <template>
-  <v-sheet style="position: relative; margin-top: -56px" color="transparent">
-    <v-container style="padding-top: 56px">
-      <v-row align="center" justify="center">
-        <v-col cols="12" md="4">
-          <v-card
-            variant="flat"
-            color="transparent"
-            style="margin: 50px 0px 50px 0px"
-          >
-            <v-card-item>
-              <v-card-title class="text-subtitle-1 font-weight-bold"
-                >CMS AirTable</v-card-title
-              >
-              <v-card-subtitle class="text-wrap">
-                在 Airtable
-                中创建一个新的基础表格，用于存储和管理您的内容数据。例如，您可以创建一个名为“内容管理”的基础表格。
-              </v-card-subtitle>
-            </v-card-item>
-
-            <v-card-actions>
-              <v-btn
-                size="small"
-                variant="tonal"
-                class="me-4"
-                @click="tableDialog = true"
-              >
-                创建一个
-              </v-btn>
-              <v-btn
-                size="small"
-                variant="elevated"
-                prepend-icon="mdi-video"
-                color="orange-accent-2"
-              >
-                查看教程
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-        <v-col cols="12" md="4">
-          <v-img width="100%" src="@/assets/term_sheet.svg"></v-img>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-sheet>
-  <v-divider />
   <v-container>
-    <v-data-iterator :items="tables" items-per-page="4" item-value="name">
-      <template v-slot:default="{ items }">
-        <v-row justify="center">
-          <v-col
-            v-for="item in items"
-            :key="item.raw.name"
-            cols="8"
-            md="3"
-            sm="12"
-          >
-            <v-card>
-              <v-img
-                :src="item.raw.pic"
-                class="ma-3 border rounded-lg"
-                height="100"
-              ></v-img>
-
-              <v-card-title class="text-subtitle-2">
-                {{ item.raw.name }}</v-card-title
-              >
-              <v-card-subtitle class="text-caption">{{
-                item.raw.description
-              }}</v-card-subtitle>
-              <v-card-actions>
-                <v-btn
-                  block
-                  prepend-icon="mdi-location-enter"
-                  variant="tonal"
-                  size="small"
-                  color="indigo"
-                  @click="viewTable(item.raw)"
-                >
-                  管理表
-                </v-btn>
-              </v-card-actions>
+    <v-row justify="center">
+      <v-col cols="8">
+        <v-row>
+          <v-col cols="12" md="4">
+            <v-card height="200" variant="outlined">
+              <div class="d-flex flex-column justify-space-between h-100">
+                <div>
+                  <v-card-item>
+                    <v-card-title class="text-subtitle-2"> DEMO </v-card-title>
+                  </v-card-item>
+                </div>
+              </div>
             </v-card>
           </v-col>
-        </v-row>
-      </template>
-    </v-data-iterator>
-  </v-container>
 
+          <v-col cols="12" md="8">
+            <v-card height="200" variant="outlined">
+              <div class="d-flex flex-no-wrap justify-space-between">
+                <div>
+                  <v-card-title class="text-subtitle-2 text-wrap">
+                    CMS AirTable
+                  </v-card-title>
+                  <v-card-subtitle class="text-caption text-wrap">
+                    在 Airtable
+                    中创建一个新的基础表格，用于存储和管理您的内容数据。例如，您可以创建一个名为“内容管理”的基础表格。
+                  </v-card-subtitle>
+
+                  <v-card-actions>
+                    <v-btn
+                      size="small"
+                      variant="tonal"
+                      class="me-4"
+                      @click="tableDialog = true"
+                    >
+                      创建一个
+                    </v-btn>
+                    <v-btn
+                      size="small"
+                      variant="elevated"
+                      prepend-icon="mdi-video"
+                      color="orange-accent-2"
+                    >
+                      查看教程
+                    </v-btn>
+                  </v-card-actions>
+                </div>
+
+                <v-img
+                  src="@/assets/term_sheet.svg"
+                  width="200"
+                  height="200"
+                  class="ma-3"
+                ></v-img>
+              </div>
+            </v-card>
+          </v-col>
+          <v-col cols="12">
+            <v-divider class="my-2" />
+          </v-col>
+        </v-row>
+        <v-data-iterator :items="tables" items-per-page="4" item-value="name">
+          <template v-slot:default="{ items }">
+            <v-row>
+              <v-col
+                v-for="item in items"
+                :key="item.raw.name"
+                cols="12"
+                md="6"
+                sm="12"
+              >
+                <v-card>
+                  <div class="d-flex flex-no-wrap justify-space-between">
+                    <div>
+                      <v-card-title class="text-body-2">
+                        {{ item.raw.name }}</v-card-title
+                      >
+                      <v-card-subtitle class="text-caption">{{
+                        item.raw.description
+                      }}</v-card-subtitle>
+
+                      <v-card-actions>
+                        <v-btn
+                          class="ms-2"
+                          variant="tonal"
+                          size="small"
+                          @click="viewTable(item.raw)"
+                        >
+                          管理表
+                        </v-btn>
+                      </v-card-actions>
+                    </div>
+                    <v-avatar class="ma-3 border" rounded="lg" size="125">
+                      <v-img
+                        src="https://cdn.vuetifyjs.com/images/cards/halcyon.png"
+                      ></v-img>
+                    </v-avatar>
+                  </div>
+                </v-card>
+              </v-col>
+            </v-row>
+          </template>
+        </v-data-iterator>
+      </v-col>
+    </v-row>
+  </v-container>
   <v-dialog max-width="800" v-model="tableDialog">
     <v-card>
       <v-toolbar>
@@ -164,18 +181,23 @@
 </template>
 
 <script setup lang="ts">
-import BFSDK from "@/api/sdk";
-import { TableMeta } from "@/interfaces/airtable";
+import { TableMeta } from "@/sdk/airtable/types";
+import bugfreed from "@/sdk";
+import { Airtable } from "@/sdk/airtable/airtable";
+
+const airtable = new Airtable({ bugfreed });
 
 const tables = ref<TableMeta[]>([]);
+
 const fetchTables = async () => {
-  const { success, data } = await BFSDK.getAirTables();
+  const { success, data } = await airtable.getTables();
   if (!success) return;
   tables.value = data;
 };
 
 const defaultTableMeta: TableMeta = {
   id: 0,
+  uuid: "",
   name: "",
   pic: "",
   description: "",
@@ -191,22 +213,28 @@ const closeTableDialog = () => {
 };
 
 const addTable = async () => {
-  if (tableLoading.value || editTableMeta.name === "") return;
+  if (tableLoading.value || !editTableMeta.name.trim()) return;
   tableLoading.value = true;
 
-  const { success } = await BFSDK.addAirTable(editTableMeta);
+  const { success, message } = await airtable.addTable(editTableMeta);
   tableLoading.value = false;
-  if (!success) return;
-  await fetchTables();
-  closeTableDialog();
+  if (success) {
+    await fetchTables();
+    closeTableDialog();
+    useSnackbar("添加表成功");
+  } else {
+    useSnackbar(`添加表失败error: ${message}`);
+  }
 };
 
 const router = useRouter();
 const viewTable = (item: TableMeta) => {
+  if (!item.uuid) return;
+
   router.push({
     name: "/wireless/[id]",
     params: {
-      id: item.id,
+      id: item.uuid,
     },
   });
 };

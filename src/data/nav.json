@@ -1,5 +1,11 @@
 [
   {
+    "title": "预约",
+    "to": "/calendar",
+    "inactiveIcon": "mdi-calendar-check-outline",
+    "activeIcon": "mdi-calendar-check"
+  },
+  {
     "title": "订单",
     "inactiveIcon": "mdi-archive-outline",
     "activeIcon": "mdi-archive",
@@ -76,7 +82,7 @@
   },
   {
     "title": "短链接",
-    "to": "/editor",
+    "to": "/shorturls",
     "inactiveIcon": "mdi-link-circle-outline",
     "activeIcon": "mdi-link-circle"
   },
@@ -88,8 +94,17 @@
   },
   {
     "title": "CMS",
-    "to": "/wireless",
     "inactiveIcon": "mdi-transit-connection-variant",
-    "activeIcon": "mdi-transit-connection-variant"
+    "activeIcon": "mdi-transit-connection-variant",
+    "items": [
+      {
+        "title": "AirTable",
+        "to": "/wireless"
+      },
+      {
+        "title": "动态表单",
+        "to": "/wireless"
+      }
+    ]
   }
 ]

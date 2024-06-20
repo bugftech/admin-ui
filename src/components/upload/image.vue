@@ -18,7 +18,12 @@
       />
       <v-dialog width="500">
         <template v-slot:activator="{ props }">
-          <v-btn variant="tonal" v-bind="props" text="图片URL网址" size="small"></v-btn>
+          <v-btn
+            variant="tonal"
+            v-bind="props"
+            text="图片URL网址"
+            size="small"
+          ></v-btn>
         </template>
         <template v-slot:default="{ isActive }">
           <v-card>
@@ -40,7 +45,7 @@
               <v-text-field
                 placeholder="https://"
                 autofocus
-                v-model="url"
+                v-model="localUrl"
               ></v-text-field>
             </v-card-text>
             <v-divider />
@@ -82,20 +87,31 @@ const state: State = {
   dragover: false,
 };
 
-const url = ref("");
-const emit = defineEmits(["change"]);
+const props = defineProps<{
+  modelValue: string;
+}>();
+
+
+const localUrl = ref(props.modelValue);
+watch(() => props.modelValue, (newValue) => {
+  localUrl.value = newValue;
+});
+
+const emit = defineEmits(["change", "update:modelValue"]);
 
 const cancel = (isActive: { value: boolean }) => {
   isActive.value = false;
-  url.value = "";
+  localUrl.value = "";
+  emit("update:modelValue", "");
   emit("change", "");
 };
 
 const commit = (isActive: { value: boolean }) => {
   isActive.value = false;
-  emit("change", url.value);
+  emit("change", localUrl.value);
+  emit("update:modelValue", localUrl.value);
   nextTick(() => {
-    url.value = "";
+    localUrl.value = "";
   });
 };
 

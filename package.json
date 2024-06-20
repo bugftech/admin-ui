@@ -23,11 +23,12 @@
     "crypto-js": "^4.2.0",
     "date-fns": "^3.3.1",
     "echarts": "^5.5.0",
+    "miniprogram-api-typings": "^3.12.2",
     "pinia-plugin-persist": "^1.0.0",
     "qrcode": "^1.5.3",
     "roboto-fontface": "*",
     "vue": "^3.3.0",
-    "vuetify": "^3.6.5",
+    "vuetify": "^3.6.10",
     "vuetify-pro-tiptap": "^2.5.0"
   },
   "devDependencies": {
