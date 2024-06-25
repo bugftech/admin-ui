@@ -10,10 +10,10 @@
       <v-row dense>
         <v-col
           cols="12"
-          class="d-flex justify-space-between"
           v-for="(obj, i) in filtered"
           :key="i"
         >
+          <!-- 
           <v-label class="text-caption font-weight-mediumn">{{
             obj.name
           }}</v-label>
@@ -33,6 +33,38 @@
           <div class="text-caption font-weight-bold" v-else>
             {{ obj.value }}
           </div>
+          -->
+
+          <template v-if="useBool(obj.title)">
+            <v-checkbox-btn :value="obj.value" hide-details density="compact">
+              <template v-slot:label>
+                <div class="text-caption font-weight-bold">{{ obj.name }}</div>
+              </template>
+            </v-checkbox-btn>
+          </template>
+          <template v-else-if="useTime(obj.title)">
+            <v-text-field
+              readonly
+              :label="obj.name"
+              :value="obj.value ? formatDateTime(obj.value) : ''"
+              :placeholder="obj.name"
+              persistent-placeholder
+              variant="solo-filled"
+              flat
+              hide-details
+            ></v-text-field>
+          </template>
+          <v-text-field
+              readonly
+              :label="obj.name"
+              :value="obj.value"
+              :placeholder="obj.name"
+              persistent-placeholder
+              variant="solo-filled"
+              flat
+              hide-details
+              v-else
+            ></v-text-field>
         </v-col>
       </v-row>
     </v-card-text>

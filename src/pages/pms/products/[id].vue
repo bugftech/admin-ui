@@ -13,13 +13,15 @@
             <v-btn
               size="small"
               class="me-2"
-              variant="elevated"
+              variant="tonal"
+              rounded="lg"
               prepend-icon="mdi-cancel"
               @click="cancel"
               >取消</v-btn
             >
             <v-btn
               size="small"
+              rounded="lg"
               variant="elevated"
               prepend-icon="mdi-check-all"
               @click="save"
@@ -271,7 +273,7 @@
                   </v-sheet>
                 </v-col>
                 <v-col cols="12" :md="item.banner ? 6 : 12">
-                  <UploadImage @change="onChangeBanner" />
+                  <UploadImage v-model="item.banner" />
                 </v-col>
               </v-row>
             </v-card-text>
@@ -339,13 +341,9 @@
                 persistent-placeholder
                 placeholder="选择分类"
                 v-model="item.productType"
-                :items="[
-                  'digital',
-                  'physical',
-                  'services',
-                  'bundles',
-                  'subscriptions',
-                ]"
+                :items="productTypes"
+                item-title="title"
+                item-value="value"
               >
               </v-select>
             </v-card-text>
@@ -367,29 +365,61 @@
     </v-form>
   </v-container>
 
-  <v-dialog fullscreen v-model="editHtmlDialog">
-
+  <v-dialog
+    fullscreen
+    v-model="editHtmlDialog"
+    transition="dialog-bottom-transition"
+  >
+    <v-card rounded="0">
+      <v-toolbar color="indigo">
+        <v-btn icon="mdi-close" @click="editHtmlDialog = false"></v-btn>
+        <v-toolbar-title class="text-subtitle-1 font-weight-bold">
+          编辑商品富文本
+        </v-toolbar-title>
+      </v-toolbar>
+      <v-divider />
+      <v-card-text class="pa-0">
+        <RichEditor v-model="item.detailHtml" />
+      </v-card-text>
+    </v-card>
   </v-dialog>
 </template>
 
 <script setup lang="ts">
 import { useRoute, useRouter } from "vue-router";
-import BFSDK from "@/api/sdk";
-import { ProductAndSku } from "@/interfaces/product";
 import { nonEmptyRules } from "@/composables/formRules";
+import { ProductService } from "@/sdk/pms/product/product";
+import bugfreed from "@/sdk";
+import { ProductAndSku } from "@/sdk/pms/product/types";
 
 const route = useRoute();
 const router = useRouter();
 const id = (route.params as { id: string }).id;
-const editHtmlDialog = ref(false)
+const editHtmlDialog = ref(false);
+const product = new ProductService({ bugfreed });
 
-const productTypes: { [key: string]: string } = {
-  digital: "虚拟商品",
-  physical: "物理商品",
-  services: "服务商品",
-  bundles: "捆绑商品",
-  subscriptions: "订阅产品",
-};
+const productTypes: any[] = [
+  {
+    title: "虚拟商品",
+    value: "digital",
+  },
+  {
+    title: "物理商品",
+    value: "physical",
+  },
+  {
+    title: "服务商品",
+    value: "services",
+  },
+  {
+    title: "捆绑商品",
+    value: "bundles",
+  },
+  {
+    title: "订阅产品",
+    value: "subscriptions",
+  },
+];
 
 const defaultProduct: ProductAndSku = {
   tenantId: 0,
@@ -457,7 +487,7 @@ const onEditHtml = (productId: number) => {
 
 onMounted(async () => {
   const intId = parseInt(id);
-  const { data, success } = await BFSDK.getProduct(intId, true);
+  const { data, success } = await product.get(intId, true);
   if (success) {
     data.albumPics = data.albumPics ? data.albumPics : [];
     data.price = data.price / 100;
@@ -480,11 +510,12 @@ const save = async () => {
     copyItem.costPrice = copyItem.costPrice * 100;
   }
 
-  const { success } = await BFSDK.updateProduct(id, copyItem);
+  const intId = parseInt(id);
+  const { success } = await product.update(intId, copyItem);
   if (success) {
-    useSnackbar("更新商品成功")
+    useSnackbar("更新商品成功");
     const intId = parseInt(id);
-    const { data, success } = await BFSDK.getProduct(intId, true);
+    const { data, success } = await product.get(intId, true);
     if (success) {
       data.albumPics = data.albumPics ? data.albumPics : [];
       data.price = data.price / 100;
@@ -493,7 +524,7 @@ const save = async () => {
       Object.assign(item.value, data);
     }
   } else {
-    useSnackbar("更新商品失败")
+    useSnackbar("更新商品失败");
   }
 };
 

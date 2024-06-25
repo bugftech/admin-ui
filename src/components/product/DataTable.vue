@@ -162,10 +162,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import BFSDK from "@/api/sdk";
 // Utilities
 import { usePriceYuan } from "@/composables/price";
-import { Product } from "@/interfaces/product";
+import bugfreed from "@/sdk";
+import { ProductService } from "@/sdk/pms/product/product";
+import { Product } from "@/sdk/pms/product/types";
 
 // GiftCard,Digital,Physical,Services,Bundles,Subscriptions
 const productTypes: { [key: string]: string } = {
@@ -211,6 +212,8 @@ const headers = [
   },
 ];
 
+const product = new ProductService({bugfreed})
+
 const search = ref();
 const router = useRouter();
 const items = ref<Product[]>([]);
@@ -229,11 +232,12 @@ const onClickRow = (e: any, selected: any) => {
 
 const fetch = async () => {
   loading.value = true;
-  const { success, data } = await BFSDK.getProducts();
+  const { success, data } = await product.list();
   if (!success) return (loading.value = false);
   items.value = data;
   loading.value = false;
 };
+
 
 onMounted(async () => {
   await fetch();

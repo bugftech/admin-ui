@@ -1,9 +1,9 @@
 <template>
   <v-card class="mt-2">
     <v-toolbar density="compact" color="transparent">
-      <v-btn icon="mdi-sync" />
+      <v-btn icon="mdi-sync" @click="fetch" size="small" />
       <v-spacer />
-      <v-btn icon="mdi-magnify" />
+      <v-btn icon="mdi-filter-variant" size="small" />
     </v-toolbar>
     <v-divider />
     <v-text-field
@@ -39,7 +39,7 @@
         </v-list-item>
       </template>
       <template v-slot:[`item.createdAt`]="{ item }">
-        {{ formatDateTime(item.createdAt) }}
+        {{ item.createdAt ? formatDateTime(item.createdAt) : "" }}
       </template>
       <template v-slot:[`item.phone`]="{ item }">
         {{ item.phone ? item.phone : "尚未绑定手机号" }}
@@ -60,15 +60,8 @@
       </template>
 
       <template v-slot:[`item.actions`]="{ item }">
-        <v-menu>
-          <template v-slot:activator="{ props }">
-            <v-btn icon="mdi-dots-vertical" variant="text" v-bind="props">
-            </v-btn>
-          </template>
-          <v-list nav density="compact">
-            {{ item }}
-          </v-list>
-        </v-menu>
+        <v-icon class="me-2" @click="disableUser(item)">mdi-cancel</v-icon>
+        <v-icon @click="deleteUser(item)">mdi-delete</v-icon>
       </template>
       <template v-slot:loading>
         <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
@@ -80,11 +73,13 @@
 </template>
 
 <script setup lang="ts">
-import BFSDK from "@/api/sdk";
-import { User } from "@/interfaces/user";
+import { User } from "@/sdk/user/types";
 import { formatDateTime } from "@/composables/time";
 import router from "@/router";
+import bugfreed from "@/sdk";
+import { UserService } from "@/sdk/user/user";
 
+const user = new UserService({ bugfreed });
 const items = ref<User[]>([]);
 const search = ref("");
 const loading = ref(false);
@@ -107,6 +102,10 @@ const headers: any[] = [
     key: "bfAppId",
   },
   {
+    title: "来源",
+    key: "source",
+  },
+  {
     title: "创建时间",
     key: "createdAt",
   },
@@ -117,15 +116,18 @@ const headers: any[] = [
 ];
 
 const confirm = ref();
-
-onMounted(async () => {
+const fetch = async () => {
   loading.value = true;
-  const { data, success } = await BFSDK.getUsers();
+  const { data, success } = await user.list();
   if (success) {
     items.value = data;
   }
 
   loading.value = false;
+};
+
+onMounted(async () => {
+  await fetch();
 });
 
 const onClickRow = (e: any, selected: any) => {
@@ -139,6 +141,15 @@ const onClickRow = (e: any, selected: any) => {
     },
   });
 };
+
+const disableUser = async(item: User) => {
+
+}
+
+
+const deleteUser = async(item: User) => {
+  
+}
 
 defineExpose({
   items,

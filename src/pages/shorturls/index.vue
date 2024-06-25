@@ -8,7 +8,7 @@
         </AppBreadcrumb>
 
         <v-card>
-          <v-data-table>
+          <v-data-table :headers="headers" class="text-caption">
 
           </v-data-table>
         </v-card>
@@ -17,7 +17,26 @@
   </v-container>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const headers: any[] = [
+  {
+    title: "uid",
+    key: "uid",
+  },
+  {
+    title: "路径",
+    key: "path",
+  },
+  {
+    title: "创建者",
+    key: "createdBy",
+  },
+  {
+    title: "最近查看",
+    key: "lastSeenAt",
+  },
+];
+</script>
 
 <route lang="yaml">
 meta:

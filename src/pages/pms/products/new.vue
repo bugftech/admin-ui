@@ -20,50 +20,58 @@
         <v-col cols="12" md="8">
           <v-card>
             <v-card-text>
-              <AppLabel>商品名称</AppLabel>
               <v-text-field
                 variant="solo-filled"
                 flat
-                :rules="nonEmptyRules"
-                density="compact"
+                density="comfortable"
                 placeholder="裙子"
+                label="商品名称"
+                persistent-placeholder
                 v-model="item.name"
+                :rules="nonEmptyRules"
               ></v-text-field>
-              <AppLabel class="mt-4">副标题</AppLabel>
               <v-text-field
+                class="mt-4"
                 variant="solo-filled"
                 flat
-                density="compact"
+                density="comfortable"
+                label="副标题"
+                persistent-placeholder
                 placeholder="PSN2026010101"
                 v-model="item.subtitle"
               ></v-text-field>
 
-              <AppLabel class="mt-4">描述</AppLabel>
               <v-text-field
+                class="mt-4"
                 variant="solo-filled"
                 flat
-                density="compact"
+                density="comfortable"
+                label="描述"
+                persistent-placeholder
                 placeholder="PSN2026010101"
                 v-model="item.description"
               ></v-text-field>
-              <AppLabel class="mt-4">关键词</AppLabel>
               <v-combobox
-                placeholder="A"
+                placeholder="请输入关键词，回车键分隔"
                 variant="solo-filled"
                 flat
                 chips
                 multiple
-                density="compact"
+                label="关键词"
+                class="mt-4"
+                density="comfortable"
+                persistent-placeholder
                 hide-details
                 v-model="item.keywords"
               ></v-combobox>
-
-              <AppLabel class="mt-4">输入商品号</AppLabel>
               <v-text-field
                 variant="solo-filled"
                 flat
-                density="compact"
-                placeholder="PSN2026010101"
+                class="mt-4"
+                density="comfortable"
+                label="商品号"
+                placeholder="请输入商品号"
+                persistent-placeholder
                 v-model="item.productSn"
               ></v-text-field>
 
@@ -98,13 +106,13 @@
             <v-card-text>
               <v-row>
                 <v-col cols="12" md="6">
-                  <AppLabel>价格</AppLabel>
                   <v-text-field
                     variant="solo-filled"
                     flat
                     density="compact"
                     prefix="¥"
                     suffix="元"
+                    label="价格"
                     :rules="nonEmptyRules"
                     class="text-caption"
                     persistent-placeholder
@@ -115,7 +123,6 @@
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="6">
-                  <AppLabel>原始价格</AppLabel>
                   <v-text-field
                     variant="solo-filled"
                     flat
@@ -127,11 +134,11 @@
                     min="0.00"
                     step="0.01"
                     type="number"
+                    label="原始价格"
                     v-model.number="item.originalPrice"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" md="6">
-                  <AppLabel>成本价格</AppLabel>
                   <v-text-field
                     variant="solo-filled"
                     flat
@@ -143,6 +150,7 @@
                     min="0.00"
                     step="0.01"
                     type="number"
+                    label="成本价格"
                     v-model.number="item.costPrice"
                   ></v-text-field>
                 </v-col>
@@ -178,7 +186,7 @@
                   </v-sheet>
                 </v-col>
                 <v-col cols="12" :md="item.banner ? 6 : 12">
-                  <UploadImage @change="onChangeBanner" />
+                  <UploadImage v-model="item.banner" />
                 </v-col>
               </v-row>
             </v-card-text>
@@ -189,12 +197,14 @@
         <v-col cols="12" md="4">
           <v-card>
             <v-card-text>
-              <AppLabel>状态</AppLabel>
               <v-select
                 hide-details
                 density="compact"
                 variant="solo-filled"
                 flat
+                label="状态"
+                persistent-placeholder
+                placeholder="请选择状态"
                 v-model="item.published"
                 :items="publishedOptions"
               >
@@ -210,14 +220,16 @@
             </v-toolbar>
             <v-divider />
             <v-card-text>
-              <AppLabel>分类</AppLabel>
               <CategorySelect
                 v-model:id="item.categoryId"
                 v-model:name="item.categoryName"
               />
 
-              <AppLabel class="mt-4">系列(collection)</AppLabel>
               <v-select
+                class="mt-4"
+                label="系列(collection)"
+                placeholder="请选择商品系列"
+                persistent-placeholder
                 hide-details
                 density="compact"
                 variant="solo-filled"
@@ -243,8 +255,10 @@
 
           <v-card class="mt-4">
             <v-card-text>
-              <AppLabel>UI模版</AppLabel>
               <v-select
+                label="UI模版"
+                placeholder="请选择UI模版"
+                persistent-placeholder
                 hide-details
                 variant="solo-filled"
                 flat

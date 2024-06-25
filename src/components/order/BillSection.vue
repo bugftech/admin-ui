@@ -8,30 +8,15 @@
     <v-divider />
     <v-card-text>
       <v-row dense>
-        <v-col cols="12" class="d-flex justify-space-between">
-          <v-label class="text-caption ">类型</v-label>
-          <div class="text-caption " style="max-width: 80%">
-          </div>
-        </v-col>
-        <v-col cols="12" class="d-flex justify-space-between">
-          <v-label class="text-caption ">抬头</v-label>
-          <div class="text-caption " style="max-width: 80%">
-          </div>
-        </v-col>
-        <v-col cols="12" class="d-flex justify-space-between">
-          <v-label class="text-caption ">接收电子邮箱</v-label>
-          <div class="text-caption " style="max-width: 80%">
-          </div>
-        </v-col>
-        <v-col cols="12" class="d-flex justify-space-between">
-          <v-label class="text-caption ">手机号</v-label>
-          <div class="text-caption " style="max-width: 80%">
-          </div>
-        </v-col>
-        <v-col cols="12" class="d-flex justify-space-between">
-          <v-label class="text-caption ">发票内容</v-label>
-          <div class="text-caption " style="max-width: 80%">
-          </div>
+        <v-col cols="12" v-for="(item, i) in invoiceHeaders" :key="i">
+          <v-text-field
+            :label="item.title"
+            :placeholder="item.title"
+            persistent-placeholder
+            variant="solo-filled"
+            flat
+          >
+          </v-text-field>
         </v-col>
       </v-row>
     </v-card-text>
@@ -39,4 +24,30 @@
 </template>
 
 <script setup>
+const invoiceHeaders = [
+  {
+    title: "类型",
+    value: "",
+  },
+  {
+    title: "抬头",
+    value: "",
+  },
+  {
+    title: "类型",
+    value: "",
+  },
+  {
+    title: "电子邮箱",
+    value: "",
+  },
+  {
+    title: "手机号",
+    value: "",
+  },
+  {
+    title: "发票内容",
+    value: "",
+  },
+];
 </script>
