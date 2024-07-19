@@ -1,9 +1,7 @@
 <template>
   <v-app>
-    <AppSnackBarQueue />
-    <AppBarBar class="border" />
-    <AppDrawerDrawer />
-    <v-divider />
+    <VAppBar flat> </VAppBar>
+    <VNavigationDrawer> </VNavigationDrawer>
     <v-main>
       <slot>
         <router-view v-slot="{ Component }">
@@ -19,15 +17,15 @@
 </template>
 
 <script setup>
-import { useTheme } from "vuetify";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
-const theme = useTheme();
 
-const mode = computed(() => {
-  return theme.global.name.value;
-});
+const items = [
+  {
+
+  },
+];
 </script>
 
 <style>

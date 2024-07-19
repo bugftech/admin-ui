@@ -102,14 +102,12 @@ const emit = defineEmits(["change", "update:modelValue"]);
 const cancel = (isActive: { value: boolean }) => {
   isActive.value = false;
   localUrl.value = "";
-  emit("update:modelValue", "");
   emit("change", "");
 };
 
 const commit = (isActive: { value: boolean }) => {
   isActive.value = false;
   emit("change", localUrl.value);
-  emit("update:modelValue", localUrl.value);
   nextTick(() => {
     localUrl.value = "";
   });

@@ -1,11 +1,10 @@
 <template>
-  <v-list nav :lines="false" density="compact" slim variant="text">
+  <v-list nav :lines="false" density="compact" slim>
     <template v-for="(item, i) in items" :key="i">
       <v-list-item
         v-if="!item.items"
         :to="item.to"
         rounded="xl"
-        variant="flat"
       >
         <template v-slot:prepend="{ isActive }">
           <v-icon
@@ -40,7 +39,6 @@
           :key="idx"
           :to="child.to"
           rounded="xl"
-          variant="flat"
         >
           <template v-slot:prepend="{ isActive }">
             <v-icon

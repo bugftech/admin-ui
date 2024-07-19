@@ -1,18 +1,19 @@
 <template>
-  <v-container>
-    <v-row align="center" justify="center">
-      <v-col cols="12">
-        <!--面包屑-->
-        <AppBreadcrumb>
-          <v-btn variant="elevated" size="small" to="/referrals/new">添加推荐人</v-btn>
-        </AppBreadcrumb>
-        <ReferralDataTable />
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-toolbar color="transparent" density="compact" class="border">
+    <v-tabs density="compact" v-model="tab">
+      <v-tab class="text-caption">数据</v-tab>
+    </v-tabs>
+  </v-toolbar>
+  <VTabsWindow v-model="tab">
+    <VTabsWindowItem :value="1">
+      <ReferralDataTable ref="data" />
+    </VTabsWindowItem>
+  </VTabsWindow>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const tab = ref(null);
+</script>
 
 <route lang="yaml">
 meta:

@@ -1,43 +1,19 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <!--面包屑-->
-        <AppBreadcrumb>
-          <v-menu>
-            <template v-slot:activator="{ props }">
-              <v-btn size="small" variant="elevated" v-bind="props"
-                >添加支付</v-btn
-              >
-            </template>
-            <v-list nav density="compact" slim>
-              <v-list-item link to="/pays/wechat/new">
-                <template v-slot:prepend>
-                  <v-icon>mdi-wechat</v-icon>
-                </template>
-                <v-list-item-title class="text-caption"
-                  >微信支付</v-list-item-title
-                >
-              </v-list-item>
-              <v-list-item link>
-                <template v-slot:prepend>
-                  <v-icon>mdi-cellphone</v-icon>
-                </template>
-                <v-list-item-title class="text-caption"
-                  >支付宝</v-list-item-title
-                >
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </AppBreadcrumb>
-
-        <PayDataTable />
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-toolbar color="transparent" density="compact" class="border">
+    <v-tabs density="compact" v-model="tab">
+      <v-tab class="text-caption">支付</v-tab>
+    </v-tabs>
+  </v-toolbar>
+  <VTabsWindow v-model="tab">
+    <VTabsWindowItem :value="1">
+      <PayDataTable />
+    </VTabsWindowItem>
+  </VTabsWindow>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const tab = ref(null);
+</script>
 
 <route lang="yaml">
 meta:

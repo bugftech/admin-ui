@@ -1,9 +1,6 @@
 <template>
-  <v-btn
-    icon="mdi-arrow-left-bold"
-    @click="back"
-    size="small"
-  >
+  <v-btn prepend-icon="mdi-arrow-left-bold" @click="back" size="small" variant="tonal">
+    返回
   </v-btn>
 </template>
 

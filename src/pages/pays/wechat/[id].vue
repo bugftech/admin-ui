@@ -1,20 +1,20 @@
 <template>
+  <v-toolbar density="comfortable" class="pe-2">
+    <v-toolbar-title>
+      <AppBackBtn /> <span class="text-subtitle-2">编辑支付</span>
+    </v-toolbar-title>
+    <v-spacer />
+    <v-btn size="small" class="me-2" variant="tonal" @click="cancel"
+      >取消</v-btn
+    >
+    <v-btn size="small" variant="flat" @click="update" color="indigo"
+      >保存数据</v-btn
+    >
+  </v-toolbar>
+  <v-divider />
   <v-container>
     <v-row class="justify-center">
-      <v-col cols="12">
-        <v-toolbar color="transparent">
-          <AppBackBtn />
-          <v-toolbar-title class="text-body-1 font-weight-bold">
-            编辑微信支付
-          </v-toolbar-title>
-          <v-spacer />
-          <v-btn size="small" class="me-2" variant="tonal" @click="cancel"
-            >取消</v-btn
-          >
-          <v-btn size="small" variant="elevated" @click="update">保存</v-btn>
-        </v-toolbar>
-      </v-col>
-      <v-col cols="12" md="8">
+      <v-col cols="12" md="7">
         <v-card>
           <v-card-title class="text-subtitle-2 my-2">基础配置</v-card-title>
           <v-card-text>
@@ -133,7 +133,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="12" md="4">
+      <v-col cols="12" md="5">
         <v-card>
           <v-card-text>
             <v-text-field
@@ -154,11 +154,12 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col cols="12" md="12">
-        <v-btn size="small" color="red">删除此支付</v-btn>
-      </v-col>
     </v-row>
   </v-container>
+  <div class="text-center">
+    <v-divider class="my-4" />
+    <v-btn size="small" color="red" class="mb-4">删除此支付</v-btn>
+  </div>
 </template>
 
 <script setup lang="ts">

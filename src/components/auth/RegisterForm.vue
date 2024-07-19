@@ -64,13 +64,14 @@
 </template>
 
 <script setup>
-import BFSDK from "@/api/sdk";
 import { nonEmptyRules } from "@/composables/formRules";
+import bugfreed from "@/sdk";
+import { Auth } from "@/sdk/index";
 
+const auth = new Auth({ bugfreed });
 const username = ref("");
 const password = ref("");
 const comfirmPassword = ref("");
-
 
 const router = useRouter();
 const route = useRoute();
@@ -79,25 +80,27 @@ const loading = ref(false);
 const signup = async () => {
   loading.value = true;
   if (password.value !== comfirmPassword.value) {
-    useSnackbar("注册失败，两次输入的密码不一致")
-    loading.value = false
-    return
+    useSnackbar("注册失败，两次输入的密码不一致");
+    loading.value = false;
+    return;
   }
-  const { success } = await BFSDK.signup(username.value, password.value);
+  const { success } = await auth.signup(username.value, password.value);
   if (success) {
-    useSnackbar("注册成功")
+    useSnackbar("注册成功");
     const redirect = route.query.redirect || "/login";
-    router.push(redirect).catch((err)=>{
-      console.error(err)
-    }).finally(() => {
-      loading.value = false;
-    });
+    router
+      .push(redirect)
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        loading.value = false;
+      });
   } else {
-    useSnackbar("登录失败")
+    useSnackbar("注册失败");
     loading.value = false;
   }
 };
 
-onMounted(() => {
-});
+onMounted(() => {});
 </script>

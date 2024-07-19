@@ -1,11 +1,13 @@
 <template>
-  <v-toolbar
-    class="rounded-0"
-    density="comfortable"
-    variant="flat"
-    color="transparent"
-  >
-    <v-breadcrumbs :items="breadcrumbs" class="text-h6"> </v-breadcrumbs>
+  <v-toolbar class="rounded-0 px-4 border" density="compact" color="transparent">
+    <v-chip label size="small">
+      {{ breadcrumbs }}
+      <v-breadcrumbs
+        :items="breadcrumbs"
+        class="text-caption font-weight-medium"
+      >
+      </v-breadcrumbs>
+    </v-chip>
     <v-spacer />
     <template v-slot:append>
       <slot />

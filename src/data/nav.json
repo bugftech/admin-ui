@@ -1,5 +1,11 @@
 [
   {
+    "title": "日历",
+    "to": "/calendar",
+    "inactiveIcon": "mdi-calendar-check-outline",
+    "activeIcon": "mdi-calendar-check"
+  },
+  {
     "title": "预约",
     "to": "/calendar",
     "inactiveIcon": "mdi-calendar-check-outline",
@@ -9,12 +15,7 @@
     "title": "订单",
     "inactiveIcon": "mdi-archive-outline",
     "activeIcon": "mdi-archive",
-    "items": [
-      {
-        "title": "订单",
-        "to": "/orders"
-      }
-    ]
+    "to": "/orders"
   },
   {
     "title": "产品",
@@ -34,7 +35,7 @@
         "to": "/pms/brands"
       },
       {
-        "title": "归纳",
+        "title": "分类",
         "to": "/pms/categories"
       },
       {
@@ -87,12 +88,6 @@
     "activeIcon": "mdi-link-circle"
   },
   {
-    "title": "富文本",
-    "to": "/editor",
-    "inactiveIcon": "mdi-view-dashboard-edit-outline",
-    "activeIcon": "mdi-view-dashboard-edit"
-  },
-  {
     "title": "CMS",
     "inactiveIcon": "mdi-transit-connection-variant",
     "activeIcon": "mdi-transit-connection-variant",
@@ -100,11 +95,13 @@
       {
         "title": "AirTable",
         "to": "/wireless"
-      },
-      {
-        "title": "动态表单",
-        "to": "/wireless"
       }
     ]
+  },
+  {
+    "title": "在线商店",
+    "to": "/onlinestore",
+    "inactiveIcon": "mdi-store-outline",
+    "activeIcon": "mdi-store"
   }
 ]

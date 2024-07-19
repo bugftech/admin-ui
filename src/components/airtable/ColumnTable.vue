@@ -26,7 +26,6 @@
         <v-checkbox-btn v-model="item.visible" readonly />
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-icon v-if="item.editable">mdi-pencil</v-icon>
         <v-icon class="ms-2" @click="deleteColumn(item)" v-if="item.deletable"
           >mdi-trash-can</v-icon
         >

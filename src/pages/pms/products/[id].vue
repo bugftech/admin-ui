@@ -1,34 +1,33 @@
 <template>
+  <v-toolbar density="comfortable" theme="transparent">
+    <v-toolbar-title class="text-subtitle-2 font-weight-bold">
+      <AppBackBtn /> <span class="ms-1">编辑 {{ item.name }}</span>
+    </v-toolbar-title>
+
+    <v-spacer />
+    <v-btn
+      size="small"
+      class="me-2"
+      variant="tonal"
+      rounded="lg"
+      prepend-icon="mdi-cancel"
+      @click="cancel"
+      >取消</v-btn
+    >
+    <v-btn
+      size="small"
+      rounded="lg"
+      variant="flat"
+      color="indigo"
+      prepend-icon="mdi-check-all"
+      @click="save"
+      >更新商品</v-btn
+    >
+  </v-toolbar>
+  <v-divider />
   <v-container>
     <v-form ref="form">
       <v-row justify="center">
-        <v-col cols="12" md="12">
-          <v-toolbar color="transparent">
-            <AppBackBtn />
-            <v-toolbar-title class="text-body-1 font-weight-bold">
-              商品 #<span>{{ id }}</span>
-            </v-toolbar-title>
-
-            <v-spacer />
-            <v-btn
-              size="small"
-              class="me-2"
-              variant="tonal"
-              rounded="lg"
-              prepend-icon="mdi-cancel"
-              @click="cancel"
-              >取消</v-btn
-            >
-            <v-btn
-              size="small"
-              rounded="lg"
-              variant="elevated"
-              prepend-icon="mdi-check-all"
-              @click="save"
-              >保存</v-btn
-            >
-          </v-toolbar>
-        </v-col>
         <v-col cols="12" md="8">
           <v-card>
             <v-card-text>
@@ -91,18 +90,9 @@
                   <v-toolbar-title class="text-caption"
                     >商品详情</v-toolbar-title
                   >
-                  <v-spacer />
-                  <v-btn
-                    icon="mdi-pencil"
-                    size="x-small"
-                    variant="elevated"
-                    @click="editHtmlDialog = true"
-                  ></v-btn>
                 </v-toolbar>
                 <v-divider />
-                <v-card-text style="height: 200px" class="overflow-y-auto">
-                  <div v-html="item.detailHtml"></div>
-                </v-card-text>
+                <RichEditor v-model="item.detailHtml" />
               </v-card>
             </v-card-text>
           </v-card>
@@ -494,6 +484,7 @@ onMounted(async () => {
     data.originalPrice = data.originalPrice / 100;
     data.costPrice = data.costPrice / 100;
     Object.assign(item.value, data);
+    route.meta.title = "编辑商品" + data.name;
   }
 });
 
@@ -535,6 +526,6 @@ const cancel = () => {
 
 <route lang="yaml">
 meta:
-  title: "查看商品"
-  breadcrumb: 查看
+  title: "编辑商品"
+  breadcrumb: "编辑商品"
 </route>

@@ -1,26 +1,27 @@
 <template>
+  <v-toolbar density="comfortable">
+    <v-toolbar-title class="text-body-1 font-weight-bold">
+      <AppBackBtn /><span class="ms-2 text-subititle-2"
+        >编辑 {{ editItem.name }}</span
+      >
+    </v-toolbar-title>
+    <v-spacer />
+    <v-btn variant="tonal" size="small" class="me-2" @click="cancel"
+      >取消</v-btn
+    >
+    <v-btn
+      size="small"
+      @click="update"
+      :loading="loading"
+      variant="flat"
+      color="indigo"
+      >更新数据</v-btn
+    >
+  </v-toolbar>
+  <v-divider />
   <v-container>
     <v-form ref="form">
       <v-row>
-        <v-col cols="12">
-          <v-toolbar color="transparent">
-            <AppBackBtn />
-            <v-toolbar-title class="text-body-1 font-weight-bold">
-              创建产品分类
-            </v-toolbar-title>
-            <v-spacer />
-            <v-btn variant="tonal" size="small" class="me-2" @click="cancel"
-              >取消</v-btn
-            >
-            <v-btn
-              variant="elevated"
-              size="small"
-              @click="update"
-              :loading="loading"
-              >确定</v-btn
-            >
-          </v-toolbar>
-        </v-col>
         <v-col cols="12" md="7">
           <v-card>
             <v-card-text>
@@ -78,22 +79,14 @@
             </v-card-text>
           </v-card>
 
-          <v-card class="mt-4">
-            <v-card-text>
-              <v-textarea
-                v-model="editItem.description"
-                variant="solo-filled"
-                flat
-                rounded="lg"
-                hide-details="auto"
-                placeholder="输入分类描述..."
-                label="关键词"
-                persistent-hint
-                persistent-placeholder
-                hint="关键词用于检索过滤分类"
-                density="comfortable"
-              ></v-textarea>
-            </v-card-text>
+          <v-card class="mt-3">
+            <v-toolbar color="transparent">
+              <v-toolbar-title class="text-caption">品牌故事</v-toolbar-title>
+            </v-toolbar>
+            <v-divider />
+            <RichEditor
+              v-model="editItem.description"
+            ></RichEditor>
           </v-card>
         </v-col>
         <v-col cols="12" md="5">
@@ -120,7 +113,7 @@
               <v-sheet class="border rounded-lg" v-if="editItem.pic">
                 <v-img :src="editItem.pic" contain />
               </v-sheet>
-              <UploadImage v-else @change="onUploadPic" />
+              <UploadImage v-model="editItem.pic" class="mt-4" />
             </v-card-text>
           </v-card>
         </v-col>
@@ -165,9 +158,6 @@ const publishedOptions: PublishedOption[] = [
 ];
 
 let editItem = reactive({ ...defaultItem });
-const onUploadPic = (e: string) => {
-  editItem.pic = e;
-};
 
 const close = () => {
   editItem = reactive({ ...defaultItem });

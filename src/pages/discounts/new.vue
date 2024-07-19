@@ -1,19 +1,19 @@
 <template>
+  <v-toolbar density="comfortable" class="pe-2">
+    <v-toolbar-title>
+      <AppBackBtn />
+      <span class="text-subtitle-2 ms-2"
+        >创建{{ FormTitle[discountType as SupportedTypes] }}
+      </span>
+    </v-toolbar-title>
+    <v-spacer />
+    <v-btn size="small" class="me-2" variant="tonal">取消</v-btn>
+    <v-btn size="small" variant="flat" @click="save" color="indigo"
+      >保存数据</v-btn
+    >
+  </v-toolbar>
+  <v-divider />
   <v-container>
-    <v-row>
-      <v-col cols="12" md="12">
-        <v-toolbar color="transparent">
-          <AppBackBtn />
-          <v-toolbar-title class="text-body-1 font-weight-bold">
-            创建{{ FormTitle[discountType as SupportedTypes] }}
-          </v-toolbar-title>
-          <v-spacer />
-          <v-btn size="small" class="me-2" variant="tonal">取消</v-btn>
-          <v-btn size="small" variant="elevated" @click="save">保存</v-btn>
-        </v-toolbar>
-      </v-col>
-    </v-row>
-
     <component
       :is="getComponentName(discountType as SupportedTypes)"
       ref="formRef"
@@ -66,7 +66,7 @@ const formRef = ref();
 
 const save = async () => {
   if (!formRef.value.save) return;
-  await formRef.value.save()
+  await formRef.value.save();
 };
 
 onMounted(() => {

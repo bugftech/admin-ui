@@ -1,28 +1,25 @@
 <template>
-  <v-container>
-    <v-row justify="center">
-      <v-col cols="12" md="12">
-        <!--面包屑-->
-        <AppBreadcrumb>
-          <v-btn
-            variant="elevated"
-            prepend-icon="mdi-download-circle-outline"
-            size="small"
-            class="me-2"
-          >
-            下载CSV
-          </v-btn>
-        </AppBreadcrumb>
-        <!--工具栏-->
-      </v-col>
-      <v-col cols="12" md="12">
-        <OrderDataTable />
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-divider />
+  <v-toolbar density="compact" color="transparent">
+    <v-tabs density="compact" v-model="tab">
+      <v-tab class="text-caption" :value="1">数据</v-tab>
+      <v-tab class="text-caption" :value="3">订单配置</v-tab>
+    </v-tabs>
+  </v-toolbar>
+  <v-divider />
+  <VTabsWindow v-model="tab">
+    <VTabsWindowItem :value="1">
+      <OrderDataTable />
+    </VTabsWindowItem>
+    <VTabsWindowItem :value="2">
+      <OrderDataTable />
+    </VTabsWindowItem>
+  </VTabsWindow>
 </template>
 
-<script setup></script>
+<script setup>
+const tab = ref(null);
+</script>
 
 <route lang="yaml">
 name: "orders"

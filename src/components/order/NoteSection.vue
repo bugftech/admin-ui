@@ -2,6 +2,7 @@
   <v-card>
     <v-toolbar color="transparent" density="compact">
       <v-card-title class="text-caption">备注信息</v-card-title>
+      <v-spacer />
     </v-toolbar>
     <v-divider />
     <v-card-text>
@@ -12,12 +13,18 @@
           v-for="(item, i) in filtered"
           :key="i"
         >
-          <v-label class="text-caption">{{
-            item.name
-          }}</v-label>
-          <div class="text-caption font-weight-medium" style="max-width: 80%">
-            {{ item.value }}
-          </div>
+          <v-text-field
+            class="mb-2"
+            :label="item.name"
+            :placeholder="item.name"
+            variant="solo-filled"
+            flat
+            persistent-placeholder
+            readonly
+            :value="item.value"
+            hide-details="auto"
+          >
+          </v-text-field>
         </v-col>
       </v-row>
     </v-card-text>
@@ -30,7 +37,7 @@ const props = defineProps({
   note: {
     type: String,
     default: () =>
-      "微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣微辣",
+      "",
   },
 });
 

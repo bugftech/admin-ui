@@ -1,33 +1,18 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <!--面包屑-->
-        <AppBreadcrumb>
-          <v-btn
-            variant="tonal"
-            size="small"
-            class="me-2"
-          >
-            导出
-          </v-btn>
-
-          <v-btn
-            variant="elevated"
-            size="small"
-            class="me-2"
-            to="/pms/products/new"
-          >
-            创建商品
-          </v-btn>
-        </AppBreadcrumb>
-        <ProductDataTable class="mt-4"/>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-toolbar color="transparent" density="compact" class="border">
+    <v-tabs density="compact" v-model="tab">
+      <v-tab class="text-caption">商品</v-tab>
+    </v-tabs>
+  </v-toolbar>
+  <VTabsWindow v-model="tab">
+    <VTabsWindowItem :value="1">
+      <ProductDataTable />
+    </VTabsWindowItem>
+  </VTabsWindow>
 </template>
 
 <script setup>
+const tab = ref(null);
 </script>
 
 <route lang="yaml">

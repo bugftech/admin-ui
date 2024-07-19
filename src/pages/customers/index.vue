@@ -1,18 +1,19 @@
 <template>
-  <v-container fluid>
-    <v-row align="center" justify="center">
-      <v-col cols="12">
-        <!--面包屑-->
-        <AppBreadcrumb>
-          <v-btn variant="elevated" size="small" to="/customers/new">添加客户</v-btn>
-        </AppBreadcrumb>
-        <CustomerDataTable />
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-toolbar color="transparent" density="compact" class="border">
+    <v-tabs density="compact" v-model="tab">
+      <v-tab class="text-caption" :value="1">客户</v-tab>
+    </v-tabs>
+  </v-toolbar>
+  <VTabsWindow v-model="tab">
+    <VTabsWindowItem :value="1">
+      <CustomerDataTable />
+    </VTabsWindowItem>
+  </VTabsWindow>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const tab = ref(null);
+</script>
 
 <route lang="yaml">
 meta:

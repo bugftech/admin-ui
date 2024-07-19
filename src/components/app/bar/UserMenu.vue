@@ -17,7 +17,7 @@
         <v-list-item-subtitle class="text-caption font-weight-bold">{{
           userProfile.email
         }}</v-list-item-subtitle>
-        <v-btn rounded prepend-icon="mdi-cog" variant="tonal" class="my-4"
+        <v-btn rounded prepend-icon="mdi-cog" variant="tonal" class="my-4" to="/settings"
           >设置账号</v-btn
         >
       </div>
@@ -39,7 +39,6 @@ import { onMounted } from "vue";
 import { useUserStore } from "@/store/user";
 import { storeToRefs } from "pinia";
 
-const defaultAvatar = "";
 
 interface Item {
   icon: string;

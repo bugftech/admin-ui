@@ -4,76 +4,161 @@
       <v-toolbar-title class="text-caption font-weight-bold"
         >基础信息</v-toolbar-title
       >
+      <v-spacer />
+      <v-btn size="small" class="pe-2" variant="flat" theme="dark">订单状态: {{ orderStatus[localItem.status] }}</v-btn>
     </v-toolbar>
     <v-divider />
-    <v-card-text>
-      <v-row dense>
-        <v-col
-          cols="12"
-          v-for="(obj, i) in filtered"
-          :key="i"
-        >
-          <!-- 
-          <v-label class="text-caption font-weight-mediumn">{{
-            obj.name
-          }}</v-label>
-          <div class="text-caption font-weight-bold" v-if="useBool(obj.title)">
-            <v-icon :color="obj.value ? 'green' : 'red'">{{
-              obj.value
-                ? "mdi-checkbox-marked-circle-outline"
-                : "mdi-checkbox-blank-circle-outline"
-            }}</v-icon>
-          </div>
-          <div
-            class="text-caption font-weight-bold"
-            v-else-if="useTime(obj.title)"
-          >
-            {{ obj.value ? formatDateTime(obj.value) : "" }}
-          </div>
-          <div class="text-caption font-weight-bold" v-else>
-            {{ obj.value }}
-          </div>
-          -->
+    <v-card-text v-if="localItem">
+      <v-text-field
+        label="App Id"
+        placeholder="BfAppID"
+        variant="solo-filled"
+        flat
+        persistent-placeholder
+        readonly
+        hint="订单来源的APP ID"
+        persistent-hint
+        :value="localItem.bfAppId"
+        hide-details="auto"
+      >
+      </v-text-field>
+      <v-text-field
+        class="mt-3"
+        label="订单号"
+        placeholder="订单号"
+        variant="solo-filled"
+        flat
+        persistent-placeholder
+        :value="localItem.orderSn"
+        hide-details="auto"
+        append-icon="mdi-content-copy"
+        @click:append="copySn(localItem.orderSn)"
+      >
+      </v-text-field>
 
-          <template v-if="useBool(obj.title)">
-            <v-checkbox-btn :value="obj.value" hide-details density="compact">
-              <template v-slot:label>
-                <div class="text-caption font-weight-bold">{{ obj.name }}</div>
-              </template>
-            </v-checkbox-btn>
+      <v-text-field
+        class="mt-4"
+        label="自动确认完成的天数"
+        placeholder="自动确认完成的天数"
+        variant="solo-filled"
+        flat
+        persistent-placeholder
+        hint="订单购买到完成状态，如未点击收货，自动在指定天数确认完成。"
+        persistent-hint
+        suffix="/天"
+        :value="localItem.autoConfirmDay"
+        hide-details="auto"
+      >
+      </v-text-field>
+
+      <v-text-field
+        class="mt-4"
+        label="订单类型"
+        placeholder="订单类型"
+        variant="solo-filled"
+        flat
+        persistent-placeholder
+        hint="订单类型分为两种：正常订单和秒杀订单"
+        persistent-hint
+        :value="localItem.orderType === 0 ? '正常订单' : '秒杀订单'"
+        hide-details="auto"
+      >
+      </v-text-field>
+
+      <v-text-field
+        class="mt-4"
+        label="支付类型"
+        placeholder="支付类型"
+        variant="solo-filled"
+        flat
+        persistent-placeholder
+        hint="支付类型：未支付，微信，支付宝，其他方式"
+        persistent-hint
+        :value="payTypes[localItem.payType]"
+        hide-details="auto"
+      >
+      </v-text-field>
+
+      <v-text-field
+        class="mt-4"
+        label="支付时间"
+        placeholder="支付时间"
+        variant="solo-filled"
+        flat
+        persistent-placeholder
+        :value="formatDateTime(localItem.paymentTime)"
+        hide-details="auto"
+      >
+      </v-text-field>
+
+      <v-text-field
+        class="mt-4"
+        label="下单时间"
+        placeholder="下单时间"
+        variant="solo-filled"
+        flat
+        persistent-placeholder
+        :value="formatDateTime(localItem.createTime)"
+        hide-details="auto"
+      >
+      </v-text-field>
+      <v-text-field
+        class="mt-4"
+        label="订单来源"
+        placeholder="订单来源"
+        variant="solo-filled"
+        flat
+        persistent-placeholder
+        :value="sourceTypes[localItem.sourceType]"
+        hide-details="auto"
+      >
+      </v-text-field>
+
+      <v-list slim>
+        <v-list-item>
+          <template v-slot:prepend>
+            <v-list-item-action start>
+              <v-checkbox-btn :value="localItem.confirmStatus" readonly>
+              </v-checkbox-btn>
+            </v-list-item-action>
           </template>
-          <template v-else-if="useTime(obj.title)">
-            <v-text-field
-              readonly
-              :label="obj.name"
-              :value="obj.value ? formatDateTime(obj.value) : ''"
-              :placeholder="obj.name"
-              persistent-placeholder
-              variant="solo-filled"
-              flat
-              hide-details
-            ></v-text-field>
+          <v-list-item-title class="text-caption font-weight-medium"
+            >已确认收货</v-list-item-title
+          >
+          <v-list-item-subtitle class="text-caption"
+            >已确认表示用户已确认收货</v-list-item-subtitle
+          >
+        </v-list-item>
+
+        <v-list-item>
+          <template v-slot:prepend>
+            <v-list-item-action start>
+              <v-checkbox-btn :value="localItem.deleteStatus" readonly>
+              </v-checkbox-btn>
+            </v-list-item-action>
           </template>
-          <v-text-field
-              readonly
-              :label="obj.name"
-              :value="obj.value"
-              :placeholder="obj.name"
-              persistent-placeholder
-              variant="solo-filled"
-              flat
-              hide-details
-              v-else
-            ></v-text-field>
-        </v-col>
-      </v-row>
+          <v-list-item-title class="text-caption font-weight-medium"
+            >已删除</v-list-item-title
+          >
+          <v-list-item-subtitle class="text-caption"
+            >用户删除订单会讲此值更新为已删除</v-list-item-subtitle
+          >
+        </v-list-item>
+      </v-list>
     </v-card-text>
   </v-card>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { formatDateTime } from "@/composables/time";
+import { copyToClipboardFormatted } from "@/composables/copy";
+import { Order } from "@/sdk/order/types";
 
+const props = defineProps({
+  item: {
+    type: Object as () => Order,
+  },
+});
 const translation = {
   bfAppId: "应用ID",
   memberUsername: "会员用户名",
@@ -91,35 +176,43 @@ const translation = {
   paymentTime: "支付时间",
 };
 
-const props = defineProps({
-  item: {
-    type: Object,
-  },
-});
+const localItem = reactive<Order>({} as Order);
 
-const filtered = computed(() => {
-  if (!props.item) return [];
-  return Object.keys(props.item).reduce((acc, key) => {
-    const value = props.item[key];
-    const translatedKey = translation[key] || key;
-    if (translatedKey !== key) {
-      acc.push({ title: key, name: translatedKey, value });
+const payTypes: Record<number, string> = {
+  0: "未支付",
+  1: "微信支付",
+  2: "支付宝",
+  3: "其他方式",
+};
+
+const sourceTypes: Record<number, string> = {
+  0: "微信小程序",
+  1: "支付宝小程序",
+  2: "Tiktok",
+  3: "App",
+  4: "Web",
+};
+
+const orderStatus: Record<number, string> = {
+  0: "待付款",
+  1: "待发货",
+  2: "已发货",
+  3: "已完成",
+  4: "已关闭",
+  5: "无效订单",
+};
+
+watch(
+  () => props.item,
+  (newItem) => {
+    if (newItem) {
+      Object.assign(localItem, newItem);
     }
-    return acc;
-  }, []);
-});
+  },
+  { immediate: true }
+);
 
-const useBool = (key) => {
-  const boolItems = ["confirmStatus", "deleteStatus"];
-  return boolItems.find((item) => item === key);
+const copySn = (orderSn: string) => {
+  copyToClipboardFormatted(orderSn);
 };
-
-const useTime = (key) => {
-  const timeItems = ["commentTime", "modifyTime", "createTime", "paymentTime"];
-  return timeItems.find((item) => item === key);
-};
-
-watch(props.item, () => {
-  propsToFilter();
-});
 </script>

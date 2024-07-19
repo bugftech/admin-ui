@@ -4,7 +4,6 @@
     v-model="app.drawer"
     :rail="rail"
     :order="mobile ? -1 : undefined"
-    floating
   >
     <template v-slot:prepend>
       <v-divider />
@@ -26,10 +25,10 @@
     </template>
     <v-divider />
     <AppDrawerList :items="app.navItems" />
-    <v-divider />
     <template v-slot:append>
+      <v-divider />
       <v-sheet
-        class="d-flex align-center text-caption text-medium-emphasis pa-2"
+        class="d-flex align-center text-caption justify-space-between px-1"
       >
         <v-btn
           :icon="rail ? 'mdi-menu-left' : 'mdi-menu-right'"
@@ -37,6 +36,14 @@
           size="small"
           variant="flat"
         />
+
+        <v-btn
+          v-if="!rail"
+          prepend-icon="mdi-search-web"
+          size="small"
+          variant="tonal"
+          >探索应用模版</v-btn
+        >
       </v-sheet>
     </template>
   </v-navigation-drawer>

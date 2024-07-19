@@ -1,7 +1,15 @@
 <template>
   <v-menu>
     <template v-slot:activator="{ props }">
-      <v-btn variant="elevated" size="small" v-bind="props"> 创建折扣 </v-btn>
+      <v-btn
+        variant="flat"
+        size="small"
+        v-bind="props"
+        append-icon="mdi-plus"
+        theme="dark"
+      >
+        创建折扣
+      </v-btn>
     </template>
 
     <v-list>

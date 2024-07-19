@@ -1,7 +1,7 @@
 <template>
-  <v-app-bar flat scroll-behavior="elevate">
+  <v-app-bar scroll-behavior="elevate" variant="outlined">
     <template v-slot:prepend>
-      <v-app-bar-title class="ml-2">
+      <v-app-bar-title class="ml-2" v-if="mdAndUp">
         <AppBarLogo />
       </v-app-bar-title>
       <v-btn

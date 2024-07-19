@@ -1,9 +1,9 @@
 <template>
-  <v-app theme="dark">
+  <v-app>
     <AppSnackBarQueue />
     <v-app-bar flat app color="transparent">
       <v-spacer />
-      <v-img src="@/assets/bugfreed-text-light.svg" height="16px"/>
+      <v-img src="@/assets/bugfreed-text-dark.svg" height="14px"/>
       <v-spacer />
     </v-app-bar>
     <v-main >

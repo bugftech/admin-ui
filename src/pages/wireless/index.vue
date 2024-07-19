@@ -3,20 +3,8 @@
     <v-row justify="center">
       <v-col cols="8">
         <v-row>
-          <v-col cols="12" md="4">
-            <v-card height="200" variant="outlined">
-              <div class="d-flex flex-column justify-space-between h-100">
-                <div>
-                  <v-card-item>
-                    <v-card-title class="text-subtitle-2"> DEMO </v-card-title>
-                  </v-card-item>
-                </div>
-              </div>
-            </v-card>
-          </v-col>
-
-          <v-col cols="12" md="8">
-            <v-card height="200" variant="outlined">
+          <v-col cols="12" md="12">
+            <v-card height="200" variant="text" class="border">
               <div class="d-flex flex-no-wrap justify-space-between">
                 <div>
                   <v-card-title class="text-subtitle-2 text-wrap">
@@ -38,9 +26,10 @@
                     </v-btn>
                     <v-btn
                       size="small"
-                      variant="elevated"
+                      variant="flat"
+                      rounded="pill"
                       prepend-icon="mdi-video"
-                      color="orange-accent-2"
+                      color="indigo"
                     >
                       查看教程
                     </v-btn>

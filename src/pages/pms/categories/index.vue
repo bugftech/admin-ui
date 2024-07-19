@@ -1,20 +1,19 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12">
-        <!--面包屑-->
-        <AppBreadcrumb>
-          <v-btn rounded="lg" size="small" to="/pms/categories/new" variant="elevated">
-            新增分类
-          </v-btn>
-        </AppBreadcrumb>
-        <CategoryDataTable ref="data" />
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-toolbar color="transparent" density="compact" class="border">
+    <v-tabs density="compact" v-model="tab">
+      <v-tab class="text-caption">分类</v-tab>
+    </v-tabs>
+  </v-toolbar>
+  <VTabsWindow v-model="tab">
+    <VTabsWindowItem :value="1">
+      <CategoryDataTable ref="data" />
+    </VTabsWindowItem>
+  </VTabsWindow>
 </template>
 
-<script setup></script>
+<script setup lang="ts">
+const tab = ref(null);
+</script>
 
 <route lang="yaml">
 meta:

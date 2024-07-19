@@ -1,25 +1,18 @@
 <template>
-  <v-container>
-    <v-row justify="center">
-      <v-col cols="12">
-        <!--面包屑-->
-        <AppBreadcrumb>
-          <v-btn
-            variant="elevated"
-            size="small"
-            class="me-2"
-            to="/pms/brands/new"
-          >
-            添加品牌
-          </v-btn>
-        </AppBreadcrumb>
-        <BrandDataTable class="mt-4"/>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-toolbar color="transparent" density="compact" class="border">
+    <v-tabs density="compact" v-model="tab">
+      <v-tab class="text-caption">品牌</v-tab>
+    </v-tabs>
+  </v-toolbar>
+  <VTabsWindow v-model="tab">
+    <VTabsWindowItem :value="1">
+      <BrandDataTable />
+    </VTabsWindowItem>
+  </VTabsWindow>
 </template>
 
-<script setup lang="ts">
+<script setup>
+const tab = ref(null);
 </script>
 
 <route lang="yaml">

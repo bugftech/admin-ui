@@ -12,7 +12,6 @@
     rounded
     :max-width="maxWidth"
     :extensions="extensions"
-    @change="onChangeEditor"
   />
 </template>
 
@@ -28,13 +27,12 @@ const emits = defineEmits(["update:modelValue"]);
 import {
   BaseKit,
   Heading,
-  type VuetifyTiptapOnChange,
 } from "vuetify-pro-tiptap";
 
 const extensions = [
   BaseKit.configure({
     placeholder: {
-      placeholder: "Placeholder...",
+      placeholder: "编辑你的详情内容",
     },
   }),
   Heading.configure({
@@ -46,11 +44,16 @@ const VuetifyTiptapRef = ref<null | Record<string, any>>(null);
 const output = ref<"html" | "json" | "text">("html");
 
 const content = ref(props.modelValue);
+
 watch(() => props.modelValue, (newValue) => {
   content.value = newValue;
 });
 
-const markdownTheme = ref("");
+watch(content, (newValue) => {
+  emits("update:modelValue", newValue);
+});
+
+const markdownTheme = ref("github");
 const outlined = ref(true);
 const dense = ref(false);
 const hideToolbar = ref(false);
@@ -58,12 +61,15 @@ const disableToolbar = ref(false);
 const errorMessages = ref(null);
 const maxWidth = ref<number>(900);
 
+/*
 function onChangeEditor({ editor, output }: VuetifyTiptapOnChange) {
-  console.log("output :>> ", output);
+  const newContent = editor.getHTML();
+  emits("update:modelValue", newContent);
   console.log("output[html] :>> ", editor.getHTML());
   console.log("output[json] :>> ", editor.getJSON());
   console.log("output[text] :>> ", editor.getText());
 }
+*/
 </script>
 
 <style>

@@ -26,10 +26,6 @@
 <script setup>
 const invoiceHeaders = [
   {
-    title: "类型",
-    value: "",
-  },
-  {
     title: "抬头",
     value: "",
   },

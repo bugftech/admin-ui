@@ -1,67 +1,78 @@
 <template>
-  <v-card>
-    <v-toolbar color="transparent" density="compact">
-      <v-tooltip text="刷新" class="text-caption" location="bottom">
-        <template v-slot:activator="{ props }">
-          <v-btn icon="mdi-sync" size="small" v-bind="props" @click="fetch" />
-        </template>
-      </v-tooltip>
-      <v-spacer />
-      <v-checkbox
-        hide-details
-        density="compact"
-        v-model="autoRefresh"
-        true-icon="fa:fas fa-check-square"
-        false-icon="fa:far fa-square"
+  <v-sheet class="elevation-3 rounded-lg px-4 ma-2">
+    <v-toolbar density="compact" color="transparent">
+      <v-btn
+        prepend-icon="mdi-sync"
+        size="small"
+        @click="fetch"
+        variant="flat"
+        color="indigo"
+        >刷新</v-btn
       >
-        <template v-slot:label>
-          <div class="text-caption font-weight-bold me-2">5S</div>
-        </template>
-      </v-checkbox>
+      <v-divider vertical class="ma-2" />
+      <v-btn
+        size="small"
+        :active="autoRefresh"
+        prepend-icon="mdi-clock"
+        variant="flat"
+        class="border"
+        @click="autoRefresh = !autoRefresh"
+      >
+        自动刷新
+      </v-btn>
+      <v-divider vertical class="ma-2" />
+      <v-btn
+        size="small"
+        variant="flat"
+        append-icon="mdi-magnify"
+        class="border"
+      >
+        检索
+      </v-btn>
+      <v-spacer />
+      <v-btn
+        icon="mdi-download"
+        size="small"
+      >
+      </v-btn>
     </v-toolbar>
-    <v-divider />
-    <v-text-field
-      flat
-      density="compact"
-      variant="solo"
-      placeholder="检索"
-      rounded="0"
-      prepend-inner-icon="mdi-magnify"
-      v-model="search"
-    >
-    </v-text-field>
-    <v-divider />
-    <v-data-table
-      show-select
-      return-object
-      class="text-caption"
-      hover
-      :loading="loading"
-      :search="search"
-      :headers="headers"
-      :items="filtered"
-      @click:row="onClickRow"
-    >
-      <template v-slot:[`item.status`]="{ item }">
-        <OrderStatusChip :status="item.status" />
-      </template>
-      <template v-slot:[`item.orderSn`]="{ item }">
-        <v-chip size="x-small" variant="tonal">{{ item.orderSn }}</v-chip>
-      </template>
-      <template v-slot:[`item.createTime`]="{ item }">
-        <div>{{ formatDateTime(item.createTime) }}</div>
-      </template>
-      <template v-slot:[`item.totalAmount`]="{ item }">
-        <div>{{ usePriceYuan(item.totalAmount) }}</div>
-      </template>
-      <template v-slot:[`item.payAmount`]="{ item }">
-        <div>{{ usePriceYuan(item.payAmount) }}</div>
-      </template>
-      <template v-slot:loading>
-        <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
-      </template>
-    </v-data-table>
-  </v-card>
+  </v-sheet>
+  <v-data-table
+    show-select
+    return-object
+    class="text-caption"
+    hover
+    :loading="loading"
+    :search="search"
+    :headers="headers"
+    :items="filtered"
+    @click:row="onClickRow"
+  >
+    <template v-slot:[`item.status`]="{ item }">
+      <OrderStatusChip :status="item.status" />
+    </template>
+    <template v-slot:[`item.orderSn`]="{ item }">
+      <v-chip
+        size="small"
+        variant="tonal"
+        label
+        append-icon="mdi-content-copy"
+        >{{ item.orderSn }}</v-chip
+      >
+    </template>
+    <template v-slot:[`item.createTime`]="{ item }">
+      <div>{{ formatDateTime(item.createTime) }}</div>
+    </template>
+    <template v-slot:[`item.totalAmount`]="{ item }">
+      <div>{{ usePriceYuan(item.totalAmount) }}</div>
+    </template>
+    <template v-slot:[`item.payAmount`]="{ item }">
+      <div>{{ usePriceYuan(item.payAmount) }}</div>
+    </template>
+    <template v-slot:loading>
+      <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
+    </template>
+  </v-data-table>
 </template>
 
 <script setup lang="ts">

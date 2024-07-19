@@ -1,162 +1,148 @@
 <template>
-  <v-card>
-    <v-toolbar color="transparent">
-      <v-btn icon="mdi-sync" size="small" />
-      <v-spacer />
-      <v-btn
-        icon="mdi-filter-variant"
-        size="x-small"
-        variant="tonal"
-        rounded="lg"
-        @click="filter = !filter"
-      ></v-btn>
-    </v-toolbar>
-    <v-divider />
-    <v-toolbar color="transparent" v-if="filter">
-      <v-menu v-if="!hasFilter('productType')">
-        <template v-slot:activator="{ props }">
-          <v-btn
-            v-bind="props"
-            size="small"
-            rounded="pill"
-            color="grey"
-            variant="outlined"
-            append-icon="mdi-menu-down"
-            >产品类型</v-btn
-          >
-        </template>
+  <app-toolkit-bar>
+    <v-btn
+      theme="dark"
+      variant="flat"
+      size="small"
+      appendIcon="mdi-plus"
+      to="/pms/products/new"
+    >
+      新建商品
+    </v-btn>
+    <v-divider class="mx-2 my-3" vertical />
+    <v-btn prepend-icon="mdi-sync" size="small" class="border">
+      刷新数据
+    </v-btn>
+    <v-divider class="mx-2 my-3" vertical />
 
-        <v-list density="compact">
-          <v-list-item
-            v-for="(k, v) in productTypes"
-            :key="v"
-            @click="addFilter('productType', v)"
-          >
-            <v-list-item-title class="text-caption">
-              {{ k }}
-            </v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
+    <v-menu>
+      <template v-slot:activator="{ props }">
+        <v-btn
+          v-bind="props"
+          size="small"
+          class="border"
+          append-icon="mdi-filter"
+          >产品类型</v-btn
+        >
+      </template>
 
-      <v-chip
-        class="ml-4"
-        v-else
-        closable
-        size="small"
-        variant="flat"
-        color="orange-accent-1"
-        @click:close="removeFilter('productType')"
-      >
-        {{ productTypes[filters["productType"]] }}
-      </v-chip>
-    </v-toolbar>
-    <v-divider />
+      <v-list density="compact">
+        <v-list-item
+          v-for="(k, v) in productTypes"
+          :key="v"
+          @click="addFilter('productType', v)"
+        >
+          <v-list-item-title class="text-caption">
+            {{ k }}
+          </v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    <v-spacer />
     <v-text-field
       flat
       density="compact"
-      variant="solo"
+      variant="solo-filled"
       placeholder="检索"
-      prepend-inner-icon="mdi-magnify"
+      append-icon="mdi-magnify"
       v-model="search"
     >
     </v-text-field>
-    <v-divider />
-    <v-data-table
-      show-select
-      return-object
-      class="text-caption"
-      hover
-      :loading="loading"
-      :search="search"
-      :headers="headers"
-      :items="items"
-      @click:row="onClickRow"
-    >
-      <template v-slot:loading>
-        <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
-      </template>
-      <template v-slot:[`item.isPublished`]="{ item }">
-        <v-checkbox-btn
-          readonly
-          :model-value="item.published"
-          hide-details
-        ></v-checkbox-btn>
-      </template>
-      <template v-slot:[`item.name`]="{ item }">
-        <v-list-item class="pa-0" slim>
-          <template v-slot:prepend>
-            <v-avatar class="rounded-lg border">
-              <v-img :src="item.banner" v-if="item.banner" />
-              <v-icon icon="mdi-image" v-else />
-            </v-avatar>
-          </template>
-          <v-list-item-title class="text-caption font-weight-medium ms-2">
-            {{ item.name }}
-          </v-list-item-title>
-        </v-list-item>
-      </template>
-      <template v-slot:[`item.price`]="{ item }">
-        <div>{{ usePriceYuan(item.price) }}</div>
-      </template>
-      <template v-slot:[`item.published`]="{ item }">
-        <v-checkbox-btn v-model="item.published" readonly></v-checkbox-btn>
-      </template>
-      <template v-slot:[`item.originalPrice`]="{ item }">
-        <div>{{ usePriceYuan(item.originalPrice) }}</div>
-      </template>
-      <template v-slot:[`item.status`]="{ item }">
-        <div class="d-flex">
-          <v-chip
-            size="x-small"
-            label
-            color="orange-accent-3"
-            class="mr-2"
-            v-if="item.newArrvial"
-            prepend-icon="mdi-new-box"
-            >新品</v-chip
-          >
-          <v-chip
-            size="x-small"
-            label
-            class="mr-2"
-            color="green-darken-1"
-            v-if="item.recommand"
-            prepend-icon="mdi-star"
-            >推荐</v-chip
-          >
-          <v-chip
-            size="x-small"
-            label
-            v-if="item.preview"
-            prepend-icon="mdi-cloud-off-outline"
-            >预告</v-chip
-          >
-        </div>
-      </template>
-      <template v-slot:[`item.productType`]="{ item }">
-        <v-chip size="x-small" variant="tonal" color="indigo">{{
-          productTypes[item.productType]
-        }}</v-chip>
-      </template>
-      <template v-slot:[`no-data`]>
-        <v-sheet>
-          <v-img src="@/assets/shopping_bags.svg" height="200px" class="my-8">
-          </v-img>
-          <div class="v-card-title text-subtitle-2">商品库存</div>
-          <div class="text-caption v-card-subtitle">商品库存记录商品的状态</div>
-          <v-btn
-            size="small"
-            class="ma-4"
-            color="orange-accent-2"
-            variant="flat"
-            to="/pms/products/new"
-            >添加商品</v-btn
-          >
-        </v-sheet>
-      </template>
-    </v-data-table>
-  </v-card>
+  </app-toolkit-bar>
+
+  <v-data-table
+    return-object
+    class="text-caption"
+    hover
+    :loading="loading"
+    :search="search"
+    :headers="headers"
+    :items="items"
+    @click:row="onClickRow"
+  >
+    <template v-slot:loading>
+      <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
+    </template>
+    <template v-slot:[`item.isPublished`]="{ item }">
+      <v-checkbox-btn
+        readonly
+        :model-value="item.published"
+        hide-details
+      ></v-checkbox-btn>
+    </template>
+    <template v-slot:[`item.name`]="{ item }">
+      <v-list-item class="pa-0" slim>
+        <template v-slot:prepend>
+          <v-avatar class="rounded-lg border">
+            <v-img :src="item.banner" v-if="item.banner" />
+            <v-icon icon="mdi-image" v-else />
+          </v-avatar>
+        </template>
+        <v-list-item-title class="text-caption font-weight-medium ms-2">
+          {{ item.name }}
+        </v-list-item-title>
+      </v-list-item>
+    </template>
+    <template v-slot:[`item.price`]="{ item }">
+      <div>{{ usePriceYuan(item.price) }}</div>
+    </template>
+    <template v-slot:[`item.published`]="{ item }">
+      <v-checkbox-btn v-model="item.published" readonly></v-checkbox-btn>
+    </template>
+    <template v-slot:[`item.originalPrice`]="{ item }">
+      <div>{{ usePriceYuan(item.originalPrice) }}</div>
+    </template>
+    <template v-slot:[`item.status`]="{ item }">
+      <div class="d-flex">
+        <v-chip
+          size="x-small"
+          label
+          color="orange-accent-3"
+          class="mr-2"
+          v-if="item.newArrvial"
+          prepend-icon="mdi-new-box"
+          >新品</v-chip
+        >
+        <v-chip
+          size="x-small"
+          label
+          class="mr-2"
+          color="green-darken-1"
+          v-if="item.recommand"
+          prepend-icon="mdi-star"
+          >推荐</v-chip
+        >
+        <v-chip
+          size="x-small"
+          label
+          v-if="item.preview"
+          prepend-icon="mdi-cloud-off-outline"
+          >预告</v-chip
+        >
+      </div>
+    </template>
+    <template v-slot:[`item.productType`]="{ item }">
+      <v-chip size="x-small" variant="tonal" color="indigo">{{
+        productTypes[item.productType]
+      }}</v-chip>
+    </template>
+    <template v-slot:[`no-data`]>
+      <v-sheet>
+        <v-img src="@/assets/shopping_bags.svg" height="200px" class="my-8">
+        </v-img>
+        <div class="v-card-title text-subtitle-2">商品库存</div>
+        <div class="text-caption v-card-subtitle">商品库存记录商品的状态</div>
+        <v-btn
+          size="small"
+          class="ma-4"
+          color="orange-accent-2"
+          variant="flat"
+          to="/pms/products/new"
+          >添加商品</v-btn
+        >
+      </v-sheet>
+    </template>
+  </v-data-table>
 </template>
 
 <script setup lang="ts">
@@ -212,13 +198,12 @@ const headers = [
   },
 ];
 
-const product = new ProductService({bugfreed})
+const product = new ProductService({ bugfreed });
 
 const search = ref();
 const router = useRouter();
 const items = ref<Product[]>([]);
 const loading = ref(false);
-const filter = ref(false);
 // filters 过滤条件
 const filters = ref<{ [key: string]: any }>({});
 
@@ -237,7 +222,6 @@ const fetch = async () => {
   items.value = data;
   loading.value = false;
 };
-
 
 onMounted(async () => {
   await fetch();

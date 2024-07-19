@@ -2,15 +2,13 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="12" md="8">
-        <AppBreadcrumb />
-
         <v-row>
           <v-col cols="12" md="4">
             <v-card
               @click="onAddApp"
               height="200"
               class="d-flex align-center justify-center flex-column"
-              color="orange-accent-2"
+              color="indigo"
             >
               <v-icon size="48">mdi-plus</v-icon>
               <div class="text-overline">创建一个新应用</div>
@@ -75,14 +73,16 @@
             <v-divider class="my-2" />
           </v-col>
           <v-col cols="12" md="4">
-            <v-card height="200" variant="outlined">
+            <v-card height="200" class="border" variant="flat">
               <div class="d-flex flex-column justify-space-between h-100">
                 <div>
                   <v-card-item>
-                    <v-card-title class="text-subtitle-2">
+                    <v-card-title class="text-subtitle-1">
                       演示项目(开发中)
                     </v-card-title>
-                    <v-icon> </v-icon>
+                    <v-card-subtitle class="text-caption text-wrap">
+                      演示项目将为你提供可交互的后端环境。以方便更好的理解运行的应用。
+                    </v-card-subtitle>
                   </v-card-item>
                 </div>
                 <div class="d-flex w-100">
@@ -94,7 +94,8 @@
                     <template v-slot:activator="{ props }">
                       <v-btn
                         rounded="0"
-                        variant="text"
+                        variant="tonal"
+                        color="green"
                         size="small"
                         class="rounded-te-lg"
                         icon="mdi-wechat"
@@ -107,10 +108,10 @@
             </v-card>
           </v-col>
           <v-col cols="12" md="8">
-            <v-card height="200" variant="outlined">
+            <v-card height="200" class="border" variant="flat">
               <div class="d-flex flex-no-wrap justify-space-between">
                 <div>
-                  <v-card-title class="text-subtitle-2 text-wrap">
+                  <v-card-title class="text-subtitle-1 text-wrap">
                     BUGFREED应用是应用运行时核心
                   </v-card-title>
                   <v-card-subtitle class="text-caption text-wrap">
@@ -118,7 +119,11 @@
                   </v-card-subtitle>
                 </div>
 
-                <v-img src="@/assets/subscribe.svg" width="200" class="ma-3"></v-img>
+                <v-img
+                  src="@/assets/subscribe.svg"
+                  width="200"
+                  class="ma-3"
+                ></v-img>
               </div>
             </v-card>
           </v-col>

@@ -190,7 +190,7 @@
                   </v-sheet>
                 </v-col>
                 <v-col cols="12" :md="editItem.pic ? 6 : 12">
-                  <UploadImage @change="onChangePic" />
+                  <UploadImage v-model="editItem.pic" />
                 </v-col>
               </v-row>
             </v-card-text>

@@ -74,7 +74,7 @@
               <v-sheet class="border" v-if="editItem.pic">
                 <v-img :src="editItem.pic" contain />
               </v-sheet>
-              <UploadImage v-else @change="onUploadPic" />
+              <UploadImage v-else v-model="editItem.pic" />
             </v-card-text>
           </v-card>
         </v-col>

@@ -1,76 +1,135 @@
 <template>
+  <v-toolbar density="comfortable" class="me-4">
+    <v-toolbar-title>
+      <AppBackBtn /><span class="text-subtitle-2 ms-1"> 添加品牌</span>
+    </v-toolbar-title>
+    <v-spacer />
+    <v-btn size="small" class="me-2" variant="tonal" @click="cancel"
+      >取消</v-btn
+    >
+    <v-btn size="small" variant="flat" @click="save" color="indigo">保存数据</v-btn>
+  </v-toolbar>
   <v-container>
     <v-row>
-      <v-col cols="12" md="12">
-        <v-toolbar color="transparent">
-          <AppBackBtn />
-          <v-toolbar-title class="text-body-1 font-weight-bold">
-            创建品牌
-          </v-toolbar-title>
-          <v-spacer />
-          <v-btn size="small" class="me-2" variant="tonal" @click="cancel"
-            >取消</v-btn
-          >
-          <v-btn size="small" variant="elevated" @click="save">保存</v-btn>
-        </v-toolbar>
-      </v-col>
       <v-col cols="12" md="8">
         <v-card>
           <v-card-text>
-            <AppLabel> 标题 </AppLabel>
-            <v-text-field
-              placeholder="苹果"
-              variant="solo-filled"
-              flat
-              :rules="nonEmptyRules"
-              density="compact"
-              v-model="editItem.name"
-            />
-            <AppLabel class="mt-4"> 首字母 </AppLabel>
-            <v-text-field
-              placeholder="A"
-              variant="solo-filled"
-              flat
-              :rules="nonEmptyRules"
-              density="compact"
-              v-model="editItem.firstLetter"
-            />
+            <v-form ref="form">
+              <v-text-field
+                placeholder="苹果"
+                label="品牌名称"
+                persistent-placeholder
+                variant="solo-filled"
+                flat
+                :rules="nonEmptyRules"
+                density="comfortable"
+                v-model="editItem.name"
+              />
+              <v-text-field
+                label="品牌首字母"
+                class="mt-3"
+                persistent-placeholder
+                placeholder="A"
+                variant="solo-filled"
+                flat
+                :rules="nonEmptyRules"
+                density="comfortable"
+                v-model="editItem.firstLetter"
+              />
 
-            <AppLabel class="mt-4"> 排序 </AppLabel>
-            <v-text-field
-              placeholder="A"
-              variant="solo-filled"
-              flat
-              :rules="nonEmptyRules"
-              density="compact"
-              v-model.number="editItem.sort"
-              type="number"
-              step="1"
-              min="0"
-            />
+              <v-text-field
+                label="排序"
+                class="mt-3"
+                persistent-placeholder
+                placeholder="A"
+                variant="solo-filled"
+                flat
+                :rules="nonEmptyRules"
+                density="comfortable"
+                v-model.number="editItem.sort"
+                type="number"
+                step="1"
+                min="0"
+              />
 
-            <AppLabel class="mt-4"> 品牌故事 </AppLabel>
-            <v-textarea
-              placeholder="A"
-              variant="solo-filled"
-              flat
-              :rules="nonEmptyRules"
-              density="compact"
-              v-model="editItem.brandStory"
-            />
+              <v-card class="mt-3 border elevation-0" variant="text">
+                <v-toolbar color="transparent">
+                  <v-toolbar-title class="text-caption"
+                    >品牌故事</v-toolbar-title
+                  >
+                  <v-spacer />
+                </v-toolbar>
+                <v-divider />
+                <RichEditor v-model="editItem.brandStory" />
+              </v-card>
+            </v-form>
           </v-card-text>
         </v-card>
         <v-card class="mt-4">
           <v-card-text>
             <AppLabel> LOGO </AppLabel>
-            <UploadImage @change="onChangeLogo"></UploadImage>
+            <v-row>
+              <v-col cols="12" md="6" v-if="editItem.logo">
+                <v-sheet
+                  class="border rounded-lg overflow-hidden"
+                  height="100px"
+                  style="position: relative"
+                >
+                  <v-img
+                    :src="editItem.logo"
+                    cover
+                    style="top: 0; left: 0; position: absolute; right: 0"
+                  ></v-img>
+                  <div class="d-flex">
+                    <v-spacer />
+                    <v-btn
+                      icon="mdi-close"
+                      size="x-small"
+                      variant="flat"
+                      @click="editItem.logo = ''"
+                      color="orange-accent-2"
+                    ></v-btn>
+                  </div>
+                </v-sheet>
+              </v-col>
+              <v-col cols="12" :md="editItem.logo ? 6 : 12">
+                <UploadImage v-model="editItem.logo" />
+              </v-col>
+            </v-row>
           </v-card-text>
         </v-card>
 
         <v-card class="mt-4">
           <v-card-text>
             <AppLabel> 横幅 </AppLabel>
-            <UploadImage @change="onChangeBanner"></UploadImage>
+            <v-row>
+              <v-col cols="12" md="6" v-if="editItem.banner">
+                <v-sheet
+                  class="border rounded-lg overflow-hidden"
+                  height="100px"
+                  style="position: relative"
+                >
+                  <v-img
+                    :src="editItem.banner"
+                    cover
+                    style="top: 0; left: 0; position: absolute; right: 0"
+                  ></v-img>
+                  <div class="d-flex">
+                    <v-spacer />
+                    <v-btn
+                      icon="mdi-close"
+                      size="x-small"
+                      variant="flat"
+                      @click="editItem.banner = ''"
+                      color="orange-accent-2"
+                    ></v-btn>
+                  </div>
+                </v-sheet>
+              </v-col>
+              <v-col cols="12" :md="editItem.banner ? 6 : 12">
+                <UploadImage v-model="editItem.banner" />
+              </v-col>
+            </v-row>
           </v-card-text>
         </v-card>
       </v-col>
@@ -106,8 +165,10 @@
 
 <script setup lang="ts">
 import { nonEmptyRules } from "@/composables/formRules";
-import BFSDK from "@/api/sdk";
-import { Brand } from "@/interfaces/brand";
+import { Brand } from "@/sdk/pms/brand/types";
+import bugfreed from "@/sdk";
+import { PMS } from "@/sdk/pms/pms";
+const pms = new PMS({ bugfreed });
 
 const defaultItem: Brand = {
   id: 0,
@@ -127,28 +188,24 @@ const defaultItem: Brand = {
 const loading = ref(false);
 
 let editItem = reactive<Brand>({ ...defaultItem });
-
-const onChangeLogo = (e: string) => {
-  editItem.logo = e;
-};
-
-const onChangeBanner = (e: string) => {
-  editItem.banner = e;
-};
+const form = ref();
 
 const save = async () => {
-  if (loading.value) return;
-  loading.value =true
-  const { success, data } = await BFSDK.addBrand(editItem);
+  const { valid } = await form.value.validate();
+  if (loading.value || !valid) return;
+  loading.value = true;
+  const { success } = await pms.brand().create(editItem);
   if (!success) {
-    useSnackbar("添加品牌失败")
-    loading.value =false
-    return
+    useSnackbar("添加品牌失败");
+    loading.value = false;
+    return;
   }
 
-  useSnackbar("添加品牌成功")
-  loading.value =false
+  useSnackbar("添加品牌成功");
+  loading.value = false;
 };
 
-const cancel = () => {};
+const cancel = () => {
+  Object.assign(editItem, defaultItem);
+};
 </script>

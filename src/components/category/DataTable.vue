@@ -1,128 +1,111 @@
 <template>
-  <v-card class="mt-4">
-    <v-toolbar color="transparent">
-      <v-select
-        density="compact"
-        hide-details
-        max-width="100"
-        variant="solo"
-        flat
-        color="indigo"
-        :items="levels"
-        item-value="level"
-        item-title="title"
-        class="text-caption ms-4"
-        v-model="defaultFilterLevel"
-        return-object
-        @update:model-value="filterByLevel"
-      >
-        <template v-slot:selection="{ item }">
-          <div class="text-caption font-weight-bold">{{ item.title }}</div>
-        </template>
-      </v-select>
+  <AppToolkitBar>
+    <v-btn
+      append-icon="mdi-plus"
+      to="/pms/categories/new"
+      theme="dark"
+      variant="flat"
+      size="small"
+    >
+      添加分类
+    </v-btn>
+    <v-divider vertical class="mx-2 my-3"> </v-divider>
+    <v-select
+      density="compact"
+      hide-details
+      max-width="100"
+      variant="solo-filled"
+      flat
+      color="indigo"
+      :items="levels"
+      item-value="level"
+      item-title="title"
+      class="text-caption"
+      v-model="defaultFilterLevel"
+      return-object
+      @update:model-value="filterByLevel"
+    >
+      <template v-slot:selection="{ item }">
+        <div class="text-caption font-weight-bold">{{ item.title }}</div>
+      </template>
+    </v-select>
 
-      <v-spacer />
-      <v-btn
-        icon="mdi-filter-variant"
-        size="x-small"
-        variant="tonal"
-        rounded="lg"
-      ></v-btn>
-    </v-toolbar>
-    <v-divider />
+    <v-spacer />
     <v-text-field
       flat
       density="compact"
-      variant="solo"
+      variant="solo-filled"
       placeholder="检索"
-      class="me-2 text-caption"
+      class="text-caption"
       prepend-inner-icon="mdi-magnify"
       v-model="search"
     >
     </v-text-field>
-    <v-divider />
-    <v-data-table
-      :loading="loading"
-      :headers="headers"
-      class="text-caption"
-      hover
-      :search="search"
-      :items="items"
-    >
-      <template v-slot:[`item.name`]="{ item }">
-        <v-list-item class="pa-0">
-          <template v-slot:prepend>
-            <v-avatar class="rounded-lg border">
-              <v-img :src="item.pic" v-if="item.pic" />
-              <v-icon icon="mdi-image" v-else />
-            </v-avatar>
+  </AppToolkitBar>
+  <v-data-table
+    :loading="loading"
+    :headers="headers"
+    class="text-caption"
+    hover
+    :search="search"
+    :items="items"
+  >
+    <template v-slot:[`item.name`]="{ item }">
+      <v-list-item class="pa-0">
+        <template v-slot:prepend>
+          <v-avatar class="rounded-lg border">
+            <v-img :src="item.pic" v-if="item.pic" />
+            <v-icon icon="mdi-image" v-else />
+          </v-avatar>
 
-            <v-list-item-title class="text-caption font-weight-medium ms-2">
-              {{ item.name }}
-            </v-list-item-title>
-          </template>
-        </v-list-item>
-      </template>
+          <v-list-item-title class="text-caption font-weight-medium ms-2">
+            {{ item.name }}
+          </v-list-item-title>
+        </template>
+      </v-list-item>
+    </template>
 
-      <template v-slot:[`item.child`]="{ item }">
-        <v-btn
-          variant="flat"
-          color="orange-accent-1"
-          size="small"
-          rounded="pill"
-          prepend-icon="mdi-eye-outline"
-          v-if="item.level === 1"
-          @click="viewChildren(item)"
-          >查看</v-btn
+    <template v-slot:[`item.child`]="{ item }">
+      <v-btn
+        variant="outlined"
+        size="x-small"
+        prepend-icon="mdi-eye-outline"
+        v-if="item.level === 1"
+        @click="viewChildren(item)"
+        >查看</v-btn
+      >
+    </template>
+    <template v-slot:loading>
+      <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
+    </template>
+    <template v-slot:[`item.actions`]="{ item }">
+      <v-icon class="me-2" @click="updateCategory(item)">mdi-pencil</v-icon>
+      <v-icon @click="remove(item)">mdi-trash-can</v-icon>
+    </template>
+    <template v-slot:[`item.published`]="{ item }">
+      <v-checkbox-btn v-model="item.published" readonly></v-checkbox-btn>
+    </template>
+    <template v-slot:[`no-data`]>
+      <v-sheet>
+        <v-img src="@/assets/category.svg" height="200px" class="my-8"> </v-img>
+        <div class="v-card-title text-subtitle-2">商品分类</div>
+        <div class="text-caption v-card-subtitle">
+          商品分类将商品归纳为一个长期标记的状态。适合长期的管理。
+        </div>
+        <v-btn size="small" class="ma-4" color="orange-accent-2" variant="flat"
+          >添加商品</v-btn
         >
-      </template>
-      <template v-slot:loading>
-        <v-skeleton-loader type="table-row@10"></v-skeleton-loader>
-      </template>
-      <template v-slot:[`item.actions`]="{ item }">
-        <v-menu close-on-content-click>
-          <template v-slot:activator="{ props }">
-            <v-icon icon="mdi-dots-vertical" size="x-large" v-bind="props">
-            </v-icon>
-          </template>
-          <v-list nav>
-            <v-list-item @click="updateCategory(item)">
-              <v-list-item-title> 编辑分类 </v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="remove(item)">
-              <v-list-item-title> 删除分类 </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </template>
-      <template v-slot:[`item.published`]="{ item }">
-        <v-checkbox-btn v-model="item.published" readonly></v-checkbox-btn>
-      </template>
-      <template v-slot:[`no-data`]>
-        <v-sheet>
-          <v-img src="@/assets/category.svg" height="200px" class="my-8">
-          </v-img>
-          <div class="v-card-title text-subtitle-2">商品分类</div>
-          <div class="text-caption v-card-subtitle">
-            商品分类将商品归纳为一个长期标记的状态。适合长期的管理。
-          </div>
-          <v-btn
-            size="small"
-            class="ma-4"
-            color="orange-accent-2"
-            variant="flat"
-            >添加商品</v-btn
-          >
-        </v-sheet>
-      </template>
-    </v-data-table>
-  </v-card>
-  <AppConfirmDialog ref="confirm"> </AppConfirmDialog>
+      </v-sheet>
+    </template>
+  </v-data-table>
+  <AppConfirmDialog ref="confirm" />
 </template>
 
 <script setup lang="ts">
-import { AllCategory } from "@/interfaces/category";
+import { AllCategory, Category } from "@/interfaces/category";
 import BFSDK from "@/api/sdk";
+import bugfreed from "@/sdk";
+import { PMS } from "@/sdk/pms/pms";
 
 const headers: any[] = [
   { title: "名称", key: "name" },
@@ -132,6 +115,8 @@ const headers: any[] = [
   { title: "下一级", key: "child" },
   { title: "操作", key: "actions", align: "end" },
 ];
+
+const pms = new PMS({ bugfreed });
 
 const search = ref();
 const confirm = ref();
@@ -181,17 +166,22 @@ const filterByLevel = async (item: Level) => {
   loading.value = false;
 };
 
-const remove = (item: any) => {
+const remove = (item: Category) => {
   if (!item) return;
   confirm.value
     .open(
       `删除分类 ${item.name} ?`,
-      "删除之后则会将永久永久抹除。请确认后再删除！",
-      { color: "red" }
+      "删除之后则会将永久永久抹除。请确认后再删除！"
     )
-    .then((ok: boolean) => {
+    .then(async (ok: boolean) => {
       if (ok) {
-        alert(ok);
+        const { success } = await pms.category().delete(item.id);
+        if (success) {
+          useSnackbar("删除分类成功")
+        } else {
+          useSnackbar("删除分类成功")
+          await viewAll()
+        }
       }
     });
 };
